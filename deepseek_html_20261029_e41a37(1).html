@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#001E43">
+<title>PKM UII – DPM UII</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy:        #001E43;
+    --navy-2:      #001A3A;
+    --white:       #FFFFFF;
+    --text-muted:  rgba(255,255,255,0.62);
+    --border:      rgba(255,255,255,0.10);
+    --border-hover:rgba(255,255,255,0.30);
+    --bg-hover:    rgba(255,255,255,0.06);
+    --container:   1200px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  img, svg { display: block; }
+  svg { fill: currentColor; }
+
+  .container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ================= HEADER ================= */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(0, 30, 67, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 0;
+  }
+
+  /* LOGO — SVG inline, tidak butuh internet */
+  .logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--white);
+    transition: opacity 0.2s;
+  }
+  .logo:hover { opacity: 0.85; }
+  .logo svg {
+    height: 42px;
+    width: auto;
+  }
+
+  /* Nav */
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    list-style: none;
+  }
+  .nav-item { position: relative; }
+  .nav-item > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    border-radius: 4px;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .nav-item > a:hover { background: var(--bg-hover); }
+  .nav-item > a .chev {
+    width: 10px;
+    height: 10px;
+    opacity: 0.7;
+    transition: transform 0.25s;
+  }
+  .nav-item:hover > a .chev { transform: rotate(180deg); }
+
+  /* Dropdown */
+  .dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 280px;
+    background: var(--navy-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: all 0.2s;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .nav-item:hover .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .dropdown a {
+    display: block;
+    padding: 9px 12px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    border-radius: 4px;
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.4;
+  }
+  .dropdown a:hover { background: var(--bg-hover); color: var(--white); }
+
+  /* Social */
+  .social { display: flex; gap: 6px; flex-shrink: 0; }
+  .social a {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.06);
+    color: var(--white);
+    transition: background 0.2s;
+  }
+  .social a:hover { background: rgba(255,255,255,0.16); }
+  .social a svg { width: 16px; height: 16px; }
+
+  .hamburger {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.06);
+    color: white;
+    place-items: center;
+  }
+  .hamburger svg { width: 20px; height: 20px; }
+
+  /* ================= HERO ================= */
+  .hero {
+    padding: 70px 0 50px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 {
+    font-family: 'Wix Madefor Display', sans-serif;
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -1.2px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .hero p {
+    font-size: clamp(14px, 1.4vw, 16px);
+    color: var(--text-muted);
+  }
+
+  /* ================= CONTENT ================= */
+  .content { padding: 50px 0 90px; min-height: 400px; }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .tab {
+    padding: 9px 22px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--white); border-color: var(--border-hover); }
+  .tab.active {
+    color: var(--white);
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.35);
+  }
+
+  .panel { display: none; animation: fadeIn 0.3s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .doc-item {
+    text-align: center;
+    padding: 24px 0;
+  }
+  .doc-item + .doc-item { border-top: 1px solid var(--border); }
+
+  .doc-heading {
+    font-family: 'Wix Madefor Display', sans-serif;
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 600;
+    margin-bottom: 14px;
+    line-height: 1.4;
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .doc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border: 1px solid var(--border-hover);
+    border-radius: 6px;
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .doc-btn:hover {
+    background: var(--bg-hover);
+    border-color: rgba(255,255,255,0.55);
+  }
+  .doc-btn svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .doc-btn:hover svg { transform: translateX(2px); }
+
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* ================= FOOTER ================= */
+  .footer {
+    background: #001633;
+    border-top: 1px solid var(--border);
+    padding: 60px 0 0;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 44px;
+  }
+
+  .footer-logo { margin-bottom: 20px; color: var(--white); }
+  .footer-logo svg { height: 42px; width: auto; }
+
+  .footer-brand p {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 320px;
+  }
+
+  .footer h4 {
+    font-family: 'Wix Madefor Display', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 18px;
+  }
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .footer-links a {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--white); }
+
+  .footer-contact {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-size: 13.5px;
+    color: var(--text-muted);
+  }
+  .footer-contact li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .footer-contact svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding: 22px 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .footer-bottom strong { color: var(--white); font-weight: 700; }
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width: 1024px) {
+    .nav, .social { display: none; }
+    .hamburger { display: grid; }
+
+    .nav.open {
+      display: block;
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      background: var(--navy-2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      max-height: calc(100vh - 70px);
+      overflow-y: auto;
+      padding: 12px 20px 20px;
+    }
+    .nav.open .nav-menu {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+    .nav.open .nav-item > a {
+      width: 100%;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-radius: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav.open .dropdown {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      box-shadow: none;
+      background: transparent;
+      border: none;
+      padding: 0 0 0 16px;
+      min-width: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s;
+    }
+    .nav.open .nav-item.open .dropdown {
+      max-height: 500px;
+      padding-top: 6px;
+      padding-bottom: 10px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero { padding: 50px 0 40px; }
+    .content { padding: 40px 0 60px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .doc-item { padding: 20px 0; }
+    .tabs { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="header">
+  <div class="container header-inner">
+    <a href="#" class="logo" aria-label="DPM UII">
+      <!-- LOGO DPM UII — SVG inline -->
+      <svg viewBox="0 0 220 55" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- DPM -->
+        <text x="0" y="42"
+              font-family="'Wix Madefor Display', Arial, sans-serif"
+              font-size="46" font-weight="800" letter-spacing="-2"
+              fill="#FFFFFF">DPM</text>
+        <!-- garis pemisah -->
+        <rect x="138" y="12" width="2" height="30" fill="rgba(255,255,255,0.5)"/>
+        <!-- UII -->
+        <text x="150" y="42"
+              font-family="'Wix Madefor Display', Arial, sans-serif"
+              font-size="34" font-weight="600" letter-spacing="-0.5"
+              fill="#FFFFFF">UII</text>
+      </svg>
+    </a>
+
+    <nav class="nav" id="nav">
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#">PROFIL
+            <svg class="chev" viewBox="0 0 320 512"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg>
+          </a>
+          <ul class="dropdown">
+            <li><a href="#">Visi &amp; Misi</a></li>
+            <li><a href="#">Sejarah Student Government</a></li>
+            <li><a href="#">Sejarah KM UII</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#">FUNGSIONARIS
+            <svg class="chev" viewBox="0 0 320 512"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg>
+          </a>
+          <ul class="dropdown">
+            <li><a href="#">Dewan</a></li>
+            <li><a href="#">Direktorat Sekertaris Jendral</a></li>
+            <li><a href="#">Badan Legislatif</a></li>
+            <li><a href="#">Badan Kerjasama Jaringan dan Advokasi</a></li>
+            <li><a href="#">Badan Audit Kemahasiswaan</a></li>
+            <li><a href="#">Badan Pengelola Aset</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#">LAPORAN
+            <svg class="chev" viewBox="0 0 320 512"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg>
+          </a>
+          <ul class="dropdown">
+            <li><a href="#">Laporan Keuangan 2</a></li>
+            <li><a href="#">Laporan Kinerja</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#">PRODUK HUKUM
+            <svg class="chev" viewBox="0 0 320 512"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg>
+          </a>
+          <ul class="dropdown">
+            <li><a href="#" style="color:#fff;font-weight:600">Peraturan KM UII</a></li>
+            <li><a href="#">PDKM UII</a></li>
+            <li><a href="#">GBHKM UII</a></li>
+            <li><a href="#">PDPM UII</a></li>
+            <li><a href="#">KA RPKM</a></li>
+            <li><a href="#">Legislasi</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#">SURAT KEPUTUSAN
+            <svg class="chev" viewBox="0 0 320 512"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg>
+          </a>
+          <ul class="dropdown">
+            <li><a href="#">Surat-Surat Keputusan Lembaga KM-UII</a></li>
+            <li><a href="#">Surat-Surat Keputusan Badan/Tim Kelengkapan Dewan</a></li>
+            <li><a href="#">Surat-Surat Keputusan Badan/Tim Penyelenggara Pemilu</a></li>
+            <li><a href="#">Surat-Surat Keputusan Lembaga Khusus</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="social">
+      <a href="#" aria-label="WhatsApp">
+        <svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+      </a>
+      <a href="#" aria-label="Instagram">
+        <svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+      </a>
+      <a href="#" aria-label="LinkedIn">
+        <svg viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+      </a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <svg viewBox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container">
+    <h1>PKM UII</h1>
+    <p>Peraturan Keluarga Mahasiswa UII</p>
+  </div>
+</section>
+
+<!-- ============ CONTENT ============ -->
+<section class="content">
+  <div class="container">
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <div id="panels"></div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg viewBox="0 0 220 55" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <text x="0" y="42" font-family="'Wix Madefor Display', Arial, sans-serif"
+                  font-size="46" font-weight="800" letter-spacing="-2" fill="#FFFFFF">DPM</text>
+            <rect x="138" y="12" width="2" height="30" fill="rgba(255,255,255,0.5)"/>
+            <text x="150" y="42" font-family="'Wix Madefor Display', Arial, sans-serif"
+                  font-size="34" font-weight="600" letter-spacing="-0.5" fill="#FFFFFF">UII</text>
+          </svg>
+        </div>
+        <p>Komplek Kantor Lembaga Kemahasiswaan UII, JL. Kaliurang KM 14,5 Kalurahan Umbulmartani, Kapanewon Ngemplak, Kabupaten Sleman Provinsi Daerah Istimewa Yogyakarta 55584</p>
+      </div>
+
+      <div>
+        <h4>Produk Hukum KM UII</h4>
+        <ul class="footer-links">
+          <li><a href="#">Peraturan Dasar KM UII</a></li>
+          <li><a href="#">Garis-Garis Besar Haluan KM UII</a></li>
+          <li><a href="#">Peraturan KM UII</a></li>
+          <li><a href="#">PDPM UII</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li>
+            <svg viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
+            <span>+62 822-3669-0700</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
+            <span>dpm@uii.ac.id</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+            <span>@dpmuii</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      Copyright © 2025 <strong>DSJ DPM UII</strong>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const DATA = {
+    "2018": [
+      { h: "Tentang Pembentukan PKM", b: "PKM UII No. 1 Tahun 2018", id: "1dujeRvT8REMMpeKGUBuOj8ZsAeM2Evkg" },
+      { h: "Tentang Pemilihan Umum Wakil Mahasiswa UII", b: "PKM UII No. 2 Tahun 2018", id: "1bDo1PPD7ETyDfC2dkQq_baDEFpoTwyAr" },
+      { h: "Tentang Pengelolaan Aspirasi UII", b: "PKM UII No. 3 Tahun 2018", id: "1rFZTIC8A-ZSEucEm0LhIUSgWS1mo8icP" },
+      { h: "Tentang Produksi Jas Almamater KM UII", b: "PKM UII No. 4 Tahun 2018", id: "1Ef3Q2bs5wLu7SOmAZoBoyVY2XDuk8sA8" },
+      { h: "Tentang Pedoman Keanggotaan KM UII", b: "PKM UII No. 5 Tahun 2018", id: "1qZnORDu4E2oF0_t2wYcwMOkFhbkOpLSu" },
+      { h: "Tentang Pedoman Administrasi KM UII", b: "PKM UII No. 6 Tahun 2018", id: "1Q9MLo5k--VfuMuWqtd7EMqJ7_B0Tx4aU" },
+      { h: "Tentang Pedoman Keuangan KM UII", b: "PKM UII No. 7 Tahun 2018", id: "1ErXi8EEYnWHTf3MLLgAmK66x3gtngpkz" }
+    ],
+    "2019": [
+      { h: "Tentang Kode Etik Lembaga Legislatif UII", b: "PKM UII No. 1 Tahun 2019", id: "1Hxk1t8ST9iqVtVuqqtq9gW6FKFR_S6eH" },
+      { h: "Tentang Pedoman Pembentukan, Pembekuan dan Pembubaran Lembaga KM UII", b: "PKM UII No. 2 Tahun 2019", id: "17A2kWBkKRnS0Up-AOqTXJIHtFh_0L7I5" },
+      { h: "Tentang DPM U &amp; DPM F", b: "PKM UII No. 3 Tahun 2019", id: "1f1JHjVVp0Ia8MkHs1e52g5EAblsoHGkR" },
+      { h: "Tentang Pedoman Pelaksanaan Foraslak Lembaga Legislatif KM UII", b: "PKM UII No. 4 Tahun 2019", id: "1COzbBfqkcoBMauJLuGf0BD4gDSnJZ3m9" },
+      { h: "Tentang UKM KM UII", b: "PKM UII No. 5 Tahun 2019", id: "11sCmzEqZ5bhwaoh2eKW5IfWowdzosztr" },
+      { h: "Tentang UKMK KM UII", b: "PKM UII No. 6 Tahun 2019", id: "1wZ224awmU8_OcOwkCaYTmmS_5syfiU-5" },
+      { h: "Tentang LEM U LEM F KM UII", b: "PKM UII No. 7 Tahun 2019", id: "1l0oG41FSe0noUCZ8OolX7Izft3co_rd1" },
+      { h: "Tentang Perubahan PKM No. 4 Tahun 2018 Tentang Produksi Jas Almamater", b: "PKM UII No. 8 Tahun 2019", id: "14WPycDOTYDDn3vax7QzQiDFEmMoGfQg2" },
+      { h: "Tentang Distribusi dan Alokasi Dana KM UII", b: "PKM UII No. 9 Tahun 2019", id: "1LA1Z8UvPPSK_K5JFNHUFGB-jukMQwN_b" },
+      { h: "Tentang Penglolaan Aset KM UII", b: "PKM UII No. 10 Tahun 2019", id: "1ZV777We_uV9tuSHaCLOnBRgY996Yrehx" }
+    ],
+    "2022": [
+      { h: "Tentang Pemilihan Umum Wakil Mahasiswa Perubahan Atas PKM No.2 Tahun 2018 Tentang Pemilihan Umum Wakil Mahasiswa", b: "PKM UII No. 1 Tahun 2022", id: "1mKFsBpbSYge3vsnfygjgjqbCuEqDFMVX" },
+      { h: "Tentang Pemilihan Umum Wakil Mahasiswa Perubahan Kedua Atas PKM No.2 Tahun 2018 Tentang Pemilihan Umum Wakil Mahasiswa", b: "PKM UII No. 2 Tahun 2022", id: "1VSPGL5GjgJczjy_FK4Dsw67t72BNT8S4" }
+    ],
+    "2023": [
+      { h: "Tentang Perubahan Ketiga Atas PKM UII Tentang Pemilihan Umum Wakil Mahasiswa", b: "PKM UII No. 1 Tahun 2023", id: "1cjdhiJ5JTUpff938rCWucXqUbaYfkKMF" }
+    ],
+    "2024": [
+      { h: "Tentang Perubahan Atas Pedoman Administrasi KM UII", b: "PKM UII No. 1 Tahun 2024", id: "1pwT67391WrVwuGsH0QXmcE4fU7gL1_qw" },
+      { h: "Tentang Pedoman Kegiatan Kepanitiaan KM UII", b: "PKM UII No. 2 Tahun 2024", id: "1IO0-w6G2L2oa4IPeav-Mv26hcZiWVcev" },
+      { h: "Tentang Distribusi dan Alokasi Dana KM UII", b: "PKM UII No. 3 Tahun 2024", id: "1FAqlVbXwcsVVW5nEhzAzTUrfwbXp_dhJ" }
+    ],
+    "2025": []
+  };
+
+  const ARROW_SVG = '<svg viewBox="0 0 448 512"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg>';
+
+  const tabsEl = document.getElementById('tabs');
+  const panelsEl = document.getElementById('panels');
+  const years = Object.keys(DATA);
+
+  years.forEach((year, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (i === 0 ? ' active' : '');
+    btn.textContent = year;
+    btn.setAttribute('role', 'tab');
+    btn.dataset.year = year;
+    btn.addEventListener('click', () => activate(year));
+    tabsEl.appendChild(btn);
+  });
+
+  years.forEach(year => {
+    const panel = document.createElement('div');
+    panel.className = 'panel' + (year === years[0] ? ' active' : '');
+    panel.id = 'panel-' + year;
+
+    const docs = DATA[year];
+    if (docs.length === 0) {
+      panel.innerHTML = '<div class="empty">Belum ada dokumen untuk tahun ini.</div>';
+    } else {
+      panel.innerHTML = docs.map(d => `
+        <div class="doc-item">
+          <h2 class="doc-heading">${d.h}</h2>
+          <a class="doc-btn" href="https://drive.google.com/file/d/${d.id}/view" target="_blank" rel="noopener">
+            ${ARROW_SVG}
+            <span>${d.b}</span>
+          </a>
+        </div>
+      `).join('');
+    }
+    panelsEl.appendChild(panel);
+  });
+
+  function activate(year) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.year === year));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + year));
+  }
+
+  const hamburger = document.getElementById('hamburger');
+  const nav = document.getElementById('nav');
+  hamburger.addEventListener('click', () => {
+    nav.classList.toggle('open');
+    hamburger.innerHTML = nav.classList.contains('open')
+      ? '<svg viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>'
+      : '<svg viewBox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>';
+  });
+
+  document.querySelectorAll('.nav-item > a').forEach(link => {
+    link.addEventListener('click', e => {
+      if (window.innerWidth <= 1024 && link.parentElement.querySelector('.dropdown')) {
+        e.preventDefault();
+        link.parentElement.classList.toggle('open');
+      }
+    });
+  });
+</script>
+</body>
+</html>

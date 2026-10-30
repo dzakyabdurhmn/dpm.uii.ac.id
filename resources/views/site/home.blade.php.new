@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#001E43">
+<meta name="description" content="Portal resmi Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia: produk hukum, laporan, dana, berita, pengumuman, dan aspirasi mahasiswa.">
+<title>DPM UII – Dewan Permusyawaratan Mahasiswa UII</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy:        #001E43;
+    --navy-footer: #001633;
+    --navy-card:   #001A3A;
+    --navy-hover:  #002451;
+    --navy-active: #002A5A;
+    --white:       #FFFFFF;
+    --t-body:      rgba(255,255,255,0.85);
+    --t-sub:       rgba(255,255,255,0.75);
+    --t-cap:       rgba(255,255,255,0.62);
+    --b-default:   rgba(255,255,255,0.10);
+    --b-btn:       rgba(255,255,255,0.30);
+    --b-btn-hover: rgba(255,255,255,0.55);
+    --bg-hover:    rgba(255,255,255,0.06);
+    --sh-sm: 0 4px 12px rgba(0,0,0,0.25);
+    --sh-md: 0 8px 24px rgba(0,0,0,0.40);
+    --sh-lg: 0 16px 48px rgba(0,0,0,0.55);
+    --container: 1200px;
+  }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--navy);
+    color: var(--t-body);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button, input, textarea { font-family: inherit; }
+  button { cursor: pointer; }
+  img { max-width: 100%; display: block; }
+  svg { display: block; }
+
+  h1, h2, h3, h4 { font-family: 'Wix Madefor Display', 'Inter', sans-serif; color: var(--white); }
+  h1 { font-weight: 800; }
+  h2 { font-weight: 700; }
+  h3 { font-weight: 600; }
+
+  .container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Buttons: always outline ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 26px;
+    background: transparent;
+    border: 1px solid var(--b-btn);
+    border-radius: 6px;
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 600;
+    transition: border-color .2s, background .2s;
+  }
+  .btn:hover { border-color: var(--b-btn-hover); background: var(--bg-hover); }
+  .btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+  .btn:hover svg { transform: translateX(3px); }
+
+  .link-more {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--white);
+    border-bottom: 1px solid var(--b-btn);
+    padding-bottom: 2px;
+    transition: border-color .2s;
+  }
+  .link-more:hover { border-color: var(--b-btn-hover); }
+
+  /* ---------- Header + Mega menu ---------- */
+  .header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(0,30,67,0.92);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--b-default);
+  }
+  .header-inner { display: flex; align-items: stretch; justify-content: space-between; gap: 24px; height: 72px; }
+
+  .logo { display: flex; align-items: center; flex-shrink: 0; }
+  .logo img { max-height: 42px; width: auto; object-fit: contain; }
+  .logo-fallback { display: none; align-items: center; gap: 8px; font-family: 'Wix Madefor Display', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: 1px; color: var(--white); }
+  .logo-fallback span { border: 2px solid var(--white); border-radius: 4px; padding: 3px 10px; }
+
+  .nav { display: flex; height: 100%; }
+  .nav-menu { display: flex; align-items: stretch; list-style: none; height: 100%; }
+  .nav-item { display: flex; }
+  .nav-item > a {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 0 11px;
+    font-size: 12px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase;
+    color: var(--white); white-space: nowrap;
+    transition: background .2s;
+  }
+  .nav-item > a::after {
+    content: ''; position: absolute; left: 11px; right: 11px; bottom: 0; height: 2px;
+    background: var(--white); transform: scaleX(0); transform-origin: left; transition: transform .25s;
+  }
+  .nav-item:hover > a, .nav-item:focus-within > a { background: var(--bg-hover); }
+  .nav-item:hover > a::after, .nav-item:focus-within > a::after { transform: scaleX(1); }
+  .nav-item .chev { width: 9px; height: 9px; fill: currentColor; opacity: .65; transition: transform .25s; }
+  .nav-item:hover .chev, .nav-item:focus-within .chev { transform: rotate(180deg); }
+
+  .mega {
+    position: absolute; left: 0; right: 0; top: 100%;
+    background: var(--navy-card);
+    border-top: 1px solid var(--b-default); border-bottom: 1px solid var(--b-default);
+    box-shadow: var(--sh-lg);
+    opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(8px);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s;
+  }
+  .nav-item:hover .mega, .nav-item:focus-within .mega { opacity: 1; visibility: visible; pointer-events: auto; transform: none; }
+
+  .mega-inner { max-width: var(--container); margin: 0 auto; display: grid; grid-template-columns: 27% 31% 42%; min-height: 290px; }
+
+  .mega-info { padding: 38px 28px 28px 24px; }
+  .mega-info .eyebrow { margin-bottom: 10px; }
+  .mega-info h2 { font-size: 24px; letter-spacing: -.4px; line-height: 1.2; margin-bottom: 14px; }
+  .mega-info > p { font-size: 13.5px; color: var(--t-cap); line-height: 1.65; }
+  .mega-docs { display: grid; gap: 16px; margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--b-default); }
+  .mega-docs a { display: block; font-size: 13px; line-height: 1.5; color: var(--t-body); transition: color .2s; }
+  .mega-docs a:hover { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
+  .mega-docs small { display: block; margin-top: 3px; font-size: 11.5px; font-weight: 500; letter-spacing: .3px; color: var(--t-cap); }
+
+  .mega-links { display: flex; flex-direction: column; padding: 22px 24px; background: var(--navy-footer); border-left: 1px solid var(--b-default); border-right: 1px solid var(--b-default); }
+  .mega-links a { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--b-default); font-size: 13.5px; font-weight: 600; line-height: 1.4; color: var(--white); }
+  .mega-links a:last-child { border-bottom: 0; }
+  .mega-links a small { display: block; margin-top: 2px; font-size: 11.5px; font-weight: 400; color: var(--t-cap); }
+  .mega-links a::after { content: '→'; flex-shrink: 0; opacity: .4; transition: transform .2s, opacity .2s; }
+  .mega-links a:hover::after { transform: translateX(4px); opacity: 1; }
+  .mega-links a:hover { background: var(--bg-hover); margin: 0 -12px; padding-left: 12px; padding-right: 12px; }
+
+  .mega-feature { position: relative; display: block; min-height: 290px; overflow: hidden; background: linear-gradient(135deg, #002A5A 0%, #001E43 55%, #001633 100%); }
+  .mega-feature::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 26px); }
+  .mf-art { position: absolute; inset: 0 0 64px; display: grid; place-items: center; }
+  .mf-art svg { width: 38%; max-width: 150px; stroke: rgba(255,255,255,0.4); fill: none; stroke-width: .8; stroke-linecap: round; stroke-linejoin: round; }
+  .mega-feature img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+  .mega-feature:hover img { transform: scale(1.04); }
+  .mf-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 14px 68px 14px 20px; background: rgba(0,22,51,.93); border-top: 1px solid var(--b-btn); }
+  .mf-cap strong { display: block; margin-bottom: 2px; font-family: 'Wix Madefor Display', sans-serif; font-size: 15px; font-weight: 700; color: var(--white); }
+  .mf-cap span { display: block; font-size: 12.5px; line-height: 1.45; color: var(--t-sub); }
+  .mf-arrow { position: absolute; right: 16px; bottom: 16px; z-index: 3; width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--b-btn); border-radius: 6px; color: var(--white); font-size: 15px; transition: border-color .2s, background .2s; }
+  .mega-feature:hover .mf-arrow { border-color: var(--b-btn-hover); background: var(--bg-hover); }
+
+  .hamburger { display: none; align-self: center; width: 42px; height: 42px; border-radius: 6px; border: 1px solid var(--b-btn); background: transparent; color: var(--white); place-items: center; }
+  .hamburger svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; }
+
+  @media (max-width: 1240px) {
+    .nav-item > a { padding: 0 9px; font-size: 11.5px; letter-spacing: .3px; }
+    .nav-item > a::after { left: 9px; right: 9px; }
+  }
+  @media (max-width: 1080px) {
+    .hamburger { display: grid; }
+    .nav { display: none; height: auto; }
+    .nav.open {
+      display: block; position: absolute; top: 100%; left: 0; right: 0;
+      background: var(--navy-card); border-bottom: 1px solid var(--b-default);
+      max-height: calc(100vh - 110px); overflow-y: auto; padding: 4px 24px 20px;
+    }
+    .nav.open .nav-menu { flex-direction: column; height: auto; }
+    .nav.open .nav-item { flex-direction: column; }
+    .nav.open .nav-item > a { padding: 15px 0; justify-content: space-between; border-bottom: 1px solid var(--b-default); font-size: 13px; }
+    .nav.open .nav-item > a::after { display: none; }
+    .nav.open .nav-item:hover > a, .nav.open .nav-item:focus-within > a { background: transparent; }
+    .mega { position: static; opacity: 1; visibility: visible; pointer-events: auto; transform: none; box-shadow: none; background: transparent; border: 0; max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+    .nav.open .nav-item.open .mega { max-height: 640px; }
+    .nav.open .nav-item.open .chev { transform: rotate(180deg); }
+    .mega-inner { display: block; min-height: 0; padding: 0; }
+    .mega-info, .mega-feature { display: none; }
+    .mega-links { background: transparent; border: 0; padding: 4px 0 10px 14px; }
+    .mega-links a:hover { margin: 0; padding-left: 0; padding-right: 0; background: transparent; }
+  }
+
+  /* ---------- Top bar (instansi) ---------- */
+  .topbar { background: var(--navy-footer); border-bottom: 1px solid var(--b-default); font-size: 12.5px; color: var(--t-cap); }
+  .topbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 8px; padding-bottom: 8px; }
+  .topbar a { transition: color .2s; }
+  .topbar a:hover { color: var(--white); }
+  .tb-right { display: flex; align-items: center; gap: 22px; }
+  .tb-right span.sep { width: 1px; height: 12px; background: var(--b-btn); }
+
+  /* ---------- Hero banner ---------- */
+  .hero { position: relative; background: var(--navy-footer); }
+  .slider { position: relative; height: clamp(480px, 76vh, 660px); overflow: hidden; }
+
+  .slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .9s ease, visibility .9s; }
+  .slide.active { opacity: 1; visibility: visible; z-index: 1; }
+
+  .slide-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #002A5A 0%, #001E43 52%, #001633 100%); }
+  .slide-bg::after {
+    content: ''; position: absolute; inset: 0; opacity: .5;
+    background-image:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 28px);
+  }
+  .slide-art { position: absolute; right: 2%; bottom: 0; width: min(58%, 780px); height: 100%; display: flex; align-items: flex-end; justify-content: flex-end; }
+  .slide-art svg { width: 100%; height: auto; max-height: 100%; }
+  .slide-photo { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity .8s; }
+  .slide.has-photo .slide-photo { opacity: 1; }
+  .slide.has-photo .slide-art, .slide.has-photo .slide-bg::after { display: none; }
+  .slide.active.has-photo .slide-photo { animation: kenburns 16s ease-out forwards; }
+  @keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.07); } }
+
+  .slide-overlay {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, rgba(0,30,67,.97) 0%, rgba(0,30,67,.86) 40%, rgba(0,30,67,.30) 100%),
+      linear-gradient(0deg, rgba(0,22,51,.9) 0%, transparent 34%);
+  }
+
+  .slide-content { position: relative; z-index: 2; height: 100%; display: flex; align-items: center; }
+  .slide-text { max-width: 660px; padding: 0 0 76px; }
+  .hero-label { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; font-size: 12.5px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--t-sub); }
+  .hero-label::before { content: ''; width: 40px; height: 2px; background: var(--white); flex-shrink: 0; }
+  .slide h1 { font-size: clamp(28px, 4.4vw, 52px); letter-spacing: -1px; line-height: 1.14; margin-bottom: 20px; }
+  .slide p.lead { font-size: clamp(15px, 1.5vw, 17px); color: var(--t-sub); max-width: 560px; margin-bottom: 32px; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .slide.active .slide-text > * { animation: rise .8s ease both; }
+  .slide.active .slide-text > *:nth-child(2) { animation-delay: .1s; }
+  .slide.active .slide-text > *:nth-child(3) { animation-delay: .2s; }
+  .slide.active .slide-text > *:nth-child(4) { animation-delay: .3s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+  /* control bar */
+  .slider-bar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; background: rgba(0,22,51,.78); border-top: 1px solid var(--b-default); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .slider-bar-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-top: 14px; padding-bottom: 14px; }
+  .counter { font-family: 'Wix Madefor Display', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; color: var(--white); min-width: 64px; }
+  .counter span { color: var(--t-cap); font-weight: 500; }
+  .dots { display: flex; gap: 10px; flex: 1; max-width: 360px; }
+  .dot { position: relative; flex: 1; height: 3px; padding: 0; border: 0; background: rgba(255,255,255,.25); overflow: hidden; cursor: pointer; }
+  .dot::before { content: ''; position: absolute; inset: -10px 0; }
+  .dot.active::after { content: ''; position: absolute; inset: 0; background: var(--white); transform-origin: left; animation: progress 7s linear forwards; }
+  .slider.paused .dot.active::after { animation-play-state: paused; }
+  @keyframes progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .arrows { display: flex; gap: 8px; }
+  .arrow { width: 38px; height: 38px; display: grid; place-items: center; background: transparent; border: 1px solid var(--b-btn); border-radius: 6px; color: var(--white); transition: border-color .2s, background .2s; }
+  .arrow:hover { border-color: var(--b-btn-hover); background: var(--bg-hover); }
+  .arrow svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---------- Akses cepat ---------- */
+  .quick-access { background: var(--navy-card); border-bottom: 1px solid var(--b-default); }
+  .qa-grid { display: grid; grid-template-columns: repeat(5, 1fr); }
+  .qa-item { display: flex; align-items: center; gap: 14px; padding: 22px 20px; transition: background .2s; }
+  .qa-item + .qa-item { border-left: 1px solid var(--b-default); }
+  .qa-item:hover { background: var(--navy-hover); }
+  .qa-item .ic { width: 42px; height: 42px; flex-shrink: 0; display: grid; place-items: center; border: 1px solid var(--b-btn); border-radius: 8px; color: var(--white); }
+  .qa-item .ic svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .qa-item strong { display: block; font-family: 'Wix Madefor Display', sans-serif; font-size: 14.5px; font-weight: 600; color: var(--white); line-height: 1.3; }
+  .qa-item small { display: block; font-size: 12px; color: var(--t-cap); font-weight: 500; line-height: 1.4; }
+
+  @media (max-width: 900px) {
+    .qa-grid { grid-template-columns: 1fr 1fr; }
+    .qa-item + .qa-item { border-left: 0; }
+    .qa-item { border-top: 1px solid var(--b-default); }
+    .qa-item:nth-child(-n+2) { border-top: 0; }
+    .qa-item:nth-child(even) { border-left: 1px solid var(--b-default); }
+    .qa-item:last-child { grid-column: 1 / -1; border-left: 0; }
+  }
+  @media (max-width: 720px) {
+    .slider { height: clamp(520px, 86vh, 640px); }
+    .slide-art { width: 100%; right: 0; opacity: .32; }
+    .slide-overlay { background: linear-gradient(0deg, rgba(0,22,51,.96) 0%, rgba(0,30,67,.78) 55%, rgba(0,30,67,.55) 100%); }
+    .slide-text { padding-bottom: 84px; }
+    .tb-right .tb-contact, #today { display: none; }
+    .counter { display: none; }
+    .qa-item { padding: 18px 14px; gap: 10px; }
+    .qa-item small { display: none; }
+  }
+
+  /* ---------- Sections ---------- */
+  section.block { padding: 96px 0; }
+  .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 44px; flex-wrap: wrap; }
+  .eyebrow { display: block; margin-bottom: 12px; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--t-cap); }
+  .sec-head h2 { font-size: clamp(28px, 4vw, 42px); letter-spacing: -1px; line-height: 1.15; max-width: 640px; }
+  .sec-head p { margin-top: 12px; max-width: 560px; color: var(--t-sub); font-size: 15px; }
+
+  .alt { background: var(--navy-footer); border-top: 1px solid var(--b-default); border-bottom: 1px solid var(--b-default); }
+
+  .grid { display: grid; gap: 18px; }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .g4 { grid-template-columns: repeat(4, 1fr); }
+
+  .card {
+    position: relative; display: block;
+    background: var(--navy-card);
+    border: 1px solid var(--b-default); border-radius: 8px;
+    padding: 28px;
+    transition: border-color .25s, background .25s, transform .25s, box-shadow .25s;
+  }
+  a.card:hover, .card.hov:hover { background: var(--navy-hover); border-color: var(--b-btn); transform: translateY(-2px); box-shadow: var(--sh-md); }
+
+  .icon-box { width: 48px; height: 48px; display: grid; place-items: center; margin-bottom: 22px; border: 1px solid var(--b-btn); border-radius: 8px; color: var(--white); }
+  .icon-box svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+  .card h3 { font-size: 19px; margin-bottom: 10px; letter-spacing: -.2px; }
+  .card p { font-size: 14px; color: var(--t-sub); }
+
+  /* Fungsi cards: number */
+  .num { position: absolute; top: 22px; right: 26px; font-family: 'Wix Madefor Display', sans-serif; font-size: 44px; font-weight: 800; color: rgba(255,255,255,0.06); line-height: 1; }
+
+  /* Produk hukum */
+  .law .abbr { font-family: 'Wix Madefor Display', sans-serif; font-size: 40px; font-weight: 800; letter-spacing: -1px; color: var(--white); line-height: 1; margin-bottom: 14px; }
+  .law .tag { display: block; margin-bottom: 18px; font-size: 11px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: var(--t-cap); }
+  .law .go { margin-top: 22px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--white); }
+  .law .go svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+  .law:hover .go svg { transform: translateX(4px); }
+
+  /* Alat kelengkapan */
+  .unit { display: flex; gap: 18px; align-items: flex-start; padding: 24px; }
+  .unit .code { flex: 0 0 auto; min-width: 64px; height: 64px; padding: 0 10px; display: grid; place-items: center; border: 1px solid var(--b-btn); border-radius: 8px; font-family: 'Wix Madefor Display', sans-serif; font-weight: 800; font-size: 15px; letter-spacing: .5px; color: var(--white); }
+  .unit h3 { font-size: 16px; margin-bottom: 4px; }
+  .unit p { font-size: 13px; color: var(--t-cap); font-weight: 500; }
+
+  /* Berita & pengumuman */
+  .two { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; }
+  .news-list, .notice-list { display: flex; flex-direction: column; gap: 14px; }
+  .news-item { display: grid; grid-template-columns: 120px 1fr; gap: 20px; padding: 18px; align-items: center; }
+  .news-thumb { aspect-ratio: 4/3; border-radius: 6px; border: 1px solid var(--b-default); background:
+      linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); display: grid; place-items: center; color: var(--t-cap); }
+  .news-thumb svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .meta { font-size: 12px; font-weight: 500; color: var(--t-cap); letter-spacing: .3px; margin-bottom: 6px; }
+  .news-item h3 { font-size: 16.5px; line-height: 1.4; margin-bottom: 6px; }
+  .news-item p { font-size: 13.5px; color: var(--t-sub); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  .panel-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .panel-title h3 { font-size: 18px; }
+
+  .notice { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 18px; align-items: center; }
+  .date-box { text-align: center; padding: 8px 0; border: 1px solid var(--b-btn); border-radius: 6px; }
+  .date-box strong { display: block; font-family: 'Wix Madefor Display', sans-serif; font-size: 20px; font-weight: 800; color: var(--white); line-height: 1.1; }
+  .date-box span { display: block; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--t-cap); }
+  .notice h3 { font-size: 14.5px; line-height: 1.45; }
+
+  /* Dana & Laporan */
+  .quick { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 24px; }
+  .quick span.t { font-family: 'Wix Madefor Display', sans-serif; font-size: 16px; font-weight: 600; color: var(--white); }
+  .quick small { display: block; margin-top: 2px; font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 500; color: var(--t-cap); }
+  .quick svg { width: 18px; height: 18px; flex-shrink: 0; stroke: var(--white); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: .7; transition: transform .2s, opacity .2s; }
+  .quick:hover svg { transform: translateX(4px); opacity: 1; }
+
+  /* Aspirasi */
+  .aspirasi { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  .aspirasi h2 { font-size: clamp(30px, 4.4vw, 48px); letter-spacing: -1.2px; line-height: 1.12; margin-bottom: 18px; }
+  .aspirasi .hash { display: inline-block; margin-top: 26px; padding: 8px 18px; border: 1px solid var(--b-btn); border-radius: 100px; font-size: 13px; font-weight: 600; color: var(--white); letter-spacing: .4px; }
+  .form-card { padding: 32px; box-shadow: var(--sh-lg); }
+  .field { margin-bottom: 18px; }
+  .field label { display: block; margin-bottom: 8px; font-size: 12.5px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: var(--t-sub); }
+  .field input, .field textarea {
+    width: 100%; padding: 13px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--b-default); border-radius: 6px;
+    color: var(--white); font-size: 14.5px;
+    transition: border-color .2s, background .2s;
+  }
+  .field input::placeholder, .field textarea::placeholder { color: rgba(255,255,255,0.38); }
+  .field input:focus, .field textarea:focus { outline: none; border-color: var(--b-btn-hover); background: rgba(255,255,255,0.05); }
+  .field textarea { min-height: 130px; resize: vertical; }
+  .field.err input, .field.err textarea { border-color: #DC2626; }
+  .field .msg-err { display: none; margin-top: 6px; font-size: 12.5px; color: #DC2626; }
+  .field.err .msg-err { display: block; }
+  .form-card .btn { width: 100%; }
+  .success { display: none; margin-top: 16px; padding: 13px 16px; border: 1px solid #16A34A; border-radius: 6px; font-size: 13.5px; color: #16A34A; }
+  .success.show { display: block; }
+
+  /* ---------- Footer ---------- */
+  .footer { background: var(--navy-footer); border-top: 1px solid var(--b-default); padding: 64px 0 0; }
+  .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 48px; padding-bottom: 48px; }
+  .footer-logo { margin-bottom: 20px; min-height: 42px; }
+  .footer-logo img { max-height: 42px; width: auto; }
+  .footer-brand p { font-size: 13.5px; color: var(--t-cap); max-width: 340px; }
+  .footer h4 { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 18px; }
+  .footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer ul a, .footer ul li { font-size: 13.5px; color: var(--t-cap); transition: color .2s; }
+  .footer ul a:hover { color: var(--white); }
+  .social { display: flex; gap: 8px; margin-top: 22px; }
+  .social a { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--b-btn); border-radius: 50%; color: var(--white); transition: background .2s, border-color .2s; }
+  .social a:hover { background: var(--bg-hover); border-color: var(--b-btn-hover); }
+  .social svg { width: 16px; height: 16px; fill: currentColor; }
+  .footer-bottom { border-top: 1px solid var(--b-default); padding: 22px 0; text-align: center; font-size: 12.5px; color: var(--t-cap); }
+  .footer-bottom strong { color: var(--white); font-weight: 700; }
+
+  /* ---------- Reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  .d1 { transition-delay: .08s; } .d2 { transition-delay: .16s; } .d3 { transition-delay: .24s; } .d4 { transition-delay: .32s; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1080px) {
+    .g4 { grid-template-columns: repeat(2, 1fr); }
+    .two, .aspirasi { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .footer-brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 720px) {
+    section.block { padding: 68px 0; }
+    .g3, .g4 { grid-template-columns: 1fr; }
+    .news-item { grid-template-columns: 92px 1fr; gap: 14px; padding: 14px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .form-card { padding: 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= TOP BAR ================= -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>Portal Resmi Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia</span>
+    <div class="tb-right">
+      <span id="today"></span>
+      <span class="sep tb-contact"></span>
+      <a class="tb-contact" href="mailto:dpm@uii.ac.id">dpm@uii.ac.id</a>
+      <span class="sep tb-contact"></span>
+      <a class="tb-contact" href="https://wa.me/6281511092004" target="_blank" rel="noopener">0815 1109 2004</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+  <div class="container header-inner">
+    <a href="#" class="logo" aria-label="DPM UII — Beranda">
+      <img src="https://dpm.uii.ac.id/wp-content/uploads/2025/07/logo-dpm.png" alt="Logo DPM UII"
+           onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='https://dpm.uii.ac.id/wp-content/uploads/2023/12/LOGO.svg'}else{this.style.display='none';this.nextElementSibling.style.display='inline-flex'}">
+      <div class="logo-fallback"><span>DPM</span><span>UII</span></div>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Navigasi utama">
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#fungsi">Tentang <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
+          <div class="mega">
+            <div class="mega-inner">
+              <div class="mega-info">
+                <span class="eyebrow">Profil Lembaga</span>
+                <h2>Tentang DPM UII</h2>
+                <p>Lembaga legislatif Keluarga Mahasiswa UII yang menjalankan fungsi legislasi, pengawasan, dan penyaluran aspirasi mahasiswa.</p>
+              </div>
+              <div class="mega-links">
+            <a href="/tentang/sambutan"><span>Sambutan</span></a>
+            <a href="/tentang/sejarah"><span>Sejarah KM</span></a>
+            <a href="/tentang/visi-misi"><span>Visi Misi</span></a>
+            <a href="/tentang/struktur"><span>Struktur</span></a>
+            <a href="/tentang/kedudukan-tugas-wewenang"><span>Kedudukan, Tugas dan Wewenang</span></a>
+            <a href="/tentang/profil-dewan"><span>Profil Dewan</span></a>
+              </div>
+              <a class="mega-feature" href="/tentang/profil-dewan">
+                <div class="mf-art" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10M10 21V10M14 21V10M19 21V10M2 10 12 3l10 7z"/></svg></div>
+                <img src="images/menu-tentang.jpg" alt="" loading="lazy" onerror="this.remove()">
+                <div class="mf-cap"><strong>Profil Dewan</strong><span>Kenali anggota dan susunan Dewan Permusyawaratan Mahasiswa UII.</span></div>
+                <span class="mf-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="#unit">Alat Kelengkapan <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
+          <div class="mega">
+            <div class="mega-inner">
+              <div class="mega-info">
+                <span class="eyebrow">Badan dan Unit Kerja</span>
+                <h2>Alat Kelengkapan</h2>
+                <p>Enam badan dan unit kerja yang menggerakkan tugas Dewan Permusyawaratan Mahasiswa UII.</p>
+              </div>
+              <div class="mega-links">
+            <a href="/unit/mentari"><span>Mentari<small>Media &amp; Kesekretariatan</small></span></a>
+            <a href="/unit/badan-legislasi"><span>Baleg<small>Badan Legislasi</small></span></a>
+            <a href="/unit/badan-pengawasan"><span>Bawas<small>Badan Pengawasan</small></span></a>
+            <a href="/unit/badan-kerjasama-advokasi-dan-jaringan"><span>Bosaj<small>Badan Kerjasama, Advokasi &amp; Jaringan</small></span></a>
+            <a href="/unit/badan-audit-kemahasiswaan"><span>BAK<small>Badan Audit Kemahasiswaan</small></span></a>
+            <a href="/unit/badan-pengelola-aset"><span>BPA<small>Badan Pengelola Aset</small></span></a>
+              </div>
+              <a class="mega-feature" href="/tentang/struktur">
+                <div class="mf-art" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5V12M12 12H5v4.5M12 12h7v4.5"/></svg></div>
+                <img src="images/menu-unit.jpg" alt="" loading="lazy" onerror="this.remove()">
+                <div class="mf-cap"><strong>Struktur Organisasi</strong><span>Lihat susunan dan hubungan kerja seluruh alat kelengkapan.</span></div>
+                <span class="mf-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('legal-products.index') }}>Produk Hukum <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
+          <div class="mega">
+            <div class="mega-inner">
+              <div class="mega-info">
+                <span class="eyebrow">Arsip Resmi</span>
+                <h2>Produk Hukum</h2>
+                <p>Peraturan resmi Keluarga Mahasiswa UII yang dapat diakses oleh seluruh civitas kemahasiswaan.</p>
+            <div class="mega-docs">
+              <a href="{{ route('legal-products.type', 'pkm') }}">PKM UII No. 3 Tahun 2024: Tentang Distribusi dan Alokasi Dana KM UII<small>Peraturan Keluarga Mahasiswa · 2024</small></a>
+              <a href="{{ route('legal-products.type', 'pkm') }}">PKM UII No. 2 Tahun 2024: Tentang Pedoman Kegiatan Kepanitiaan KM UII<small>Peraturan Keluarga Mahasiswa · 2024</small></a>
+            </div>
+              </div>
+              <div class="mega-links">
+            <a href="{{ route('legal-products.type', 'pdkm') }}"><span>PDKM<small>Peraturan Dasar Keluarga Mahasiswa</small></span></a>
+            <a href="{{ route('legal-products.type', 'gbhkm') }}"><span>GBHKM<small>Garis-Garis Besar Haluan Keluarga Mahasiswa</small></span></a>
+            <a href="{{ route('legal-products.type', 'pkm') }}"><span>PKM<small>Peraturan Keluarga Mahasiswa</small></span></a>
+            <a href="{{ route('legal-products.type', 'pdpm') }}"><span>PDPM<small>Peraturan Dewan Permusyawaratan Mahasiswa</small></span></a>
+            <a href="{{ route('legal-products.index') }}><span>Semua Produk Hukum</span></a>
+              </div>
+              <a class="mega-feature" href="{{ route('legal-products.index') }}>
+                <div class="mf-art" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></div>
+                <img src="images/menu-hukum.jpg" alt="" loading="lazy" onerror="this.remove()">
+                <div class="mf-cap"><strong>Arsip Produk Hukum</strong><span>Telusuri dan unduh peraturan berdasarkan jenis dan tahun.</span></div>
+                <span class="mf-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="/dana">Dana <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
+          <div class="mega">
+            <div class="mega-inner">
+              <div class="mega-info">
+                <span class="eyebrow">Transparansi</span>
+                <h2>Dana</h2>
+                <p>Informasi distribusi dan pertanggungjawaban dana lembaga Keluarga Mahasiswa UII.</p>
+            <div class="mega-docs">
+              <a href="{{ route('legal-products.type', 'pkm') }}">PKM UII No. 3 Tahun 2024: Tentang Distribusi dan Alokasi Dana KM UII<small>Dasar pengaturan distribusi dana</small></a>
+            </div>
+              </div>
+              <div class="mega-links">
+            <a href="/dana/distribusi-dana"><span>Distribusi Dana<small>Alokasi dana lembaga</small></span></a>
+            <a href="/dana/lpj"><span>LPJ<small>Laporan pertanggungjawaban</small></span></a>
+            <a href="/dana/lha"><span>LHA<small>Laporan hasil audit</small></span></a>
+              </div>
+              <a class="mega-feature" href="/dana">
+                <div class="mf-art" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3H15"/></svg></div>
+                <img src="images/menu-dana.jpg" alt="" loading="lazy" onerror="this.remove()">
+                <div class="mf-cap"><strong>Transparansi Dana</strong><span>Akses laporan pertanggungjawaban dan hasil audit lembaga.</span></div>
+                <span class="mf-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item"><a href="/laporan-kinerja">Laporan Kinerja</a></li>
+        <li class="nav-item">
+          <a href="/keputusan">Keputusan <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
+          <div class="mega">
+            <div class="mega-inner">
+              <div class="mega-info">
+                <span class="eyebrow">Surat Keputusan</span>
+                <h2>Surat Keputusan</h2>
+                <p>Kumpulan surat keputusan resmi yang diterbitkan Dewan Permusyawaratan Mahasiswa UII.</p>
+              </div>
+              <div class="mega-links">
+            <a href="/keputusan/lembaga-km-uii"><span>Lembaga KM UII<small>Surat-surat keputusan lembaga KM UII</small></span></a>
+            <a href="/keputusan/badan-tim-kelengkapan-dewan"><span>Badan / Tim Kelengkapan Dewan</span></a>
+            <a href="/keputusan/badan-tim-penyelenggara-pemilu"><span>Badan / Tim Penyelenggara Pemilu</span></a>
+            <a href="/keputusan/lembaga-khusus"><span>Lembaga Khusus</span></a>
+              </div>
+              <a class="mega-feature" href="/keputusan">
+                <div class="mf-art" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="m9 14 2 2 4-4"/></svg></div>
+                <img src="images/menu-keputusan.jpg" alt="" loading="lazy" onerror="this.remove()">
+                <div class="mf-cap"><strong>Arsip Surat Keputusan</strong><span>Telusuri keputusan resmi berdasarkan kategori lembaga.</span></div>
+                <span class="mf-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item"><a href="#berita">Berita</a></li>
+        <li class="nav-item"><a href="#aspirasi">Aspirasi</a></li>
+      </ul>
+    </nav>
+
+    <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ================= HERO BANNER ================= -->
+<!-- Foto banner: letakkan file di folder images/ (hero-1.jpg, hero-2.jpg, hero-3.jpg) atau ubah data-img di bawah.
+     Jika foto belum ada, otomatis tampil ilustrasi institusional. Ukuran ideal 1920x800 px. -->
+<section class="hero" aria-label="Banner utama">
+  <div class="slider" id="slider">
+
+    <!-- Slide 1 -->
+    <div class="slide active" data-img="images/hero-1.jpg">
+      <div class="slide-bg"></div>
+      <div class="slide-art" aria-hidden="true">
+        <svg viewBox="0 0 640 520" fill="none" stroke="rgba(255,255,255,0.42)" stroke-width="1.6" stroke-linejoin="round">
+          <defs>
+            <g id="col">
+              <rect x="0" y="0" width="28" height="170"/>
+              <path d="M9 6V164M19 6V164" stroke="rgba(255,255,255,0.2)"/>
+              <rect x="-6" y="-8" width="40" height="8" fill="rgba(255,255,255,0.09)"/>
+              <rect x="-6" y="170" width="40" height="8" fill="rgba(255,255,255,0.09)"/>
+            </g>
+          </defs>
+          <path d="M50 205 L320 62 L590 205 Z" fill="rgba(255,255,255,0.07)"/>
+          <path d="M92 195 L320 76 L548 195"/>
+          <circle cx="320" cy="150" r="30" fill="rgba(255,255,255,0.09)"/>
+          <circle cx="320" cy="150" r="20"/>
+          <path d="M320 134 L324 146 L336 146 L326 154 L330 166 L320 159 L310 166 L314 154 L304 146 L316 146 Z" fill="rgba(255,255,255,0.18)" stroke="none"/>
+          <rect x="50" y="205" width="540" height="22" fill="rgba(255,255,255,0.09)"/>
+          <use href="#col" x="96"  y="235"/>
+          <use href="#col" x="176" y="235"/>
+          <use href="#col" x="256" y="235"/>
+          <use href="#col" x="336" y="235"/>
+          <use href="#col" x="416" y="235"/>
+          <use href="#col" x="496" y="235"/>
+          <path d="M70 413 H570"/>
+          <path d="M50 433 H590"/>
+          <path d="M30 453 H610"/>
+          <path d="M10 473 H630"/>
+          <path d="M10 473 V500 H630 V473" stroke="rgba(255,255,255,0.2)"/>
+        </svg>
+      </div>
+      <div class="slide-photo"></div>
+      <div class="slide-overlay"></div>
+      <div class="container slide-content">
+        <div class="slide-text">
+          <div class="hero-label">Portal Resmi · Keluarga Mahasiswa UII</div>
+          <h1>Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia</h1>
+          <p class="lead">Lembaga legislatif Keluarga Mahasiswa UII yang menjalankan fungsi legislasi, pengawasan, dan penyaluran aspirasi mahasiswa.</p>
+          <div class="hero-actions">
+            <a href="/tentang/profil-dewan" class="btn">Profil Lembaga <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a href="{{ route('legal-products.index') }} class="btn">Produk Hukum</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide" data-img="images/hero-2.jpg">
+      <div class="slide-bg"></div>
+      <div class="slide-art" aria-hidden="true">
+        <svg viewBox="0 0 640 520" fill="none" stroke="rgba(255,255,255,0.42)" stroke-width="1.6" stroke-linejoin="round">
+          <rect x="170" y="60" width="300" height="390" rx="6" transform="rotate(-7 320 255)" fill="rgba(255,255,255,0.10)"/>
+          <rect x="170" y="60" width="300" height="390" rx="6" transform="rotate(7 320 255)" fill="rgba(255,255,255,0.10)"/>
+          <rect x="170" y="60" width="300" height="390" rx="6" fill="rgba(255,255,255,0.09)"/>
+          <path d="M215 120 H425" stroke-width="3"/>
+          <path d="M215 150 H400 M215 176 H425 M215 202 H410 M215 228 H425 M215 254 H385 M215 292 H425 M215 318 H405 M215 344 H425" stroke="rgba(255,255,255,0.26)"/>
+          <circle cx="320" cy="400" r="34" fill="rgba(255,255,255,0.09)"/>
+          <circle cx="320" cy="400" r="24"/>
+          <path d="M320 384 L324 396 L336 396 L326 404 L330 416 L320 409 L310 416 L314 404 L304 396 L316 396 Z" fill="rgba(255,255,255,0.18)" stroke="none"/>
+          <path d="M300 430 L292 470 L320 456 L348 470 L340 430" fill="rgba(255,255,255,0.09)"/>
+        </svg>
+      </div>
+      <div class="slide-photo"></div>
+      <div class="slide-overlay"></div>
+      <div class="container slide-content">
+        <div class="slide-text">
+          <div class="hero-label">Produk Hukum</div>
+          <h1>Landasan Hukum Keluarga Mahasiswa UII</h1>
+          <p class="lead">Arsip resmi PDKM, GBHKM, PKM, dan PDPM yang dapat diakses oleh seluruh civitas kemahasiswaan Universitas Islam Indonesia.</p>
+          <div class="hero-actions">
+            <a href="{{ route('legal-products.index') }} class="btn">Akses Produk Hukum <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a href="/keputusan" class="btn">Surat Keputusan</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide" data-img="images/hero-3.jpg">
+      <div class="slide-bg"></div>
+      <div class="slide-art" aria-hidden="true">
+        <svg viewBox="0 0 640 520" fill="none" stroke="rgba(255,255,255,0.42)" stroke-width="1.6" stroke-linejoin="round">
+          <path d="M250 70 H520 A16 16 0 0 1 536 86 V176 A16 16 0 0 1 520 192 H340 L300 226 V192 H250 A16 16 0 0 1 234 176 V86 A16 16 0 0 1 250 70 Z" fill="rgba(255,255,255,0.09)"/>
+          <path d="M268 108 H500 M268 134 H470 M268 160 H430" stroke="rgba(255,255,255,0.26)"/>
+          <circle cx="150" cy="310" r="32" fill="rgba(255,255,255,0.10)"/>
+          <path d="M92 450 C92 380 208 380 208 450 Z" fill="rgba(255,255,255,0.10)"/>
+          <circle cx="490" cy="310" r="32" fill="rgba(255,255,255,0.10)"/>
+          <path d="M432 450 C432 380 548 380 548 450 Z" fill="rgba(255,255,255,0.10)"/>
+          <circle cx="320" cy="290" r="40" fill="rgba(255,255,255,0.10)"/>
+          <path d="M240 450 C240 366 400 366 400 450 Z" fill="rgba(255,255,255,0.10)"/>
+          <path d="M40 450 H600"/>
+          <path d="M40 450 V490 H600 V450" stroke="rgba(255,255,255,0.2)"/>
+        </svg>
+      </div>
+      <div class="slide-photo"></div>
+      <div class="slide-overlay"></div>
+      <div class="container slide-content">
+        <div class="slide-text">
+          <div class="hero-label">Aspirasi Mahasiswa</div>
+          <h1>Rumah Aspirasi Mahasiswa UII</h1>
+          <p class="lead">Setiap kritik, saran, dan gagasan mahasiswa dicatat dan diteruskan kepada pihak yang berwenang untuk ditindaklanjuti.</p>
+          <div class="hero-actions">
+            <a href="#aspirasi" class="btn">Sampaikan Aspirasi <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kontrol -->
+    <div class="slider-bar">
+      <div class="container slider-bar-inner">
+        <div class="counter"><b id="curNo">01</b> <span>/ <span id="totNo">03</span></span></div>
+        <div class="dots" role="tablist" aria-label="Pilih banner">
+          <button class="dot active" aria-label="Banner 1"></button>
+          <button class="dot" aria-label="Banner 2"></button>
+          <button class="dot" aria-label="Banner 3"></button>
+        </div>
+        <div class="arrows">
+          <button class="arrow" id="prevBtn" aria-label="Banner sebelumnya"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <button class="arrow" id="nextBtn" aria-label="Banner berikutnya"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= AKSES CEPAT ================= -->
+<nav class="quick-access" aria-label="Akses cepat">
+  <div class="container qa-grid">
+    <a class="qa-item" href="{{ route('legal-products.index') }}>
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span>
+      <span><strong>Produk Hukum</strong><small>Arsip peraturan resmi</small></span>
+    </a>
+    <a class="qa-item" href="/dana/distribusi-dana">
+      <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3H15"/></svg></span>
+      <span><strong>Dana</strong><small>Distribusi, LPJ, dan LHA</small></span>
+    </a>
+    <a class="qa-item" href="/laporan-kinerja">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M2 20h20"/></svg></span>
+      <span><strong>Laporan Kinerja</strong><small>Capaian kerja lembaga</small></span>
+    </a>
+    <a class="qa-item" href="/keputusan">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="m9 14 2 2 4-4"/></svg></span>
+      <span><strong>Surat Keputusan</strong><small>Keputusan resmi dewan</small></span>
+    </a>
+    <a class="qa-item" href="#aspirasi">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+      <span><strong>Aspirasi</strong><small>Sampaikan masukan Anda</small></span>
+    </a>
+  </div>
+</nav>
+
+<!-- ================= FUNGSI ================= -->
+<section class="block" id="fungsi">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow">Tentang DPM UII</span>
+        <h2>Tiga fungsi untuk menjaga arah Keluarga Mahasiswa</h2>
+        <p>Sebagai lembaga legislatif tertinggi dalam sistem student government KM UII, DPM UII menjalankan tiga peran utama.</p>
+      </div>
+      <a href="/tentang/profil-dewan" class="link-more">Profil Dewan
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <div class="grid g3">
+      <div class="card hov reveal">
+        <span class="num">01</span>
+        <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></div>
+        <h3>Legislasi</h3>
+        <p>Menyusun dan menetapkan produk hukum KM UII, dari peraturan dasar hingga peraturan teknis kelembagaan.</p>
+      </div>
+      <div class="card hov reveal d1">
+        <span class="num">02</span>
+        <div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></div>
+        <h3>Pengawasan</h3>
+        <p>Mengawasi pelaksanaan kebijakan, program kerja, serta pengelolaan dana dan aset lembaga kemahasiswaan.</p>
+      </div>
+      <div class="card hov reveal d2">
+        <span class="num">03</span>
+        <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>Aspirasi</h3>
+        <p>Menjadi saluran resmi suara mahasiswa agar setiap masukan tersampaikan dan ditindaklanjuti.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRODUK HUKUM ================= -->
+<section class="block alt" id="produk-hukum">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow">Produk Hukum</span>
+        <h2>Landasan hukum Keluarga Mahasiswa UII</h2>
+        <p>Akses arsip peraturan resmi berdasarkan jenisnya.</p>
+      </div>
+      <a href="{{ route('legal-products.index') }} class="link-more">Lihat semua arsip
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <div class="grid g4">
+      <a href="{{ route('legal-products.type', 'pdkm') }}" class="card law reveal">
+        <span class="tag">Produk Hukum</span>
+        <div class="abbr">PDKM</div>
+        <p>Peraturan Dasar Keluarga Mahasiswa</p>
+        <span class="go">Buka arsip <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a href="{{ route('legal-products.type', 'gbhkm') }}" class="card law reveal d1">
+        <span class="tag">Produk Hukum</span>
+        <div class="abbr">GBHKM</div>
+        <p>Garis-Garis Besar Haluan Keluarga Mahasiswa</p>
+        <span class="go">Buka arsip <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a href="{{ route('legal-products.type', 'pkm') }}" class="card law reveal d2">
+        <span class="tag">Produk Hukum</span>
+        <div class="abbr">PKM</div>
+        <p>Peraturan Keluarga Mahasiswa</p>
+        <span class="go">Buka arsip <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a href="{{ route('legal-products.type', 'pdpm') }}" class="card law reveal d3">
+        <span class="tag">Produk Hukum</span>
+        <div class="abbr">PDPM</div>
+        <p>Peraturan Dewan Permusyawaratan Mahasiswa</p>
+        <span class="go">Buka arsip <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ALAT KELENGKAPAN ================= -->
+<section class="block" id="unit">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow">Alat Kelengkapan</span>
+        <h2>Badan dan unit kerja DPM UII</h2>
+        <p>Enam alat kelengkapan yang menggerakkan kerja parlemen mahasiswa.</p>
+      </div>
+    </div>
+
+    <div class="grid g3">
+      <a href="/unit/mentari" class="card unit reveal"><div class="code">MENTARI</div><div><h3>Mentari</h3><p>Media &amp; Kesekretariatan</p></div></a>
+      <a href="/unit/badan-legislasi" class="card unit reveal d1"><div class="code">BALEG</div><div><h3>Baleg</h3><p>Badan Legislasi</p></div></a>
+      <a href="/unit/badan-pengawasan" class="card unit reveal d2"><div class="code">BAWAS</div><div><h3>Bawas</h3><p>Badan Pengawasan</p></div></a>
+      <a href="/unit/badan-kerjasama-advokasi-dan-jaringan" class="card unit reveal"><div class="code">BOSAJ</div><div><h3>Bosaj</h3><p>Badan Kerjasama, Advokasi &amp; Jaringan</p></div></a>
+      <a href="/unit/badan-audit-kemahasiswaan" class="card unit reveal d1"><div class="code">BAK</div><div><h3>BAK</h3><p>Badan Audit Kemahasiswaan</p></div></a>
+      <a href="/unit/badan-pengelola-aset" class="card unit reveal d2"><div class="code">BPA</div><div><h3>BPA</h3><p>Badan Pengelola Aset</p></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BERITA & PENGUMUMAN ================= -->
+<section class="block alt" id="berita">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow">Kabar Parlemen</span>
+        <h2>Berita dan pengumuman terbaru</h2>
+      </div>
+    </div>
+
+    <div class="two">
+      <div class="reveal">
+        <div class="panel-title">
+          <h3>Berita Kegiatan</h3>
+          <a href="/berita" class="link-more">Semua berita</a>
+        </div>
+        <div class="news-list">
+          <!-- Contoh konten: ganti dengan data berita sebenarnya -->
+          <a href="/berita" class="card news-item">
+            <div class="news-thumb"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg></div>
+            <div>
+              <div class="meta">Berita · Tanggal publikasi</div>
+              <h3>Judul berita kegiatan DPM UII</h3>
+              <p>Ringkasan singkat berita kegiatan parlemen mahasiswa akan tampil di sini untuk memberi gambaran isi berita.</p>
+            </div>
+          </a>
+          <a href="/berita" class="card news-item">
+            <div class="news-thumb"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg></div>
+            <div>
+              <div class="meta">Berita · Tanggal publikasi</div>
+              <h3>Judul berita kegiatan DPM UII</h3>
+              <p>Ringkasan singkat berita kegiatan parlemen mahasiswa akan tampil di sini untuk memberi gambaran isi berita.</p>
+            </div>
+          </a>
+          <a href="/berita" class="card news-item">
+            <div class="news-thumb"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg></div>
+            <div>
+              <div class="meta">Berita · Tanggal publikasi</div>
+              <h3>Judul berita kegiatan DPM UII</h3>
+              <p>Ringkasan singkat berita kegiatan parlemen mahasiswa akan tampil di sini untuk memberi gambaran isi berita.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="reveal d1">
+        <div class="panel-title">
+          <h3>Pengumuman</h3>
+          <a href="/pengumuman" class="link-more">Semua</a>
+        </div>
+        <div class="notice-list">
+          <!-- Contoh konten: ganti dengan data pengumuman sebenarnya -->
+          <a href="/pengumuman" class="card notice">
+            <div class="date-box"><strong>00</strong><span>Bln</span></div>
+            <h3>Judul pengumuman resmi untuk mahasiswa</h3>
+          </a>
+          <a href="/pengumuman" class="card notice">
+            <div class="date-box"><strong>00</strong><span>Bln</span></div>
+            <h3>Judul pengumuman resmi untuk mahasiswa</h3>
+          </a>
+          <a href="/pengumuman" class="card notice">
+            <div class="date-box"><strong>00</strong><span>Bln</span></div>
+            <h3>Judul pengumuman resmi untuk mahasiswa</h3>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DANA & LAPORAN ================= -->
+<section class="block" id="dokumen">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow">Transparansi</span>
+        <h2>Dana, laporan, dan keputusan</h2>
+        <p>Dokumen publik sebagai bentuk akuntabilitas kepada seluruh mahasiswa.</p>
+      </div>
+    </div>
+
+    <div class="grid g3">
+      <a href="/dana/distribusi-dana" class="card quick reveal"><div><span class="t">Distribusi Dana</span><small>Alokasi dana lembaga KM UII</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="/dana/lpj" class="card quick reveal d1"><div><span class="t">LPJ</span><small>Laporan pertanggungjawaban</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="/dana/lha" class="card quick reveal d2"><div><span class="t">LHA</span><small>Laporan hasil audit</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="/laporan-kinerja" class="card quick reveal"><div><span class="t">Laporan Kinerja</span><small>Capaian kerja DPM UII</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="/keputusan" class="card quick reveal d1"><div><span class="t">Keputusan</span><small>Surat keputusan resmi</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="/dokumen" class="card quick reveal d2"><div><span class="t">Semua Dokumen</span><small>Arsip dokumen lengkap</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ASPIRASI ================= -->
+<section class="block alt" id="aspirasi">
+  <div class="container aspirasi">
+    <div class="reveal">
+      <span class="eyebrow">Aspirasi</span>
+      <h2>Suaramu menentukan arah Keluarga Mahasiswa</h2>
+      <p style="color:var(--t-sub);font-size:15.5px;max-width:480px">Sampaikan kritik, saran, atau gagasanmu langsung kepada DPM UII. Setiap aspirasi dicatat dan diteruskan kepada pihak yang berwenang.</p>
+      <span class="hash">#RumahAspirasiMahasiswa</span>
+    </div>
+
+    <form class="card form-card reveal d1" id="aspirasiForm" novalidate>
+      <div class="field">
+        <label for="nama">Nama</label>
+        <input type="text" id="nama" name="nama" placeholder="Nama lengkap" required>
+        <span class="msg-err">Nama wajib diisi.</span>
+      </div>
+      <div class="field">
+        <label for="kontak">Email / NIM</label>
+        <input type="text" id="kontak" name="kontak" placeholder="email@students.uii.ac.id atau NIM" required>
+        <span class="msg-err">Email atau NIM wajib diisi.</span>
+      </div>
+      <div class="field">
+        <label for="pesan">Aspirasi</label>
+        <textarea id="pesan" name="pesan" placeholder="Tuliskan aspirasimu di sini..." required></textarea>
+        <span class="msg-err">Aspirasi wajib diisi.</span>
+      </div>
+      <button type="submit" class="btn">Kirim Aspirasi
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <div class="success" id="formSuccess" role="status">Terima kasih, aspirasimu telah kami terima.</div>
+    </form>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="https://dpm.uii.ac.id/wp-content/uploads/2023/12/LOGO.svg" alt="DPM UII" onerror="this.style.display='none'">
+        </div>
+        <p>Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia. Parlemen Mahasiswa Keluarga Mahasiswa UII.</p>
+        <div class="social">
+          <a href="https://wa.me/6281511092004" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/dpmuii/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Produk Hukum</h4>
+        <ul>
+          <li><a href="{{ route('legal-products.type', 'pdkm') }}">Peraturan Dasar KM UII</a></li>
+          <li><a href="{{ route('legal-products.type', 'gbhkm') }}">Garis-Garis Besar Haluan KM UII</a></li>
+          <li><a href="{{ route('legal-products.type', 'pkm') }}">Peraturan KM UII</a></li>
+          <li><a href="{{ route('legal-products.type', 'pdpm') }}">PDPM UII</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Kontak</h4>
+        <ul>
+          <li>Kampus Terpadu UII, Jl. Kaliurang KM 14,5, Sleman, Yogyakarta</li>
+          <li><a href="https://wa.me/6281511092004" target="_blank" rel="noopener">0815 1109 2004</a></li>
+          <li><a href="mailto:dpm@uii.ac.id">dpm@uii.ac.id</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      Hak Cipta &copy; 2026 <strong>Sekretariat Jenderal DPM UII</strong>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Menu & mega menu
+  const hamburger = document.getElementById('hamburger');
+  const nav = document.getElementById('nav');
+  hamburger.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', open);
+  });
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const link = item.querySelector(':scope > a');
+    if (item.querySelector('.mega')) {
+      link.addEventListener('click', e => {
+        if (window.innerWidth <= 1080) { e.preventDefault(); item.classList.toggle('open'); }
+      });
+    }
+  });
+  document.querySelectorAll('.mega a, .nav-item:not(:has(.mega)) > a').forEach(a => {
+    a.addEventListener('click', () => nav.classList.remove('open'));
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && document.activeElement) document.activeElement.blur();
+  });
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Tanggal pada top bar
+  try {
+    document.getElementById('today').textContent =
+      new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  } catch (e) {}
+
+  // Hero slider
+  (function () {
+    const slider = document.getElementById('slider');
+    const slides = [...slider.querySelectorAll('.slide')];
+    const dots = [...slider.querySelectorAll('.dot')];
+    const cur = document.getElementById('curNo');
+    const tot = document.getElementById('totNo');
+    const DUR = 7000;
+    const pad = n => String(n).padStart(2, '0');
+    let i = 0, timer = null;
+    let hold = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    tot.textContent = pad(slides.length);
+
+    // pasang foto bila file tersedia
+    slides.forEach(s => {
+      const src = s.dataset.img;
+      if (!src) return;
+      const im = new Image();
+      im.onload = () => {
+        s.querySelector('.slide-photo').style.backgroundImage = 'url("' + src + '")';
+        s.classList.add('has-photo');
+      };
+      im.src = src;
+    });
+
+    function schedule() {
+      clearTimeout(timer);
+      if (!hold) timer = setTimeout(() => go(i + 1), DUR);
+    }
+    function go(n) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, k) => s.classList.toggle('active', k === i));
+      dots.forEach((d, k) => {
+        d.classList.remove('active');
+        if (k === i) { void d.offsetWidth; d.classList.add('active'); }
+      });
+      cur.textContent = pad(i + 1);
+      schedule();
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => go(i - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => go(i + 1));
+    dots.forEach((d, k) => d.addEventListener('click', () => go(k)));
+
+    slider.addEventListener('mouseenter', () => { clearTimeout(timer); slider.classList.add('paused'); });
+    slider.addEventListener('mouseleave', () => { slider.classList.remove('paused'); go(i); });
+
+    let x0 = null;
+    slider.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+    slider.addEventListener('touchend', e => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) go(i + (dx < 0 ? 1 : -1));
+      x0 = null;
+    });
+
+    schedule();
+  })();
+
+  // Form aspirasi (demo: sambungkan ke endpoint sebenarnya)
+  const form = document.getElementById('aspirasiForm');
+  const ok = document.getElementById('formSuccess');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    let valid = true;
+    form.querySelectorAll('.field').forEach(f => {
+      const input = f.querySelector('input, textarea');
+      const bad = !input.value.trim();
+      f.classList.toggle('err', bad);
+      if (bad) valid = false;
+    });
+    if (!valid) { ok.classList.remove('show'); return; }
+    ok.classList.add('show');
+    form.reset();
+  });
+</script>
+</body>
+</html>
+

@@ -1,0 +1,138 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Wix Madefor Display', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+
+    --color-brand-50: #eef4ff;
+    --color-brand-100: #d9e6ff;
+    --color-brand-200: #b8d0ff;
+    --color-brand-300: #8ab2ff;
+    --color-brand-400: #5a8df8;
+    --color-brand-500: #3568e8;
+    --color-brand-600: #244fc9;
+    --color-brand-700: #1d3fa2;
+    --color-brand-800: #173480;
+    --color-brand-900: #0b2a5b;
+
+    --color-accent-300: #f7d98a;
+    --color-accent-400: #f2c14e;
+    --color-accent-500: #d9a521;
+    --color-accent-600: #b8871a;
+
+    --color-navy-950: #08285C;
+    --color-navy-900: #0b2a5b;
+    --color-navy-800: #173480;
+    --color-navy-700: #1d3fa2;
+    --color-navy-600: #244fc9;
+
+    --color-amber-50: #fffbeb;
+    --color-amber-100: #fef3c7;
+    --color-amber-200: #fde68a;
+    --color-amber-300: #fcd34d;
+    --color-amber-400: #fbbf24;
+    --color-amber-500: #f59e0b;
+    --color-amber-600: #d97706;
+    --color-amber-700: #b45309;
+    --color-amber-800: #92400e;
+    --color-amber-900: #78350f;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+@layer components {
+    /* Rich text rendered from the CMS editor */
+    .prose-content {
+        color: var(--color-slate-700);
+        line-height: 1.8;
+    }
+
+    .prose-content > * + * {
+        margin-top: 1rem;
+    }
+
+    .prose-content h2 {
+        font-size: 1.5rem;
+        line-height: 1.35;
+        font-weight: 700;
+        color: var(--color-slate-900);
+        margin-top: 2rem;
+    }
+
+    .prose-content h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--color-slate-900);
+        margin-top: 1.5rem;
+    }
+
+    .prose-content a {
+        color: var(--color-brand-600);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .prose-content ul,
+    .prose-content ol {
+        padding-left: 1.4rem;
+        list-style: disc;
+    }
+
+    .prose-content ol {
+        list-style: decimal;
+    }
+
+    .prose-content li + li {
+        margin-top: 0.35rem;
+    }
+
+    .prose-content blockquote {
+        border-left: 3px solid var(--color-brand-300);
+        padding-left: 1rem;
+        color: var(--color-slate-600);
+        font-style: italic;
+    }
+
+    .prose-content img {
+        border-radius: 0.75rem;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .prose-content strong {
+        color: var(--color-slate-900);
+    }
+}
+
+/* Quill editor */
+.ql-toolbar.ql-snow {
+    border-color: var(--color-slate-300);
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    background: var(--color-slate-50);
+}
+
+.ql-container.ql-snow {
+    border-color: var(--color-slate-300);
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.ql-editor {
+    min-height: 320px;
+}
+
+.ql-editor.ql-blank::before {
+    color: var(--color-slate-400);
+    font-style: normal;
+}
