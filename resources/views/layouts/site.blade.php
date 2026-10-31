@@ -225,52 +225,175 @@
     .nav-item > a::after { left: 9px; right: 9px; }
   }
   @media (max-width: 1080px) {
-    .hamburger { display: grid; }
+    .header-inner { height: 88px !important; }
+    .hamburger { display: grid; width: 48px; height: 48px; }
     .nav {
-      position: absolute; top: 100%; left: 0; right: 0;
-      background: var(--navy-card); border-bottom: 1px solid var(--b-default);
-      overflow: hidden;
-      /* Animation setup - use wrapper for smooth height animation */
-      max-height: 0;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-8px);
-      transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                  opacity 0.3s ease,
-                  transform 0.3s ease,
-                  visibility 0.3s ease;
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      width: 100% !important;
+      height: calc(100vh - 88px) !important;
+      height: calc(100dvh - 88px) !important;
+      min-height: calc(100vh - 88px) !important;
+      min-height: calc(100dvh - 88px) !important;
+      box-sizing: border-box !important;
+      background: var(--navy-card);
+      border-bottom: 1px solid var(--b-default);
+      box-shadow: var(--sh-lg);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 24px 48px !important;
+      z-index: 999;
     }
     .nav.open {
-      max-height: 100vh; /* Large enough for content */
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
+      display: block !important;
     }
-    /* Inner wrapper for smooth padding animation */
     .nav-inner {
-      padding: 0 24px;
-      border-bottom: 1px solid var(--b-default);
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+      display: block !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      padding: 0 !important;
+      border: none !important;
     }
-    .nav.open .nav-inner {
-      opacity: 1;
-      transform: translateY(0);
+    .nav .nav-menu,
+    .nav.open .nav-menu {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      height: auto !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      list-style: none !important;
     }
-    .nav .nav-menu { flex-direction: column; height: auto; }
-    .nav .nav-item { flex-direction: column; }
-    .nav .nav-item > a { padding: 15px 0; justify-content: space-between; border-bottom: 1px solid var(--b-default); font-size: 13px; }
-    .nav .nav-item > a::after { display: none; }
-    .nav .nav-item:hover > a, .nav .nav-item:focus-within > a { background: transparent; }
-    .mega { position: static; opacity: 1; visibility: visible; pointer-events: auto; transform: none; box-shadow: none; background: transparent; border: 0; max-height: 0; overflow: hidden; transition: max-height .3s ease; }
-    .nav-item.open .mega { max-height: 640px; }
-    .nav-item.open .chev { transform: rotate(180deg); }
-    .mega-inner { display: block; min-height: 0; padding: 0; }
-    .mega-info, .mega-feature { display: none !important; }
-    .mega-feature img { display: none !important; }
-    .mega-links { background: transparent; border: 0; padding: 4px 0 10px 14px; max-height: 400px; overflow-y: auto; }
-    .mega-links a:hover { margin: 0; padding-left: 0; padding-right: 0; background: transparent; }
+    .nav .nav-item,
+    .nav.open .nav-item {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      height: auto !important;
+      box-sizing: border-box !important;
+    }
+    .nav .nav-item > a,
+    .nav.open .nav-item > a {
+      display: flex !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      padding: 15px 0 !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      border-bottom: 1px solid var(--b-default) !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      letter-spacing: .5px !important;
+      text-transform: uppercase !important;
+      color: var(--white) !important;
+      white-space: normal !important;
+    }
+    .nav .nav-item > a::after,
+    .nav.open .nav-item > a::after {
+      display: none !important;
+    }
+    .nav .nav-item:hover > a,
+    .nav .nav-item:focus-within > a,
+    .nav.open .nav-item:hover > a,
+    .nav.open .nav-item:focus-within > a {
+      background: transparent !important;
+    }
+    .nav-item .chev,
+    .nav.open .nav-item .chev {
+      margin-left: auto !important;
+      flex-shrink: 0 !important;
+      width: 10px !important;
+      height: 10px !important;
+      opacity: .75 !important;
+      transition: transform .25s ease !important;
+    }
+    .nav-item.open .chev,
+    .nav.open .nav-item.open .chev {
+      transform: rotate(180deg) !important;
+    }
+    .mega {
+      position: static !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      transform: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      border: 0 !important;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s ease !important;
+    }
+    .nav-item.open .mega,
+    .nav.open .nav-item.open .mega {
+      max-height: 800px !important;
+    }
+    .mega-inner {
+      display: block !important;
+      width: 100% !important;
+      min-height: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
+    }
+    .mega-info,
+    .mega-feature {
+      display: none !important;
+    }
+    .mega-feature img {
+      display: none !important;
+    }
+    .mega-links {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      height: auto !important;
+      box-sizing: border-box !important;
+      background: transparent !important;
+      border: 0 !important;
+      padding: 4px 0 10px 14px !important;
+      max-height: none !important;
+      overflow: visible !important;
+    }
+    .mega-links a {
+      display: flex !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 14px !important;
+      padding: 12px 0 !important;
+      border-bottom: 1px solid var(--b-default) !important;
+      font-size: 13.5px !important;
+      font-weight: 600 !important;
+      line-height: 1.4 !important;
+      color: var(--white) !important;
+      white-space: normal !important;
+    }
+    .mega-links a:last-child {
+      border-bottom: 0 !important;
+    }
+    .mega-links a:hover {
+      margin: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      background: transparent !important;
+    }
+    .mega-links a::after {
+      content: '→' !important;
+      flex-shrink: 0 !important;
+      margin-left: auto !important;
+      opacity: .4 !important;
+      transition: transform .2s, opacity .2s !important;
+    }
+    .mega-links a:hover::after {
+      transform: translateX(4px) !important;
+      opacity: 1 !important;
+    }
     .mega-links::-webkit-scrollbar { width: 4px; }
     .mega-links::-webkit-scrollbar-track { background: transparent; }
     .mega-links::-webkit-scrollbar-thumb { background: var(--b-btn); border-radius: 2px; }
@@ -300,8 +423,7 @@
     </a>
 
     <nav class="nav" id="nav" aria-label="Navigasi utama">
-      <div class="nav-inner">
-        <ul class="nav-menu">
+      <ul class="nav-menu">
         <li class="nav-item">
           <a href="{{ url('/#fungsi') }}">Tentang <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
           <div class="mega">
@@ -462,7 +584,6 @@
           </div>
         </li>
       </ul>
-      </div>
     </nav>
 
     <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false">

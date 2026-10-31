@@ -65,6 +65,7 @@ class LegalProductController extends Controller
         $selectedType = $type ?? $this->queryString($request, 'jenis');
         $selectedType = array_key_exists($selectedType ?? '', LegalProduct::TYPES) ? $selectedType : null;
 
+        // Single view handles both cases via @if($currentType) conditional
         return view('site.legal-products.index', [
             'products' => $products,
             'singles' => $singles,

@@ -21,6 +21,11 @@ class AboutController extends Controller
             return view('site.sejarah');
         }
 
+        // Handle kedudukan-tugas-wewenang with custom static view
+        if ($section === 'kedudukan-tugas-wewenang') {
+            return view('site.kedudukan-tugas-wewenang');
+        }
+
         $config = SiteContent::configFor($section);
 
         abort_if($config === null, 404);
