@@ -951,7 +951,7 @@
   <dialog class="pdlg" id="pdlg" aria-labelledby="pdTitle">
     <div class="pdlg-head">
       <div class="t"><small id="pdLabel"></small><strong id="pdTitle"></strong></div>
-      <a class="btn sm" id="pdOpen" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Buka di Drive</span></a>
+      <a class="btn sm" id="pdOpen" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Buka di Tab Baru</span></a>
       <a class="btn sm" id="pdDl" href="#" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg><span>Unduh</span></a>
       <button class="pdlg-x" id="pdClose" type="button" aria-label="Tutup pratinjau"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
@@ -1257,8 +1257,9 @@
   const esc = s => { const d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   const dec = s => s.replace(/&/g, '&');
 
-  const dlUrl = id => 'https://drive.google.com/uc?export=download&id=' + id;
-  const viewUrl = id => 'https://drive.google.com/file/d/' + id + '/view';
+  // Pakai download_url dari database (file lokal di uploads/), BUKAN Google Drive
+  const dlUrl = d => d.download_url;
+  const viewUrl = d => d.download_url; // PDF bisa dibuka langsung di browser via iframe
 
   const state = { year: 'all', q: '', sort: 'desc' };
   let shownDocs = [];
@@ -1315,7 +1316,7 @@
           '<div class="doc-actions">' +
             '<button class="btn sm" type="button" data-k="' + k + '" aria-label="Pratinjau ' + esc(d.regulation_number || d.title) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Pratinjau</button>' +
             (d.has_file
-              ? '<a class="btn sm" href="' + dlUrl(d.id) + '" rel="noopener" aria-label="Unduh ' + esc(d.regulation_number || d.title) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Unduh</a>'
+              ? '<a class="btn sm" href="' + dlUrl(d) + '" rel="noopener" aria-label="Unduh ' + esc(d.regulation_number || d.title) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Unduh</a>'
               : '<span class="btn sm" style="border-style:dashed;border-color:var(--b-default);color:var(--t-cap);">Belum ada berkas</span>') +
           '</div></article>';
       });
@@ -1358,9 +1359,10 @@
   function openPreview(d) {
     $('pdLabel').textContent = d.regulation_number || TYPE_LABEL;
     $('pdTitle').textContent = d.title;
-    $('pdOpen').href = viewUrl(d.id);
-    $('pdDl').href = dlUrl(d.id);
-    $('pdFrame').src = 'https://drive.google.com/file/d/' + d.id + '/preview';
+    // Pakai download_url dari database (file lokal), bukan Google Drive
+    $('pdOpen').href = viewUrl(d);
+    $('pdDl').href = dlUrl(d);
+    $('pdFrame').src = d.download_url; // Preview PDF langsung via file lokal
     dlg.showModal();
   }
   function closePreview() { dlg.close(); }
