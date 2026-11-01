@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Fixed content sections of the public site.
@@ -14,6 +15,7 @@ class SiteContent extends Model
 {
     protected $fillable = [
         'key',
+        'period_id',
         'title',
         'body',
     ];
@@ -71,6 +73,11 @@ class SiteContent extends Model
     public static function configFor(string $key): ?array
     {
         return self::SECTIONS[$key] ?? null;
+    }
+
+    public function period(): BelongsTo
+    {
+        return $this->belongsTo(Period::class);
     }
 
     public function getRouteAttribute(): string

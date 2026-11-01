@@ -277,7 +277,7 @@
         <div class="slide-text">
           <div class="hero-label">Produk Hukum</div>
           <h1>Landasan Hukum Keluarga Mahasiswa UII</h1>
-          <p class="lead">Arsip resmi PDKM, GBHKM, PKM, dan PDPM yang dapat diakses oleh seluruh civitas kemahasiswaan Universitas Islam Indonesia.</p>
+          <p class="lead">Arsip resmi PDKM, GBHKM, PKM, dan PDPM-U yang dapat diakses oleh seluruh civitas kemahasiswaan Universitas Islam Indonesia.</p>
           <div class="hero-actions">
             <a href="/produk-hukum" class="btn">Akses Produk Hukum <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
             <a href="/keputusan" class="btn">Surat Keputusan</a>
@@ -344,7 +344,7 @@
     </a>
     <a class="qa-item" href="/dana/distribusi-dana">
       <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3H15"/></svg></span>
-      <span><strong>Dana</strong><small>Distribusi, LPJ, dan LHA</small></span>
+      <span><strong>Keuangan</strong><small>Distribusi, LPJ, dan LHA</small></span>
     </a>
     <a class="qa-item" href="/laporan-kinerja">
       <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M2 20h20"/></svg></span>
@@ -367,8 +367,8 @@
     <div class="sec-head reveal">
       <div>
         <span class="eyebrow">Tentang DPM UII</span>
-        <h2>Tiga fungsi untuk menjaga arah Keluarga Mahasiswa</h2>
-        <p>Sebagai lembaga legislatif tertinggi dalam sistem student government KM UII, DPM UII menjalankan tiga peran utama.</p>
+        <h2>3 Fungsi Utama</h2>
+        <p>Dewan Permusyawaratan Mahasiswa <br>Universitas Islam Indonesia</p>
       </div>
       <a href="/tentang/profil-dewan" class="link-more">Profil Dewan
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -380,19 +380,19 @@
         <span class="num">01</span>
         <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></div>
         <h3>Legislasi</h3>
-        <p>Menyusun dan menetapkan produk hukum KM UII, dari peraturan dasar hingga peraturan teknis kelembagaan.</p>
+        <p>Dalam menjalankan fungsi legislasi, DPM UII bertugas merancang, membahas, dan menetapkan seluruh produk hukum yang berlaku di lingkungan mahasiswa. Tugas ini mencakup penetapan aturan tertinggi seperti Peraturan Dasar Keluarga Mahasiswa (PDKM UII) dan Garis-garis Besar Haluan KM UII (GBHKM UII), hingga pembentukan Peraturan KM, Peraturan DPM, serta Keputusan DPM UII yang menjadi acuan legalitas seluruh aktivitas organisasi kampus.</p>
       </div>
       <div class="card hov reveal d1">
         <span class="num">02</span>
         <div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></div>
-        <h3>Pengawasan</h3>
-        <p>Mengawasi pelaksanaan kebijakan, program kerja, serta pengelolaan dana dan aset lembaga kemahasiswaan.</p>
+        <h3>Anggaran</h3>
+        <p>Dalam fungsi anggaran, DPM UII memiliki wewenang penuh untuk membahas dan menetapkan arah kebijakan keuangan Keluarga Mahasiswa. Hal ini meliputi penetapan besaran sumber dana KM UII, pengalokasian anggaran kerja operasional bagi lembaga legislatif, eksekutif (LEM UII), maupun lembaga-lembaga khusus, serta penyusunan aturan distribusi dan pertanggungjawaban dana kemahasiswaan.</p>
       </div>
       <div class="card hov reveal d2">
         <span class="num">03</span>
         <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-        <h3>Aspirasi</h3>
-        <p>Menjadi saluran resmi suara mahasiswa agar setiap masukan tersampaikan dan ditindaklanjuti.</p>
+        <h3>Pengawasan</h3>
+        <p>Dalam fungsi pengawasan, DPM UII berperan mengawal jalannya roda kepengurusan agar tetap sesuai dengan aturan hukum dan garis kebijakan yang berlaku. DPM UII memverifikasi rencana strategis dan program kerja LEM UII di awal periode, memberikan instruksi secara periodik atas pelaksanaan program kerja dan laporan keuangan LEM UII per triwulan, serta melakukan koordinasi secara periodik terhadap laporan keuangan dan kegiatan Lembaga Khusus melalui Rapat Dengar Pendapat (RDP) per triwulan. Pengawasan ini diakhiri dengan kewenangan menilai (baik menerima atau menolak) Laporan Pertanggungjawaban (LPJ) Keuangan lembaga tingkat universitas dan fakultas, serta Laporan Akhir Jabatan LEM UII.</p>
       </div>
     </div>
   </div>
@@ -433,7 +433,7 @@
       </a>
       <a href="{{ route('legal-products.type', 'pdpm') }}" class="card law reveal d3">
         <span class="tag">Produk Hukum</span>
-        <div class="abbr">PDPM</div>
+        <div class="abbr">PDPM-U</div>
         <p>Peraturan Dewan Permusyawaratan Mahasiswa</p>
         <span class="go">Buka arsip <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
@@ -528,19 +528,19 @@
   </div>
 </section>
 
-<!-- ================= DANA & LAPORAN ================= -->
+<!-- ================= KEUANGAN & LAPORAN ================= -->
 <section class="block" id="dokumen">
   <div class="container">
     <div class="sec-head reveal">
       <div>
         <span class="eyebrow">Transparansi</span>
-        <h2>Dana, laporan, dan keputusan</h2>
+        <h2>Keuangan, laporan, dan keputusan</h2>
         <p>Dokumen publik sebagai bentuk akuntabilitas kepada seluruh mahasiswa.</p>
       </div>
     </div>
 
     <div class="grid g3">
-      <a href="/dana/distribusi-dana" class="card quick reveal"><div><span class="t">Distribusi Dana</span><small>Alokasi dana lembaga KM UII</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="/dana/distribusi-dana" class="card quick reveal"><div><span class="t">Distribusi Keuangan</span><small>Alokasi dana lembaga KM UII</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a href="/dana/lpj" class="card quick reveal d1"><div><span class="t">LPJ</span><small>Laporan pertanggungjawaban</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a href="/dana/lha" class="card quick reveal d2"><div><span class="t">LHA</span><small>Laporan hasil audit</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a href="/laporan-kinerja" class="card quick reveal"><div><span class="t">Laporan Kinerja</span><small>Capaian kerja DPM UII</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>

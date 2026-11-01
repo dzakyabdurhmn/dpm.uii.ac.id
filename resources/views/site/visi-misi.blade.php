@@ -1,209 +1,222 @@
 @extends('layouts.site')
 
-@section('title', 'Visi Misi — '.($siteSettings['site_name'] ?? 'DPM UII'))
+@section('title', 'Visi dan Misi | DPM UII')
 @section('meta_description', 'Visi dan Misi Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia.')
 
-@section('content')
+@push('styles')
 <style>
-    .visi-misi-page { color: rgba(255,255,255,.85); }
-    .visi-misi-hero { background: linear-gradient(135deg, #002A5A 0%, #001E43 55%, #001633 100%); }
-    .visi-misi-wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
-    .visi-misi-hero-inner { padding: 68px 0 64px; position: relative; overflow: hidden; }
-    .visi-misi-hero-inner::before {
-        content: '';
-        position: absolute; inset: 0;
-        background: repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 1px, transparent 1px 26px);
-        pointer-events: none;
-    }
-    .visi-misi-eyebrow { margin: 0 0 10px; color: rgba(255,255,255,.72); font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
-    .visi-misi-hero h1 { margin: 0; color: #fff; font-size: clamp(30px, 4.6vw, 44px); font-weight: 800; letter-spacing: -.03em; }
-    .visi-misi-hero-copy { max-width: 720px; margin: 14px 0 0; color: rgba(255,255,255,.82); font-size: 15px; line-height: 1.85; }
+  /* ============ VISI MISI ============ */
+  .nav-item.current > a::after { transform: scaleX(1); }
+  .mega-links a[aria-current] { background: var(--bg-hover); }
+  :focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+  html { scroll-padding-top: 150px; }
 
-    .visi-misi-section { padding: 56px 0 70px; background: #001E43; }
-    .visi-misi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-    .visi-misi-card { 
-        border: 1px solid rgba(255,255,255,.1); 
-        border-radius: 12px; 
-        background: linear-gradient(145deg, #001A3A 0%, #001633 100%);
-        overflow: hidden;
-        transition: border-color .2s, box-shadow .2s, transform .2s;
-    }
-    .visi-misi-card:hover {
-        border-color: rgba(255,255,255,.25);
-        box-shadow: 0 12px 40px rgba(0,0,0,.35);
-        transform: translateY(-2px);
-    }
-    .visi-misi-card-header { 
-        padding: 24px 28px; 
-        border-bottom: 1px solid rgba(255,255,255,.1);
-        background: rgba(255,255,255,.03);
-    }
-    .visi-misi-icon { 
-        width: 56px; height: 56px; 
-        border-radius: 12px; 
-        display: flex; align-items: center; justify-content: center;
-        margin-bottom: 12px;
-    }
-    .visi-misi-icon svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 2; }
-    .visi-misi-card-header h2 { 
-        margin: 0; color: #fff; font-size: 20px; font-weight: 800; letter-spacing: -.01em; 
-    }
-    .visi-misi-card-body { padding: 28px; }
-    .visi-misi-prose { color: rgba(255,255,255,.84); font-size: 15px; line-height: 1.95; }
-    .visi-misi-prose p { margin: 16px 0; }
-    .visi-misi-prose h3 { margin: 28px 0 12px; color: #fff; font-weight: 800; font-size: 16px; }
-    .visi-misi-prose ul { margin: 16px 0; padding-left: 0; list-style: none; }
-    .visi-misi-prose li { 
-        margin: 12px 0; padding-left: 28px; position: relative; 
-        font-size: 14.5px; line-height: 1.8;
-        color: rgba(255,255,255,.88);
-    }
-    .visi-misi-prose li::before {
-        content: '';
-        position: absolute; left: 0; top: 7px;
-        width: 8px; height: 8px;
-        border-radius: 50%;
-        background: currentColor;
-        opacity: .6;
-    }
-    .visi-misi-prose strong { color: #fff; font-weight: 700; }
+  /* hero */
+  .pg-head { position: relative; overflow: hidden; border-bottom: 1px solid var(--b-default); padding: 56px 0 64px;
+    background: linear-gradient(135deg, #002A5A 0%, #001E43 55%, #001633 100%); }
+  .pg-head::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 28px); }
+  .hero-grid { position: relative; display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; align-items: center; }
+  .crumb { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; font-size: 12.5px; color: var(--t-cap); }
+  .crumb a { transition: color .2s; } .crumb a:hover { color: var(--white); }
+  .crumb span[aria-hidden] { opacity: .5; }
+  .crumb span[aria-current] { color: var(--white); font-weight: 600; }
+  .pg-head h1 { font-size: clamp(34px, 5.6vw, 62px); letter-spacing: -1.6px; line-height: 1.06; margin-bottom: 18px; }
+  .pg-desc { max-width: 580px; margin-bottom: 28px; font-size: 16px; color: var(--t-sub); }
+  .meta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .meta span { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--b-btn); border-radius: 100px; font-size: 12.5px; font-weight: 600; color: var(--white); background: rgba(0,22,51,.5); }
+  .meta span small { font-size: 11px; font-weight: 500; letter-spacing: .8px; text-transform: uppercase; color: var(--t-cap); }
+  .hero-art { display: flex; justify-content: flex-end; }
+  .hero-art svg { width: min(100%, 460px); height: auto; }
 
-    .visi-misi-card.visi { border-color: rgba(34,197,94,.3); }
-    .visi-misi-card.visi .visi-misi-icon { background: rgba(34,197,94,.15); color: #4ade80; }
-    .visi-misi-card.visi li::before { background: #4ade80; }
-    .visi-misi-card.misi { border-color: rgba(250,204,21,.3); }
-    .visi-misi-card.misi .visi-misi-icon { background: rgba(250,204,21,.15); color: #fbbf24; }
-    .visi-misi-card.misi li::before { background: #fbbf24; }
+  /* subnav */
+  .subnav { position: sticky; top: 73px; z-index: 50; background: rgba(0,22,51,.95); border-bottom: 1px solid var(--b-default); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .subnav::after { content: ''; position: absolute; left: 0; bottom: -1px; height: 2px; width: calc(var(--p, 0) * 100%); background: var(--white); transition: width .1s linear; }
+  .subnav-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .subnav ol { list-style: none; display: flex; gap: 4px; padding: 10px 0; overflow-x: auto; scrollbar-width: none; }
+  .subnav ol::-webkit-scrollbar { display: none; }
+  .subnav li a { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 100px; border: 1px solid transparent; white-space: nowrap; font-size: 13.5px; font-weight: 600; color: var(--t-cap); transition: color .2s, background .2s, border-color .2s; }
+  .subnav li a em { font-style: normal; font-size: 11px; opacity: .6; }
+  .subnav li a:hover { color: var(--white); }
+  .subnav li a[aria-current="true"] { color: var(--white); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.35); }
+  .subnav .btn { flex-shrink: 0; }
 
-    .visi-misi-values { margin-top: 48px; }
-    .visi-misi-values-title { 
-        margin: 0 0 24px; color: #fff; font-size: 20px; font-weight: 800; letter-spacing: -.01em; 
-        text-align: center;
-    }
-    .visi-misi-values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .visi-misi-value-card {
-        padding: 22px 20px;
-        border: 1px solid rgba(255,255,255,.1);
-        border-radius: 10px;
-        background: #001A3A;
-        text-align: center;
-        transition: border-color .2s, background .2s, transform .2s;
-    }
-    .visi-misi-value-card:hover {
-        border-color: rgba(255,255,255,.25);
-        background: #002451;
-        transform: translateY(-2px);
-    }
-    .visi-misi-value-icon {
-        width: 48px; height: 48px;
-        margin: 0 auto 12px;
-        display: flex; align-items: center; justify-content: center;
-        border-radius: 10px;
-        background: rgba(255,255,255,.05);
-        color: rgba(255,255,255,.7);
-    }
-    .visi-misi-value-icon svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; }
-    .visi-misi-value-card h3 { margin: 0 0 6px; color: #fff; font-size: 14px; font-weight: 800; letter-spacing: .02em; }
-    .visi-misi-value-card p { margin: 0; color: rgba(255,255,255,.62); font-size: 12px; line-height: 1.6; }
+  /* visi band */
+  .visi-band { position: relative; padding: 96px 0; border-bottom: 1px solid var(--b-default); text-align: center; overflow: hidden; background: var(--navy-card); }
+  .visi-band::before { content: '“'; position: absolute; left: 50%; top: -50px; transform: translateX(-50%); font-family: 'Wix Madefor Display', serif; font-size: 340px; line-height: 1; color: rgba(255,255,255,.045); pointer-events: none; }
+  .visi-band .tag { position: relative; display: inline-block; margin-bottom: 26px; padding: 6px 18px; border: 1px solid var(--b-btn); border-radius: 100px; font-size: 11.5px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+  .visi-band blockquote { position: relative; max-width: 980px; margin: 0 auto; font-family: 'Wix Madefor Display', sans-serif; font-size: clamp(24px, 3.7vw, 44px); font-weight: 700; line-height: 1.32; letter-spacing: -1px; }
+  .visi-band blockquote em { font-style: normal; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 8px; text-decoration-color: rgba(255,255,255,.4); }
+  .visi-band .rule { width: 64px; height: 1px; margin: 36px auto 0; background: var(--b-btn-hover); }
 
-    @media (max-width: 980px) {
-        .visi-misi-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 720px) {
-        .visi-misi-wrap { width: min(100% - 28px, 1180px); }
-        .visi-misi-hero-inner { padding: 48px 0 46px; }
-        .visi-misi-section { padding: 40px 0 52px; }
-        .visi-misi-values-grid { grid-template-columns: 1fr; }
-    }
+  /* misi band */
+  .misi-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 40px; }
+  .misi-head h2 { font-size: clamp(30px, 4vw, 48px); letter-spacing: -1.2px; }
+  .misi-head h2 + p { margin-top: 10px; font-size: 15px; color: var(--t-cap); }
+  .misi-count { font-family: 'Wix Madefor Display', sans-serif; font-size: 88px; font-weight: 800; line-height: .9; letter-spacing: -4px; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.28); }
+  .misi { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .misi li { display: grid; grid-template-columns: auto 1fr; gap: 20px; padding: 26px 28px; background: var(--navy-card); border: 1px solid var(--b-default); border-radius: 8px; transition: border-color .2s, background .2s; }
+  .misi li:hover { border-color: var(--b-btn); background: var(--navy-hover); }
+  .misi li b { font-family: 'Wix Madefor Display', sans-serif; font-size: 34px; font-weight: 800; line-height: 1; letter-spacing: -1.5px; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.42); }
+  .misi li p { font-size: 15px; line-height: 1.75; color: var(--t-body); }
+  .misi li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .vm-band { padding: 80px 0; border-bottom: 1px solid var(--b-default); }
+  .vm-band.alt { background: var(--navy-footer); }
+
+  /* sub cta */
+  .sub-cta { margin-top: 36px; padding: 22px 26px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; border: 1px solid var(--b-btn); border-radius: 8px; background: var(--navy-card); }
+  .sub-cta p { font-size: 14.5px; color: var(--t-sub); }
+  .sub-cta strong { color: var(--white); }
+  .link-plain { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--t-sub); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; transition: color .2s, border-color .2s; }
+  .link-plain:hover { color: var(--white); border-color: var(--b-btn); }
+  .link-plain::after { content: '→'; font-size: 11px; opacity: .6; transition: transform .2s, opacity .2s; }
+  .link-plain:hover::after { transform: translateX(4px); opacity: 1; }
+
+  @media (max-width: 1080px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-art { display: none; }
+    .misi { grid-template-columns: minmax(0, 1fr); }
+    .misi-count { font-size: 64px; }
+  }
+  @media (max-width: 720px) {
+    .pg-head { padding: 36px 0 44px; }
+    .visi-band { padding: 64px 0; }
+    .vm-band { padding: 56px 0; }
+    .misi li { padding: 20px 18px; gap: 14px; }
+    .misi li b { font-size: 26px; }
+    .misi-count { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
 </style>
+@endpush
 
-<div class="visi-misi-page">
-    <section class="visi-misi-hero">
-        <div class="visi-misi-wrap visi-misi-hero-inner">
-            <p class="visi-misi-eyebrow">Profil Lembaga</p>
-            <h1>Visi dan Misi</h1>
-            <p class="visi-misi-hero-copy">
-                Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia — lembaga legislatif tertinggi dalam sistem student government KM UII.
-            </p>
-        </div>
-    </section>
+@section('content')
+<!-- ================= PAGE HEADER ================= -->
+<section class="pg-head">
+  <div class="container hero-grid">
+    <div>
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="{{ route('home') }}">Beranda</a><span aria-hidden="true">/</span>
+        <a href="{{ url('/#fungsi') }}">Tentang</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Visi dan Misi</span>
+      </nav>
+      <span class="eyebrow">Tentang DPM UII</span>
+      <h1>Visi dan Misi</h1>
+      <p class="pg-desc">Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia, lembaga legislatif tertinggi dalam sistem student government KM UII.</p>
+      <div class="meta">
+        <span><small>Visi</small> 1</span>
+        <span><small>Misi</small> 13</span>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg viewBox="0 0 640 520" fill="none" stroke="rgba(255,255,255,0.42)" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
+        <defs><g id="col"><rect x="0" y="0" width="28" height="170"/><path d="M9 6V164M19 6V164" stroke="rgba(255,255,255,0.18)"/><rect x="-6" y="-8" width="40" height="8" fill="rgba(255,255,255,0.09)"/><rect x="-6" y="170" width="40" height="8" fill="rgba(255,255,255,0.09)"/></g></defs>
+        <path d="M50 205 L320 62 L590 205 Z" fill="rgba(255,255,255,0.07)"/>
+        <path d="M92 195 L320 76 L548 195"/>
+        <circle cx="320" cy="150" r="30" fill="rgba(255,255,255,0.09)"/><circle cx="320" cy="150" r="20"/>
+        <path d="M320 134 L324 146 L336 146 L326 154 L330 166 L320 159 L310 166 L314 154 L304 146 L316 146 Z" fill="rgba(255,255,255,0.3)" stroke="none"/>
+        <rect x="50" y="205" width="540" height="22" fill="rgba(255,255,255,0.09)"/>
+        <use href="#col" x="96" y="235"/><use href="#col" x="176" y="235"/><use href="#col" x="256" y="235"/>
+        <use href="#col" x="336" y="235"/><use href="#col" x="416" y="235"/><use href="#col" x="496" y="235"/>
+        <path d="M70 413 H570M50 433 H590M30 453 H610M10 473 H630"/>
+      </svg>
+    </div>
+  </div>
+</section>
 
-    <section class="visi-misi-section">
-        <div class="visi-misi-wrap">
-            <div class="visi-misi-grid">
-                {{-- VISI CARD --}}
-                <article class="visi-misi-card visi">
-                    <div class="visi-misi-card-header">
-                        <div class="visi-misi-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
-                        </div>
-                        <h2>Visi</h2>
-                    </div>
-                    <div class="visi-misi-card-body">
-                        <div class="visi-misi-prose">
-                            <p><strong>Terbinanya mahasiswa Universitas Islam Indonesia menjadi Insan Ulil Albab, yang turut bertanggung jawab atas terwujudnya tatanan masyarakat yang diridhoi Allah SWT.</strong></p>
-                        </div>
-                    </div>
-                </article>
-
-                {{-- MISI CARD --}}
-                <article class="visi-misi-card misi">
-                    <div class="visi-misi-card-header">
-                        <div class="visi-misi-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 4h16v2H4zm0 4h16v2H4z"/></svg>
-                        </div>
-                        <h2>Misi</h2>
-                    </div>
-                    <div class="visi-misi-card-body">
-                        <div class="visi-misi-prose">
-                            <ol>
-                                <li>Mewujudkan peran fungsi lembaga aspirasi mahasiswa yang responsif, progresif, adaptif, inovatif serta kolaboratif.</li>
-                                <li>Optimalisasi fungsi lembaga mahasiswa yang amar ma'ruf nahi munkar.</li>
-                                <li>Memperkuat Ukhuwah Islamiyah, persaudaraan Islam dan persaudaraan sebangsa di dalam kelembagaan Keluarga Mahasiswa UII.</li>
-                                <li>Mewujudkan kelembagaan mahasiswa sebagai pembaharu dengan menghidupkan tradisi intelektual yang responsif terhadap permasalahan keumatan.</li>
-                                <li>Membangun kehidupan kampus yang berorientasi pada pembentukan mahasiswa menjadi Insan Ulil Albab.</li>
-                                <li>Menanamkan nilai-nilai keislaman dan kebangsaan yang kafah pada diri mahasiswa UII berlandaskan semangat rahmatan lil alamin guna mewujudkan Indonesia yang adil dan madani.</li>
-                                <li>Menguatkan tradisi intelektual dengan dasar studi ilmiah dalam kehidupan kampus sebagai basis pencerahan dan pembentukan karakter mahasiswa UII guna mewujudkan perubahan sosial transformatif.</li>
-                                <li>Optimalisasi bargaining position KM UII terhadap birokrat kampus.</li>
-                                <li>Optimalisasi pengawasan KM UII terhadap kebijakan birokrat kampus dan pemerintah.</li>
-                                <li>Mengembangkan jaringan kemahasiswaan di tingkat regional, nasional dan internasional.</li>
-                                <li>Mewujudkan kemandirian dan independensi "Student Government" Keluarga Mahasiswa Universitas Islam Indonesia.</li>
-                                <li>Optimalisasi sistem kelembagaan kemahasiswaan yang demokratis dan transparan dalam lingkungan KM UII.</li>
-                                <li>Optimalisasi peran dan fungsi mahasiswa Universitas Islam Indonesia sebagai katalisator pergerakan dalam membersamai perjuangan rakyat.</li>
-                            </ol>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            {{-- NILAI INTI --}}
-            <div class="visi-misi-values">
-                <h2 class="visi-misi-values-title">Nilai Inti</h2>
-                <div class="visi-misi-values-grid">
-                    <article class="visi-misi-value-card">
-                        <div class="visi-misi-value-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        </div>
-                        <h3>Insan Ulil Albab</h3>
-                        <p>Mahasiswa berilmu, berbudi luhur, dan bertanggung jawab</p>
-                    </article>
-                    <article class="visi-misi-value-card">
-                        <div class="visi-misi-value-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                        </div>
-                        <h3>Student Government</h3>
-                        <p>Mahasiswa mengelola mahasiswa secara mandiri & demokratis</p>
-                    </article>
-                    <article class="visi-misi-value-card">
-                        <div class="visi-misi-value-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-                        </div>
-                        <h3>Amar Ma'ruf Nahi Munkar</h3>
-                        <p>Menyuruh kebaikan, mencegah keburukan sebagai landasan</p>
-                    </article>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ================= SUBNAV ================= -->
+<div class="subnav" id="subnav">
+  <div class="container subnav-inner">
+    <ol id="toc">
+      <li><a href="#visi"><em>01</em>Visi</a></li>
+      <li><a href="#misi"><em>02</em>Misi</a></li>
+    </ol>
+    <a href="{{ url('/#fungsi') }}" class="link-plain">Tentang DPM</a>
+  </div>
 </div>
+
+<!-- ================= VISI ================= -->
+<section class="visi-band" id="visi" aria-labelledby="h-visi">
+  <div class="container">
+    <span class="tag" id="h-visi">Visi</span>
+    <blockquote>Terbinanya mahasiswa Universitas Islam Indonesia menjadi <em>Insan Ulil Albab</em>, yang turut bertanggung jawab atas terwujudnya tatanan masyarakat yang diridhoi Allah SWT.</blockquote>
+    <div class="rule"></div>
+  </div>
+</section>
+
+<!-- ================= MISI ================= -->
+<section class="vm-band alt" id="misi" aria-labelledby="h-misi">
+  <div class="container">
+    <div class="misi-head">
+      <div>
+        <h2 id="h-misi">Misi</h2>
+        <p>13 misi DPM UII.</p>
+      </div>
+      <span class="misi-count" aria-hidden="true">13</span>
+    </div>
+    <ol class="misi">
+      <li><b>01</b><p>Mewujudkan peran fungsi lembaga aspirasi mahasiswa yang responsif, progresif, adaptif, inovatif serta kolaboratif.</p></li>
+      <li><b>02</b><p>Optimalisasi fungsi lembaga mahasiswa yang amar ma'ruf nahi munkar.</p></li>
+      <li><b>03</b><p>Memperkuat Ukhuwah Islamiyah, persaudaraan Islam dan persaudaraan sebangsa di dalam kelembagaan Keluarga Mahasiswa UII.</p></li>
+      <li><b>04</b><p>Mewujudkan kelembagaan mahasiswa sebagai pembaharu dengan menghidupkan tradisi intelektual yang responsif terhadap permasalahan keumatan.</p></li>
+      <li><b>05</b><p>Membangun kehidupan kampus yang berorientasi pada pembentukan mahasiswa menjadi Insan Ulil Albab.</p></li>
+      <li><b>06</b><p>Menanamkan nilai-nilai keislaman dan kebangsaan yang kafah pada diri mahasiswa UII berlandaskan semangat rahmatan lil alamin guna mewujudkan Indonesia yang adil dan madani.</p></li>
+      <li><b>07</b><p>Menguatkan tradisi intelektual dengan dasar studi ilmiah dalam kehidupan kampus sebagai basis pencerahan dan pembentukan karakter mahasiswa UII guna mewujudkan perubahan sosial transformatif.</p></li>
+      <li><b>08</b><p>Optimalisasi bargaining position KM UII terhadap birokrat kampus.</p></li>
+      <li><b>09</b><p>Optimalisasi pengawasan KM UII terhadap kebijakan birokrat kampus dan pemerintah.</p></li>
+      <li><b>10</b><p>Mengembangkan jaringan kemahasiswaan di tingkat regional, nasional dan internasional.</p></li>
+      <li><b>11</b><p>Mewujudkan kemandirian dan independensi "Student Government" Keluarga Mahasiswa Universitas Islam Indonesia.</p></li>
+      <li><b>12</b><p>Optimalisasi sistem kelembagaan kemahasiswaan yang demokratis dan transparan dalam lingkungan KM UII.</p></li>
+      <li><b>13</b><p>Optimalisasi peran dan fungsi mahasiswa Universitas Islam Indonesia sebagai katalisator pergerakan dalam membersamai perjuangan rakyat.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= PRATINJAU DIALOG ================= -->
+<dialog class="pdlg" id="pdlg" aria-labelledby="pdTitle">
+  <div class="pdlg-head">
+    <div class="t"><small id="pdLabel"></small><strong id="pdTitle"></strong></div>
+    <a class="btn sm" id="pdOpen" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Buka di Drive</span></a>
+    <a class="btn sm" id="pdDl" href="#" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg><span>Unduh</span></a>
+    <button class="pdlg-x" id="pdClose" type="button" aria-label="Tutup pratinjau"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="pdlg-body"><div class="pdlg-load">Memuat dokumen...</div><iframe id="pdFrame" title="Pratinjau dokumen" loading="lazy"></iframe></div>
+</dialog>
 @endsection
+
+@push('scripts')
+<script>
+  // ---------- Sub-navigasi, progres baca ----------
+  (function () {
+    const links = [...document.querySelectorAll('#toc a')];
+    const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+    const io = new IntersectionObserver(es => {
+      es.forEach(en => {
+        if (en.isIntersecting) {
+          links.forEach(a => a.removeAttribute('aria-current'));
+          const a = map.get(en.target.id);
+          if (a) a.setAttribute('aria-current', 'true');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    map.forEach((a, id) => { const s = document.getElementById(id); if (s) io.observe(s); });
+
+    const bar = document.getElementById('subnav');
+    const first = document.getElementById('visi');
+    let ticking = false;
+    function prog() {
+      const start = first.offsetTop - 200;
+      const end = document.documentElement.scrollHeight - window.innerHeight;
+      const p = Math.min(1, Math.max(0, (window.scrollY - start) / Math.max(1, end - start)));
+      bar.style.setProperty('--p', p.toFixed(3));
+      ticking = false;
+    }
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(prog);
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true }); prog();
+  })();
+</script>
+@endpush

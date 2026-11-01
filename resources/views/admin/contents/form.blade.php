@@ -18,10 +18,11 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-5">
             <label for="body" class="block text-sm font-medium text-slate-700">Isi halaman</label>
             <p class="mt-1 text-xs text-slate-500">
-                Mendukung HTML sederhana (&lt;p&gt;, &lt;h2&gt;, &lt;ul&gt;, &lt;strong&gt;).
+                Editor WYSIWYG — mendukung heading, bold, italic, list, blockquote, link, dan gambar.
             </p>
 
-            <textarea id="body" name="body" rows="16"
+            <textarea id="body" name="body" data-rich-editor rows="16"
+                      placeholder="Tulis isi halaman…"
                       class="mt-3 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 font-mono text-sm text-slate-800">{{ old('body', $content->body ?? '') }}</textarea>
 
             @error('body')

@@ -18,7 +18,7 @@ class ContentController extends Controller
     {
         return view('admin.contents.index', [
             'sections' => SiteContent::SECTIONS,
-            'contents' => SiteContent::query()->get()->keyBy('key'),
+            'contents' => SiteContent::query()->whereNull('period_id')->get()->keyBy('key'),
         ]);
     }
 
@@ -31,7 +31,7 @@ class ContentController extends Controller
         return view('admin.contents.form', [
             'section' => $section,
             'config' => $config,
-            'content' => SiteContent::query()->where('key', $section)->first(),
+            'content' => SiteContent::query()->where('key', $section)->whereNull('period_id')->first(),
         ]);
     }
 
@@ -46,10 +46,11 @@ class ContentController extends Controller
         ]);
 
         SiteContent::query()->updateOrCreate(
-            ['key' => $section],
+            ['key' => $section, 'period_id' => null],
             [
                 'title' => $config['title'],
                 'body' => $data['body'] ?? null,
+                'period_id' => null,
             ],
         );
 

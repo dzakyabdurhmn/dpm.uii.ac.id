@@ -22,7 +22,33 @@ class LegalProductController extends Controller
     {
         abort_unless(array_key_exists($type, LegalProduct::TYPES), 404);
 
+        // PDKM uses a dedicated view with custom design
+        if ($type === 'pdkm') {
+            return $this->showPdkm($request);
+        }
+
         return $this->listing($request, $type);
+    }
+
+    /**
+     * Show PDKM with dedicated custom view.
+     */
+    private function showPdkm(Request $request): View
+    {
+        $product = LegalProduct::query()
+            ->active()
+            ->with(['amends', 'period'])
+            ->ordered()
+            ->where('type', 'pdkm')
+            ->first();
+
+        abort_unless($product, 404);
+
+        return view('site.legal-products.pdkm', [
+            'product' => $product,
+            'types' => LegalProduct::TYPES,
+            'currentType' => 'pdkm',
+        ]);
     }
 
     private function listing(Request $request, ?string $type = null): View

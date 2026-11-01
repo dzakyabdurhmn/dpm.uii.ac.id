@@ -849,118 +849,431 @@
     $abbr = $typeMeta['label'] ?? Str::upper($currentType);
     $name = $typeMeta['name'] ?? Str::upper($currentType);
     $desc = $typeMeta['description'] ?? '';
+    $isSingleType = in_array($currentType, ['pdkm', 'gbhkm']);
+    $isPkm = $currentType === 'pkm';
     
     $typeProducts = $products->where('type', $currentType)->sortByDesc(fn($p) => [$p->year ?? 0, $p->number ?? 0])->values();
     $totalCount = $typeProducts->count();
     
-    $yearsWithData = $typeProducts->whereNotNull('year')->pluck('year')->unique()->sort()->values();
-    $yearRange = $yearsWithData->isNotEmpty() ? "{$yearsWithData->first()}–{$yearsWithData->last()}" : '-';
-    
-    $latest = $typeProducts->first();
-    $latestLabel = $latest ? "No. {$latest->number}/{$latest->year}" : '-';
-    
-    $groupedByYear = [];
-    foreach ($typeProducts as $product) {
-        $year = $product->year ?? 'Tanpa tahun';
-        if (!isset($groupedByYear[$year])) {
-            $groupedByYear[$year] = [];
+    // For singles (PDKM/GBHKM): separate main document from amendments
+    if ($isSingleType) {
+        $mainDoc = $typeProducts->firstWhere('amends_id', null);
+        $amendments = $typeProducts->where('amends_id', '!=', null)->sortBy('sort_order')->values();
+        
+        // Build grouped data for JS (amendments as "Perubahan ke-X")
+        $groupedByYear = [];
+        if ($mainDoc) {
+            $groupedByYear['main'] = [[
+                'id' => $mainDoc->id,
+                'year' => null,
+                'number' => null,
+                'title' => $mainDoc->title,
+                'regulation_number' => $mainDoc->regulation_number,
+                'description' => $mainDoc->description,
+                'extension' => $mainDoc->extension,
+                'size' => $mainDoc->size,
+                'human_size' => $mainDoc->human_size,
+                'downloads' => $mainDoc->downloads,
+                'download_url' => $mainDoc->download_url,
+                'has_file' => $mainDoc->hasFile(),
+                'amends' => null,
+                'amend' => false,
+                'is_main' => true,
+            ]];
         }
-        $groupedByYear[$year][] = [
-            'id' => $product->id,
-            'year' => $product->year,
-            'number' => $product->number,
-            'title' => $product->title,
-            'regulation_number' => $product->regulation_number,
-            'description' => $product->description,
-            'extension' => $product->extension,
-            'size' => $product->size,
-            'human_size' => $product->human_size,
-            'downloads' => $product->downloads,
-            'download_url' => $product->download_url,
-            'has_file' => $product->hasFile(),
-            'amends' => $product->amends ? [
-                'regulation_number' => $product->amends->regulation_number,
-                'heading' => $product->amends->heading,
-            ] : null,
-            'amend' => (bool)$product->amends,
-        ];
+        foreach ($amendments as $index => $amendment) {
+            $groupedByYear['amendments'][] = [
+                'id' => $amendment->id,
+                'year' => null,
+                'number' => null,
+                'title' => $amendment->title,
+                'regulation_number' => 'Perubahan ke-'.($index + 1).' '.$abbr,
+                'description' => $amendment->description,
+                'extension' => $amendment->extension,
+                'size' => $amendment->size,
+                'human_size' => $amendment->human_size,
+                'downloads' => $amendment->downloads,
+                'download_url' => $amendment->download_url,
+                'has_file' => $amendment->hasFile(),
+                'amends' => $amendment->amends ? [
+                    'regulation_number' => $amendment->amends->regulation_number,
+                    'heading' => $amendment->amends->heading,
+                ] : null,
+                'amend' => true,
+                'is_main' => false,
+                'amendment_number' => $index + 1,
+            ];
+        }
+        
+        $yearsWithData = collect([]);
+        $yearRange = '-';
+        $latestLabel = $mainDoc ? $mainDoc->title : '-';
+        $availableYears = ['main', 'amendments'];
+    } elseif ($isPkm) {
+        // PKM: Group by year, create year cards like editions
+        $yearsWithData = $typeProducts->whereNotNull('year')->pluck('year')->unique()->sortDesc()->values();
+        $yearRange = $yearsWithData->isNotEmpty() ? "{$yearsWithData->first()}–{$yearsWithData->last()}" : '-';
+        
+        $latest = $typeProducts->first();
+        $latestLabel = $latest ? "No. {$latest->number}/{$latest->year}" : '-';
+        
+        $groupedByYear = [];
+        $editions = [];
+        foreach ($yearsWithData as $year) {
+            $yearProducts = $typeProducts->where('year', $year)->sortByDesc('number')->values();
+            $count = $yearProducts->count();
+            
+            $editions[] = [
+                'year' => $year,
+                'label' => "Tahun $year",
+                'short' => (string)$year,
+                'count' => $count,
+                'status' => $year === $yearsWithData->first() ? 'Aktif' : 'Arsip',
+                'products' => $yearProducts->map(function($p) {
+                    return [
+                        'id' => $p->id,
+                        'year' => $p->year,
+                        'number' => $p->number,
+                        'title' => $p->title,
+                        'regulation_number' => $p->regulation_number,
+                        'description' => $p->description,
+                        'extension' => $p->extension,
+                        'size' => $p->size,
+                        'human_size' => $p->human_size,
+                        'downloads' => $p->downloads,
+                        'download_url' => $p->download_url,
+                        'has_file' => $p->hasFile(),
+                        'amends' => $p->amends ? [
+                            'regulation_number' => $p->amends->regulation_number,
+                            'heading' => $p->amends->heading,
+                        ] : null,
+                        'amend' => (bool)$p->amends,
+                    ];
+                })->values()->toArray(),
+            ];
+        }
+        
+        $availableYears = array_column($editions, 'year');
+    } else {
+        $yearsWithData = $typeProducts->whereNotNull('year')->pluck('year')->unique()->sort()->values();
+        $yearRange = $yearsWithData->isNotEmpty() ? "{$yearsWithData->first()}–{$yearsWithData->last()}" : '-';
+        
+        $latest = $typeProducts->first();
+        $latestLabel = $latest ? "No. {$latest->number}/{$latest->year}" : '-';
+        
+        $groupedByYear = [];
+        foreach ($typeProducts as $product) {
+            $year = $product->year ?? 'Tanpa tahun';
+            if (!isset($groupedByYear[$year])) {
+                $groupedByYear[$year] = [];
+            }
+            $groupedByYear[$year][] = [
+                'id' => $product->id,
+                'year' => $product->year,
+                'number' => $product->number,
+                'title' => $product->title,
+                'regulation_number' => $product->regulation_number,
+                'description' => $product->description,
+                'extension' => $product->extension,
+                'size' => $product->size,
+                'human_size' => $product->human_size,
+                'downloads' => $product->downloads,
+                'download_url' => $product->download_url,
+                'has_file' => $product->hasFile(),
+                'amends' => $product->amends ? [
+                    'regulation_number' => $product->amends->regulation_number,
+                    'heading' => $product->amends->heading,
+                ] : null,
+                'amend' => (bool)$product->amends,
+            ];
+        }
+        
+        $availableYears = array_keys($groupedByYear);
+        sort($availableYears, SORT_NUMERIC);
+        $availableYears = array_reverse($availableYears);
     }
-    
-    $availableYears = array_keys($groupedByYear);
-    sort($availableYears, SORT_NUMERIC);
-    $availableYears = array_reverse($availableYears);
   @endphp
 
-  <!-- ================= HEAD ================= -->
-  <section class="pg-head">
-    <div class="container pg-head-inner">
-      <div>
-        <nav class="crumb" aria-label="Breadcrumb">
-          <a href="{{ route('home') }}">Beranda</a><span aria-hidden="true">/</span>
-          <a href="{{ route('legal-products.index') }}">Produk Hukum</a><span aria-hidden="true">/</span>
-          <span aria-current="page">{{ $name }} ({{ $abbr }})</span>
-        </nav>
-        <span class="eyebrow">Produk Hukum</span>
-        <h1>{{ $abbr }}</h1>
-        <p class="pg-sub">{{ $name }}</p>
-        <p class="pg-desc">{{ $desc }}</p>
-      </div>
-      <div class="pg-stats" aria-label="Ringkasan arsip">
-        <div class="pg-stat"><span>Peraturan</span><strong id="stTotal">{{ $totalCount }}</strong></div>
-        <div class="pg-stat"><span>Rentang</span><strong id="stRange">{{ $yearRange }}</strong></div>
-        <div class="pg-stat"><span>Terbaru</span><strong id="stLatest">{{ $latestLabel }}</strong></div>
-      </div>
-    </div>
-  </section>
+  @if ($isPkm)
+    {{-- ============ PKM PAGE (Year Cards Design) ============ --}}
+    @php
+      $currentEdition = $editions[0] ?? null;
+      $editionsJson = json_encode($editions);
+    @endphp
 
-  <!-- ================= TOOLBAR ================= -->
-  <div class="pkm-bar" id="bar">
-    <div class="container pkm-bar-inner">
-      <div class="bar-row">
-        <div class="tb-field" id="qWrap">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-          <input class="tb-input" id="q" type="search" placeholder="Cari judul atau nomor peraturan" aria-label="Cari peraturan" autocomplete="off">
-          <button class="tb-clear" id="qClear" type="button" aria-label="Hapus pencarian"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-        </div>
-        <select class="tb-select" id="sortSel" aria-label="Urutkan">
-          <option value="desc">Terbaru lebih dulu</option>
-          <option value="asc">Terlama lebih dulu</option>
-        </select>
-        <div class="tb-count" id="count" aria-live="polite"></div>
-      </div>
-      <div class="years" id="years" role="group" aria-label="Filter tahun"></div>
-    </div>
-  </div>
-
-  <!-- ================= LIST ================= -->
-  <section class="list-wrap">
-    <div class="container">
-      <div id="list"></div>
-
-      <div class="note">
+    <!-- ================= HEAD ================= -->
+    <section class="pg-head">
+      <div class="container doc-hero">
         <div>
-          <h2>Tidak menemukan peraturan yang dicari?</h2>
-          <p>Hubungi Badan Legislasi atau Sekretariat DPM UII untuk bantuan pencarian dokumen peraturan.</p>
+          <nav class="crumb" aria-label="Breadcrumb">
+            <a href="{{ route('home') }}">Beranda</a><span aria-hidden="true">/</span>
+            <a href="{{ route('legal-products.index') }}">Produk Hukum</a><span aria-hidden="true">/</span>
+            <span aria-current="page">{{ $name }} ({{ $abbr }})</span>
+          </nav>
+          <span class="eyebrow2">Produk Hukum · Peraturan Bernomor</span>
+          <h1 class="big">{{ $abbr }}</h1>
+          <p class="pg-sub">{{ $name }}</p>
+          <p class="pg-desc">Peraturan teknis yang menjabarkan PDKM dan GBHKM, disusun per nomor dan tahun. Pilih tahun untuk melihat daftar peraturan.</p>
+          <div class="hero-btns">
+            <a class="btn lg dl" href="{{ route('legal-products.index') }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Semua Produk Hukum</a>
+          </div>
         </div>
-        <a class="btn" href="https://wa.me/6281511092004" target="_blank" rel="noopener">Hubungi via WhatsApp</a>
+        <div class="sheet" aria-hidden="true">
+          <span class="seal"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10M10 21V10M14 21V10M19 21V10M2 10 12 3l10 7z"/></svg></span>
+          <small>Keluarga Mahasiswa UII</small>
+          <div class="sh-mid"><b>{{ $abbr }}</b><span>Peraturan Keluarga<br>Mahasiswa<br>Universitas Islam Indonesia</span></div>
+          <div class="sh-line"></div>
+          <div class="sh-bot"><small>Tahun Terbaru</small><strong id="shYr">{{ $currentEdition['year'] ?? '–' }}</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="edbar-wrap">
+      <div class="container">
+        <div class="edhead"><span id="edLbl">Tahun PKM</span><i></i></div>
+        <div class="edcards" role="tablist" aria-labelledby="edLbl" id="edsw"></div>
+        <p class="ednote" id="ednote" hidden></p>
       </div>
     </div>
-  </section>
 
-  <!-- ================= PRATINJAU ================= -->
-  <dialog class="pdlg" id="pdlg" aria-labelledby="pdTitle">
-    <div class="pdlg-head">
-      <div class="t"><small id="pdLabel"></small><strong id="pdTitle"></strong></div>
-      <a class="btn sm" id="pdOpen" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Buka di Tab Baru</span></a>
-      <a class="btn sm" id="pdDl" href="#" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg><span>Unduh</span></a>
-      <button class="pdlg-x" id="pdClose" type="button" aria-label="Tutup pratinjau"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div class="facts-wrap">
+      <div class="container">
+        <div class="facts-row">
+          <div><small>Total Peraturan</small><b id="fTotal">{{ $totalCount }}</b></div>
+          <div><small>Tahun Terarsip</small><b id="fYears">{{ $yearsWithData->count() }}</b></div>
+          <div><small>Tahun Aktif</small><b id="fCurrent">{{ $currentEdition['year'] ?? '–' }}</b></div>
+          <div><small>Terbaru</small><b id="fLatest">{{ $latestLabel }}</b></div>
+        </div>
+      </div>
     </div>
-    <div class="pdlg-body"><div class="pdlg-load">Memuat dokumen...</div><iframe id="pdFrame" title="Pratinjau dokumen" loading="lazy"></iframe></div>
-  </dialog>
 
-  <button class="totop" id="totop" type="button" aria-label="Kembali ke atas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+    <section class="band-wide" id="baca">
+      <div class="container">
+        <div class="sec-h">
+          <span class="eyebrow2">Daftar Peraturan</span>
+          <h2>PKM Tahun <span id="yrLabel">{{ $currentEdition['year'] ?? '–' }}</span></h2>
+          <p>{{ $currentEdition['count'] ?? 0 }} peraturan tercatat pada tahun ini.</p>
+        </div>
+        <div class="reader" id="reader">
+          <div class="reader-bar">
+            <strong id="rTitle">Peraturan Keluarga Mahasiswa Tahun <span id="rtYear">{{ $currentEdition['year'] ?? '–' }}</span></strong>
+            <div>
+              <a class="btn sm dl" id="dlAll" href="#" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Unduh Semua</a>
+            </div>
+          </div>
+          <div class="reader-body" id="docList">
+            <div class="reader-ph">
+              <p>Pilih tahun dari kartu di atas untuk melihat daftar peraturan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-@else
+    <section class="band-wide alt">
+      <div class="container">
+        <div class="sec-h">
+          <span class="eyebrow2">Terkait</span>
+          <h2>Peraturan Terkait</h2>
+          <p>Peraturan lain yang berkaitan dengan PKM.</p>
+        </div>
+        <div class="links">
+          <a href="{{ route('legal-products.type', 'pdkm') }}"><strong>Peraturan Dasar (PDKM)</strong><span>Konstitusi tertinggi KM UII.</span><em>Buka arsip →</em></a>
+          <a href="{{ route('legal-products.type', 'gbhkm') }}"><strong>Garis-Garis Besar Haluan (GBHKM)</strong><span>Arah kebijakan KM UII per periode.</span><em>Buka arsip →</em></a>
+          <a href="{{ route('legal-products.type', 'pdpm') }}"><strong>Peraturan Dewan (PDPM-U)</strong><span>Peraturan internal DPM UII.</span><em>Buka arsip →</em></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRATINJAU ================= -->
+    <dialog class="pdlg" id="pdlg" aria-labelledby="pdTitle">
+      <div class="pdlg-head">
+        <div class="t"><small id="pdLabel"></small><strong id="pdTitle"></strong></div>
+        <a class="btn sm" id="pdOpen" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Buka di Tab Baru</span></a>
+        <a class="btn sm" id="pdDl" href="#" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg><span>Unduh</span></a>
+        <button class="pdlg-x" id="pdClose" type="button" aria-label="Tutup pratinjau"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </div>
+      <div class="pdlg-body"><div class="pdlg-load">Memuat dokumen...</div><iframe id="pdFrame" title="Pratinjau dokumen" loading="lazy"></iframe></div>
+    </dialog>
+
+    <button class="totop" id="totop" type="button" aria-label="Kembali ke atas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+
+  @else
+    {{-- ============ OTHER TYPE PAGES (PDKM, GBHKM, PDPM) ============ --}}
+    @php
+      $typeMeta = $types[$currentType] ?? null;
+      $abbr = $typeMeta['label'] ?? Str::upper($currentType);
+      $name = $typeMeta['name'] ?? Str::upper($currentType);
+      $desc = $typeMeta['description'] ?? '';
+      $isSingleType = in_array($currentType, ['pdkm', 'gbhkm']);
+      
+      $typeProducts = $products->where('type', $currentType)->sortByDesc(fn($p) => [$p->year ?? 0, $p->number ?? 0])->values();
+      $totalCount = $typeProducts->count();
+      
+      // For singles (PDKM/GBHKM): separate main document from amendments
+      if ($isSingleType) {
+          $mainDoc = $typeProducts->firstWhere('amends_id', null);
+          $amendments = $typeProducts->where('amends_id', '!=', null)->sortBy('sort_order')->values();
+          
+          // Build grouped data for JS (amendments as "Perubahan ke-X")
+          $groupedByYear = [];
+          if ($mainDoc) {
+              $groupedByYear['main'] = [[
+                  'id' => $mainDoc->id,
+                  'year' => null,
+                  'number' => null,
+                  'title' => $mainDoc->title,
+                  'regulation_number' => $mainDoc->regulation_number,
+                  'description' => $mainDoc->description,
+                  'extension' => $mainDoc->extension,
+                  'size' => $mainDoc->size,
+                  'human_size' => $mainDoc->human_size,
+                  'downloads' => $mainDoc->downloads,
+                  'download_url' => $mainDoc->download_url,
+                  'has_file' => $mainDoc->hasFile(),
+                  'amends' => null,
+                  'amend' => false,
+                  'is_main' => true,
+              ]];
+          }
+          foreach ($amendments as $index => $amendment) {
+              $groupedByYear['amendments'][] = [
+                  'id' => $amendment->id,
+                  'year' => null,
+                  'number' => null,
+                  'title' => $amendment->title,
+                  'regulation_number' => 'Perubahan ke-'.($index + 1).' '.$abbr,
+                  'description' => $amendment->description,
+                  'extension' => $amendment->extension,
+                  'size' => $amendment->size,
+                  'human_size' => $amendment->human_size,
+                  'downloads' => $amendment->downloads,
+                  'download_url' => $amendment->download_url,
+                  'has_file' => $amendment->hasFile(),
+                  'amends' => $amendment->amends ? [
+                      'regulation_number' => $amendment->amends->regulation_number,
+                      'heading' => $amendment->amends->heading,
+                  ] : null,
+                  'amend' => true,
+                  'is_main' => false,
+                  'amendment_number' => $index + 1,
+              ];
+          }
+          
+          $yearsWithData = collect([]);
+          $yearRange = '-';
+          $latestLabel = $mainDoc ? $mainDoc->title : '-';
+          $availableYears = ['main', 'amendments'];
+      } else {
+          $yearsWithData = $typeProducts->whereNotNull('year')->pluck('year')->unique()->sort()->values();
+          $yearRange = $yearsWithData->isNotEmpty() ? "{$yearsWithData->first()}–{$yearsWithData->last()}" : '-';
+          
+          $latest = $typeProducts->first();
+          $latestLabel = $latest ? "No. {$latest->number}/{$latest->year}" : '-';
+          
+          $groupedByYear = [];
+          foreach ($typeProducts as $product) {
+              $year = $product->year ?? 'Tanpa tahun';
+              if (!isset($groupedByYear[$year])) {
+                  $groupedByYear[$year] = [];
+              }
+              $groupedByYear[$year][] = [
+                  'id' => $product->id,
+                  'year' => $product->year,
+                  'number' => $product->number,
+                  'title' => $product->title,
+                  'regulation_number' => $product->regulation_number,
+                  'description' => $product->description,
+                  'extension' => $product->extension,
+                  'size' => $product->size,
+                  'human_size' => $product->human_size,
+                  'downloads' => $product->downloads,
+                  'download_url' => $product->download_url,
+                  'has_file' => $product->hasFile(),
+                  'amends' => $product->amends ? [
+                      'regulation_number' => $product->amends->regulation_number,
+                      'heading' => $product->amends->heading,
+                  ] : null,
+                  'amend' => (bool)$product->amends,
+              ];
+          }
+          
+          $availableYears = array_keys($groupedByYear);
+          sort($availableYears, SORT_NUMERIC);
+          $availableYears = array_reverse($availableYears);
+      }
+    @endphp
+
+    <!-- ================= HEAD ================= -->
+    <section class="pg-head">
+      <div class="container pg-head-inner">
+        <div>
+          <nav class="crumb" aria-label="Breadcrumb">
+            <a href="{{ route('home') }}">Beranda</a><span aria-hidden="true">/</span>
+            <a href="{{ route('legal-products.index') }}">Produk Hukum</a><span aria-hidden="true">/</span>
+            <span aria-current="page">{{ $name }} ({{ $abbr }})</span>
+          </nav>
+          <span class="eyebrow">Produk Hukum</span>
+          <h1>{{ $abbr }}</h1>
+          <p class="pg-sub">{{ $name }}</p>
+          <p class="pg-desc">{{ $desc }}</p>
+        </div>
+        <div class="pg-stats" aria-label="Ringkasan arsip">
+          <div class="pg-stat"><span>Peraturan</span><strong id="stTotal">{{ $totalCount }}</strong></div>
+          <div class="pg-stat"><span>Rentang</span><strong id="stRange">{{ $yearRange }}</strong></div>
+          <div class="pg-stat"><span>Terbaru</span><strong id="stLatest">{{ $latestLabel }}</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TOOLBAR ================= -->
+    <div class="pkm-bar" id="bar">
+      <div class="container pkm-bar-inner">
+        <div class="bar-row">
+          <div class="tb-field" id="qWrap">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input class="tb-input" id="q" type="search" placeholder="Cari judul atau nomor peraturan" aria-label="Cari peraturan" autocomplete="off">
+            <button class="tb-clear" id="qClear" type="button" aria-label="Hapus pencarian"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          </div>
+          <select class="tb-select" id="sortSel" aria-label="Urutkan">
+            <option value="desc">Terbaru lebih dulu</option>
+            <option value="asc">Terlama lebih dulu</option>
+          </select>
+          <div class="tb-count" id="count" aria-live="polite"></div>
+        </div>
+        <div class="years" id="years" role="group" aria-label="Filter tahun"></div>
+      </div>
+    </div>
+
+    <!-- ================= LIST ================= -->
+    <section class="list-wrap">
+      <div class="container">
+        <div id="list"></div>
+
+        <div class="note">
+          <div>
+            <h2>Tidak menemukan peraturan yang dicari?</h2>
+            <p>Hubungi Badan Legislasi atau Sekretariat DPM UII untuk bantuan pencarian dokumen peraturan.</p>
+          </div>
+          <a class="btn" href="https://wa.me/6281511092004" target="_blank" rel="noopener">Hubungi via WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRATINJAU ================= -->
+    <dialog class="pdlg" id="pdlg" aria-labelledby="pdTitle">
+      <div class="pdlg-head">
+        <div class="t"><small id="pdLabel"></small><strong id="pdTitle"></strong></div>
+        <a class="btn sm" id="pdOpen" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Buka di Tab Baru</span></a>
+        <a class="btn sm" id="pdDl" href="#" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg><span>Unduh</span></a>
+        <button class="pdlg-x" id="pdClose" type="button" aria-label="Tutup pratinjau"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </div>
+      <div class="pdlg-body"><div class="pdlg-load">Memuat dokumen...</div><iframe id="pdFrame" title="Pratinjau dokumen" loading="lazy"></iframe></div>
+    </dialog>
+
+    <button class="totop" id="totop" type="button" aria-label="Kembali ke atas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+  @endif
+  @else
   {{-- ============ MAIN INDEX PAGE ============ --}}
   <div class="law-page">
       <!-- ============ HERO ============ -->
@@ -1145,7 +1458,7 @@
 
                   <!-- DOCUMENTS CONTAINER -->
                   <div id="documentsContainer">
-                      @if ($groupedByYear->isEmpty())
+                      @if (empty($groupedByYear))
                           <div class="empty-state">
                               <strong>Belum ada peraturan bernomor</strong>
                               Dokumen PKM dan PDPM sedang dalam proses pengarsipan digital.
@@ -1252,25 +1565,32 @@
   const YEARS = @json($availableYears);
   const TYPE_LABEL = @json($abbr);
   const TYPE_NAME = @json($name);
+  const IS_SINGLE_TYPE = @json($isSingleType);
 
   const $ = id => document.getElementById(id);
   const esc = s => { const d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
-  const dec = s => s.replace(/&/g, '&');
 
   // Pakai download_url dari database (file lokal di uploads/), BUKAN Google Drive
   const dlUrl = d => d.download_url;
-  const viewUrl = d => d.download_url; // PDF bisa dibuka langsung di browser via iframe
+  const viewUrl = d => d.download_url;
 
-  const state = { year: 'all', q: '', sort: 'desc' };
+  const state = { year: IS_SINGLE_TYPE ? 'main' : 'all', q: '', sort: 'desc' };
   let shownDocs = [];
 
   // ringkasan
   (function () {
-    const withDocs = [...new Set(Object.values(DOCS_BY_YEAR).flat().map(d => d.year))].filter(Boolean).sort((a, b) => a - b);
-    const latest = Object.values(DOCS_BY_YEAR).flat().sort((a, b) => (b.year || 0) - (a.year || 0) || (b.number || 0) - (a.number || 0))[0];
-    $('stTotal').textContent = Object.values(DOCS_BY_YEAR).flat().length;
-    $('stRange').textContent = withDocs.length ? withDocs[0] + '–' + withDocs[withDocs.length - 1] : '-';
-    $('stLatest').textContent = latest ? 'No. ' + latest.number + '/' + latest.year : '-';
+    if (IS_SINGLE_TYPE) {
+      $('stTotal').textContent = Object.values(DOCS_BY_YEAR).flat().length;
+      $('stRange').textContent = '-';
+      const main = DOCS_BY_YEAR['main']?.[0];
+      $('stLatest').textContent = main ? main.title : '-';
+    } else {
+      const withDocs = [...new Set(Object.values(DOCS_BY_YEAR).flat().map(d => d.year))].filter(Boolean).sort((a, b) => a - b);
+      const latest = Object.values(DOCS_BY_YEAR).flat().sort((a, b) => (b.year || 0) - (a.year || 0) || (b.number || 0) - (a.number || 0))[0];
+      $('stTotal').textContent = Object.values(DOCS_BY_YEAR).flat().length;
+      $('stRange').textContent = withDocs.length ? withDocs[0] + '–' + withDocs[withDocs.length - 1] : '-';
+      $('stLatest').textContent = latest ? 'No. ' + latest.number + '/' + latest.year : '-';
+    }
   })();
 
   const hl = s => {
@@ -1287,6 +1607,11 @@
   }
 
   function renderYears() {
+    if (IS_SINGLE_TYPE) {
+      // Hide year pills for singles
+      $('years').innerHTML = '';
+      return;
+    }
     const ys = YEARS.slice().sort((a, b) => state.sort === 'desc' ? b - a : a - b);
     const total = Object.values(DOCS_BY_YEAR).flat().filter(matches).length;
     $('years').innerHTML =
@@ -1299,6 +1624,65 @@
 
   function render() {
     renderYears();
+    
+    if (IS_SINGLE_TYPE) {
+      // For singles: show main first, then amendments
+      shownDocs = [];
+      let html = '';
+      
+      // Main document
+      const mainDocs = (DOCS_BY_YEAR['main'] || []).filter(matches);
+      if (mainDocs.length) {
+        html += '<div class="docs">';
+        mainDocs.forEach(d => {
+          const k = shownDocs.push(d) - 1;
+          html += '<article class="doc">' +
+            '<div class="doc-no" aria-hidden="true"><small>Utama</small><b>—</b></div>' +
+            '<div class="doc-main"><div class="doc-label"><span>' + hl(d.regulation_number || d.title) + '</span></div>' +
+            '<h3>' + hl(d.title) + '</h3></div>' +
+            '<div class="doc-actions">' +
+              '<button class="btn sm" type="button" data-k="' + k + '" aria-label="Pratinjau ' + esc(d.regulation_number || d.title) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Pratinjau</button>' +
+              (d.has_file
+                ? '<a class="btn sm" href="' + dlUrl(d) + '" rel="noopener" aria-label="Unduh ' + esc(d.regulation_number || d.title) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Unduh</a>'
+                : '<span class="btn sm" style="border-style:dashed;border-color:var(--b-default);color:var(--t-cap);">Belum ada berkas</span>') +
+            '</div></article>';
+        });
+        html += '</div>';
+      }
+      
+      // Amendments
+      const amendDocs = (DOCS_BY_YEAR['amendments'] || []).filter(matches);
+      if (amendDocs.length) {
+        html += '<h2 class="yr">Perubahan<small>' + amendDocs.length + ' dokumen</span></h2><div class="docs">';
+        amendDocs.forEach(d => {
+          const k = shownDocs.push(d) - 1;
+          html += '<article class="doc">' +
+            '<div class="doc-no" aria-hidden="true"><small>Perubahan</small><b>ke-' + (d.amendment_number || '—') + '</b></div>' +
+            '<div class="doc-main"><div class="doc-label"><span>' + hl(d.regulation_number) + '</span><span class="badge">Perubahan</span></div>' +
+            '<h3>' + hl(d.title) + '</h3></div>' +
+            '<div class="doc-actions">' +
+              '<button class="btn sm" type="button" data-k="' + k + '" aria-label="Pratinjau ' + esc(d.regulation_number || d.title) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Pratinjau</button>' +
+              (d.has_file
+                ? '<a class="btn sm" href="' + dlUrl(d) + '" rel="noopener" aria-label="Unduh ' + esc(d.regulation_number || d.title) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Unduh</a>'
+                : '<span class="btn sm" style="border-style:dashed;border-color:var(--b-default);color:var(--t-cap);">Belum ada berkas</span>') +
+            '</div></article>';
+        });
+        html += '</div>';
+      }
+      
+      if (!shownDocs.length) {
+        const q = state.q.trim();
+        html = q
+          ? '<div class="empty"><strong>Tidak ada hasil</strong>Tidak ada peraturan yang cocok dengan “' + esc(q) + '”.<br><button class="btn" type="button" id="resetBtn">Hapus pencarian</button></div>'
+          : '<div class="empty"><strong>Belum ada peraturan</strong>Arsip ' + TYPE_NAME + ' sedang dalam proses pengarsipan digital.</div>';
+      }
+      $('list').innerHTML = html;
+      $('count').innerHTML = 'Menampilkan <b>' + shownDocs.length + '</b> dari ' + Object.values(DOCS_BY_YEAR).flat().length + ' dokumen';
+      $('qWrap').classList.toggle('has', !!state.q);
+      return;
+    }
+    
+    // Original logic for numbered types (PKM, PDPM)
     const ys = YEARS.slice().sort((a, b) => state.sort === 'desc' ? b - a : a - b);
     shownDocs = [];
     let html = '';
@@ -1341,6 +1725,7 @@
   $('qClear').addEventListener('click', () => { state.q = ''; $('q').value = ''; $('q').focus(); render(); });
   $('sortSel').addEventListener('change', e => { state.sort = e.target.value; render(); });
   $('years').addEventListener('click', e => {
+    if (IS_SINGLE_TYPE) return; // No year filtering for singles
     const b = e.target.closest('.ypill');
     if (!b) return;
     state.year = b.dataset.y === 'all' ? 'all' : +b.dataset.y;
@@ -1352,7 +1737,7 @@
     const b = e.target.closest('button[data-k]');
     if (b) openPreview(shownDocs[+b.dataset.k]);
   });
-  { const y = +location.hash.slice(1); if (YEARS.map(Number).includes(y)) state.year = y; }
+  { const y = +location.hash.slice(1); if (!IS_SINGLE_TYPE && YEARS.map(Number).includes(y)) state.year = y; }
 
   // pratinjau
   const dlg = $('pdlg');

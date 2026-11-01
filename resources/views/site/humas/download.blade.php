@@ -149,7 +149,7 @@
                                 </div>
                             </div>
                             <p class="humas-desc">{{ $file['description'] }}</p>
-                            <a href="{{ route('humas.download.file', $file['filename']) }}" class="btn-download {{ $file['icon'] }}">
+                            <a href="{{ route('publikasi.download.file', $file['filename']) }}" class="btn-download {{ $file['icon'] }}">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                 <span>Unduh Sekarang</span>
                             </a>

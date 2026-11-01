@@ -1,395 +1,398 @@
 @extends('layouts.site')
 
-@section('title', 'Sejarah — '.($siteSettings['site_name'] ?? 'DPM UII'))
-@section('meta_description', 'Sejarah Student Government dan Sejarah Keluarga Mahasiswa Universitas Islam Indonesia.')
+@section('title', 'Sejarah Keluarga Mahasiswa UII | DPM UII')
+@section('meta_description', 'Sejarah Keluarga Mahasiswa Universitas Islam Indonesia: dari Senat Mahasiswa STI hingga sistem Student Government saat ini.')
+
+@push('styles')
+<style>
+  /* ============ SEJARAH ============ */
+  .nav-item.current > a::after { transform: scaleX(1); }
+  .mega-links a[aria-current] { background: var(--bg-hover); }
+  :focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+  html { scroll-padding-top: 150px; }
+
+  /* hero */
+  .pg-head { position: relative; overflow: hidden; border-bottom: 1px solid var(--b-default); padding: 56px 0 64px;
+    background: linear-gradient(135deg, #002A5A 0%, #001E43 55%, #001633 100%); }
+  .pg-head::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 28px); }
+  .hero-grid { position: relative; display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; align-items: center; }
+  .crumb { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; font-size: 12.5px; color: var(--t-cap); }
+  .crumb a { transition: color .2s; } .crumb a:hover { color: var(--white); }
+  .crumb span[aria-hidden] { opacity: .5; }
+  .crumb span[aria-current] { color: var(--white); font-weight: 600; }
+  .pg-head h1 { font-size: clamp(34px, 5.6vw, 62px); letter-spacing: -1.6px; line-height: 1.06; margin-bottom: 18px; }
+  .pg-desc { max-width: 580px; margin-bottom: 28px; font-size: 16px; color: var(--t-sub); }
+  .meta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .meta span { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--b-btn); border-radius: 100px; font-size: 12.5px; font-weight: 600; color: var(--white); background: rgba(0,22,51,.5); }
+  .meta span small { font-size: 11px; font-weight: 500; letter-spacing: .8px; text-transform: uppercase; color: var(--t-cap); }
+  .hero-art { display: flex; justify-content: flex-end; }
+  .hero-art svg { width: min(100%, 460px); height: auto; }
+
+  /* timeline header */
+  .tlh-wrap { padding: 40px 0; border-bottom: 1px solid var(--b-default); background: var(--navy-footer); }
+  .tlh-scroll { overflow-x: auto; }
+  .tlh { list-style: none; display: grid; grid-template-columns: repeat(6, minmax(150px, 1fr)); min-width: 900px; position: relative; }
+  .tlh::before { content: ''; position: absolute; left: 0; right: 0; top: 8px; height: 1px; background: var(--b-btn); }
+  .tlh li { position: relative; padding-top: 28px; padding-right: 16px; }
+  .tlh i { position: absolute; left: 0; top: 0; width: 17px; height: 17px; border-radius: 50%; background: var(--navy-footer); border: 2px solid var(--white); }
+  .tlh li:nth-child(3) i { background: var(--white); box-shadow: 0 0 0 5px rgba(255,255,255,.15); }
+  .tlh b { display: block; margin-bottom: 4px; font-family: 'Wix Madefor Display', sans-serif; font-size: 15px; }
+  .tlh span { font-size: 13px; line-height: 1.5; color: var(--t-cap); }
+  .tl-hint { display: none; margin-top: 10px; font-size: 12.5px; color: var(--t-cap); }
+  .prose { max-width: 740px; }
+  .prose > p { margin-bottom: 20px; font-size: 16px; line-height: 1.9; color: var(--t-body); }
+  .prose em { font-style: italic; color: var(--white); } .prose strong { color: var(--white); }
+  .ph { margin: 40px 0 16px; font-size: 22px; letter-spacing: -.4px; }
+  .bq { margin: 28px 0; padding: 24px 28px; border-left: 2px solid var(--b-btn-hover); background: var(--navy-card); border-radius: 0 8px 8px 0; font-family: 'Wix Madefor Display', sans-serif; font-size: 17px; line-height: 1.75; color: var(--white); font-weight: 500; }
+  .bq cite { display: block; margin-top: 14px; font-family: 'Inter', sans-serif; font-style: normal; font-size: 12px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--t-cap); }
+  .dg { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 28px 0; }
+  .dg div { padding: 18px 20px; border: 1px solid var(--b-btn); border-radius: 8px; background: var(--navy-card); }
+  .dg b { display: block; margin-bottom: 4px; font-family: 'Wix Madefor Display', sans-serif; font-size: 18px; }
+  .dg span { font-size: 13.5px; line-height: 1.55; color: var(--t-sub); }
+  .pl { margin: 0 0 22px; padding-left: 0; list-style: none; counter-reset: n; }
+  .pl li { position: relative; padding: 10px 0 10px 28px; font-size: 15.5px; line-height: 1.75; color: var(--t-body); border-bottom: 1px solid var(--b-default); }
+  .pl li:last-child { border-bottom: 0; }
+  .pl li::before { content: ''; position: absolute; left: 4px; top: 21px; width: 7px; height: 7px; border-radius: 50%; background: var(--white); }
+  .pl.num li { counter-increment: n; } .pl.num li::before { content: counter(n); top: 10px; left: 0; width: auto; height: auto; background: none; font-weight: 700; color: var(--t-cap); font-size: 14px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0 0 24px; }
+  .two > div { padding: 22px; border: 1px solid var(--b-default); border-radius: 8px; background: var(--navy-card); }
+  .two h4 { margin-bottom: 8px; font-size: 12px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--t-cap); font-family: 'Inter', sans-serif; }
+  .five { display: grid; gap: 12px; margin-bottom: 28px; }
+  .five article { display: grid; grid-template-columns: auto 1fr; column-gap: 20px; padding: 22px 24px; border: 1px solid var(--b-default); border-radius: 8px; background: var(--navy-card); transition: border-color .2s, background .2s; }
+  .five article:hover { border-color: var(--b-btn); background: var(--navy-hover); }
+  .five b { grid-row: 1 / span 2; font-family: 'Wix Madefor Display', sans-serif; font-size: 30px; font-weight: 800; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.42); }
+  .five h4 { margin-bottom: 6px; font-size: 16px; font-family: 'Wix Madefor Display', sans-serif; }
+  .five p { font-size: 14.5px; line-height: 1.75; color: var(--t-sub); }
+
+  /* subnav */
+  .subnav { position: sticky; top: 73px; z-index: 50; background: rgba(0,22,51,.95); border-bottom: 1px solid var(--b-default); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .subnav::after { content: ''; position: absolute; left: 0; bottom: -1px; height: 2px; width: calc(var(--p, 0) * 100%); background: var(--white); transition: width .1s linear; }
+  .subnav-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .subnav ol { list-style: none; display: flex; gap: 4px; padding: 10px 0; overflow-x: auto; scrollbar-width: none; }
+  .subnav ol::-webkit-scrollbar { display: none; }
+  .subnav li a { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 100px; border: 1px solid transparent; white-space: nowrap; font-size: 13.5px; font-weight: 600; color: var(--t-cap); transition: color .2s, background .2s, border-color .2s; }
+  .subnav li a em { font-style: normal; font-size: 11px; opacity: .6; }
+  .subnav li a:hover { color: var(--white); }
+  .subnav li a[aria-current="true"] { color: var(--white); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.35); }
+  .subnav .btn { flex-shrink: 0; }
+
+  /* band */
+  .band { padding: 96px 0; border-bottom: 1px solid var(--b-default); }
+  .band.alt { background: var(--navy-footer); }
+  .band-grid { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 72px; align-items: start; }
+  .band-head { position: sticky; top: 150px; }
+  .big-no { display: block; margin-bottom: 8px; font-family: 'Wix Madefor Display', sans-serif; font-size: 88px; font-weight: 800; line-height: 1; letter-spacing: -4px; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.28); }
+  .band-head h2 { margin-bottom: 14px; font-size: clamp(28px, 3.2vw, 38px); letter-spacing: -.9px; line-height: 1.15; }
+  .band-head p { font-size: 14.5px; color: var(--t-cap); line-height: 1.75; }
+
+  @media (max-width: 1080px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-art { display: none; }
+    .band { padding: 72px 0; }
+    .band-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .band-head { position: static; }
+    .big-no { font-size: 64px; }
+    .subnav .btn { display: none; }
+  }
+  @media (max-width: 720px) {
+    .pg-head { padding: 36px 0 44px; }
+    .band { padding: 56px 0; }
+    .tlh-wrap { padding: 28px 0; }
+    .tl-hint { display: block; }
+    .bq { padding: 18px 20px; font-size: 15.5px; }
+    .two { grid-template-columns: 1fr; }
+    .prose > p { font-size: 15.5px; }
+    .five article { grid-template-columns: 1fr; }
+    .five b { grid-row: auto; margin-bottom: 8px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+</style>
+@endpush
 
 @section('content')
-<style>
-    .sejarah-page { color: rgba(255,255,255,.85); }
-    .sejarah-hero { background: linear-gradient(135deg, #002A5A 0%, #001E43 55%, #001633 100%); }
-    .sejarah-wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
-    .sejarah-hero-inner { padding: 68px 0 64px; position: relative; overflow: hidden; }
-    .sejarah-hero-inner::before {
-        content: '';
-        position: absolute; inset: 0;
-        background: repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 1px, transparent 1px 26px);
-        pointer-events: none;
-    }
-    .sejarah-eyebrow { margin: 0 0 10px; color: rgba(255,255,255,.72); font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
-    .sejarah-hero h1 { margin: 0; color: #fff; font-size: clamp(30px, 4.6vw, 44px); font-weight: 800; letter-spacing: -.03em; }
-    .sejarah-hero-copy { max-width: 720px; margin: 14px 0 0; color: rgba(255,255,255,.82); font-size: 15px; line-height: 1.85; }
+<!-- ================= PAGE HEADER ================= -->
+<section class="pg-head">
+  <div class="container hero-grid">
+    <div>
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="{{ route('home') }}">Beranda</a><span aria-hidden="true">/</span>
+        <a href="{{ url('/#fungsi') }}">Tentang</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Sejarah</span>
+      </nav>
+      <span class="eyebrow">Tentang DPM UII</span>
+      <h1>Sejarah Keluarga Mahasiswa UII</h1>
+      <p class="pg-desc">Perjalanan lembaga kemahasiswaan Universitas Islam Indonesia, dari Senat Mahasiswa STI hingga sistem student government yang berjalan hari ini.</p>
+      <div class="meta">
+        <span><small>STI berdiri</small> 1945</span>
+        <span><small>KM UII lahir</small> 21 Sep 1950</span>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg viewBox="0 0 640 520" fill="none" stroke="rgba(255,255,255,0.42)" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
+        <defs><g id="col"><rect x="0" y="0" width="28" height="170"/><path d="M9 6V164M19 6V164" stroke="rgba(255,255,255,0.18)"/><rect x="-6" y="-8" width="40" height="8" fill="rgba(255,255,255,0.09)"/><rect x="-6" y="170" width="40" height="8" fill="rgba(255,255,255,0.09)"/></g></defs>
+        <path d="M50 205 L320 62 L590 205 Z" fill="rgba(255,255,255,0.07)"/>
+        <path d="M92 195 L320 76 L548 195"/>
+        <circle cx="320" cy="150" r="30" fill="rgba(255,255,255,0.09)"/><circle cx="320" cy="150" r="20"/>
+        <path d="M320 134 L324 146 L336 146 L326 154 L330 166 L320 159 L310 166 L314 154 L304 146 L316 146 Z" fill="rgba(255,255,255,0.3)" stroke="none"/>
+        <rect x="50" y="205" width="540" height="22" fill="rgba(255,255,255,0.09)"/>
+        <use href="#col" x="96" y="235"/><use href="#col" x="176" y="235"/><use href="#col" x="256" y="235"/>
+        <use href="#col" x="336" y="235"/><use href="#col" x="416" y="235"/><use href="#col" x="496" y="235"/>
+        <path d="M70 413 H570M50 433 H590M30 453 H610M10 473 H630"/>
+      </svg>
+    </div>
+  </div>
+</section>
 
-    .sejarah-section { padding: 56px 0 70px; background: #001E43; }
+<!-- ================= TIMELINE HEADER ================= -->
+<section class="tlh-wrap" aria-label="Garis waktu singkat">
+  <div class="container">
+    <div class="tlh-scroll">
+      <ol class="tlh">
+        <li><i></i><b>8 Jul 1945</b><span>STI berdiri</span></li>
+        <li><i></i><b>10 Apr 1946</b><span>STI pindah ke Yogyakarta</span></li>
+        <li><i></i><b>21 Sep 1950</b><span>MPM dan DEMA; lahir KM UII</span></li>
+        <li><i></i><b>1978</b><span>NKK; era BKK-KUA</span></li>
+        <li><i></i><b>15 Mei 1993</b><span>DPM dan LEM dibentuk</span></li>
+        <li><i></i><b>1998</b><span>LEMF dan DPMF</span></li>
+      </ol>
+    </div>
+    <p class="tl-hint">Geser ke samping untuk melihat seluruhnya.</p>
+  </div>
+</section>
 
-    /* TABS */
-    .sejarah-tabs { 
-        display: flex; gap: 8px; margin-bottom: 40px; 
-        border-bottom: 1px solid rgba(255,255,255,.1);
-        padding-bottom: 8px;
-    }
-    .sejarah-tab {
-        padding: 14px 28px;
-        border: 1px solid rgba(255,255,255,.1);
-        border-radius: 8px 8px 0 0;
-        background: rgba(255,255,255,.03);
-        color: rgba(255,255,255,.7);
-        font-size: 14px; font-weight: 700; letter-spacing: .05em;
-        cursor: pointer;
-        transition: all .2s;
-        border-bottom: none;
-        margin-bottom: -1px;
-    }
-    .sejarah-tab:hover { color: #fff; background: rgba(255,255,255,.06); }
-    .sejarah-tab.active {
-        background: #001A3A; color: #fff;
-        border-color: rgba(255,255,255,.2);
-        box-shadow: 0 -4px 20px rgba(0,0,0,.2);
-    }
-
-    /* TIMELINE */
-    .sejarah-timeline { position: relative; padding-left: 40px; }
-    .sejarah-timeline::before {
-        content: '';
-        position: absolute; left: 15px; top: 0; bottom: 0;
-        width: 2px; background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.15));
-    }
-    .timeline-item { position: relative; padding: 0 0 48px 48px; }
-    .timeline-item:last-child { padding-bottom: 0; }
-    .timeline-marker {
-        position: absolute; left: -40px; top: 4px;
-        width: 32px; height: 32px;
-        border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        background: #001A3A;
-        border: 3px solid;
-        box-shadow: 0 0 0 4px #001E43;
-        z-index: 2;
-    }
-    .timeline-marker svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.5; }
-    .timeline-item.sg .timeline-marker { border-color: #4ade80; color: #4ade80; }
-    .timeline-item.kmui .timeline-marker { border-color: #fbbf24; color: #fbbf24; }
-    .timeline-year {
-        font-size: 12px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase;
-        color: rgba(255,255,255,.5); margin-bottom: 8px;
-    }
-    .timeline-content {
-        background: #001A3A;
-        border: 1px solid rgba(255,255,255,.08);
-        border-radius: 12px;
-        padding: 28px;
-        transition: border-color .2s, box-shadow .2s, transform .2s;
-    }
-    .timeline-content:hover {
-        border-color: rgba(255,255,255,.2);
-        box-shadow: 0 8px 32px rgba(0,0,0,.3);
-        transform: translateX(4px);
-    }
-    .timeline-content h3 { margin: 0 0 14px; color: #fff; font-size: 18px; font-weight: 800; }
-    .timeline-content p { margin: 12px 0; color: rgba(255,255,255,.82); line-height: 1.9; }
-    .timeline-content ul { margin: 16px 0; padding-left: 22px; }
-    .timeline-content li { margin: 8px 0; color: rgba(255,255,255,.85); line-height: 1.8; }
-    .timeline-content strong { color: #fff; font-weight: 700; }
-
-    /* PANELS for detailed text */
-    .sejarah-panel {
-        background: linear-gradient(145deg, #001A3A 0%, #001633 100%);
-        border: 1px solid rgba(255,255,255,.08);
-        border-radius: 12px;
-        padding: 32px;
-        margin-bottom: 28px;
-    }
-    .sejarah-panel h3 { margin: 0 0 16px; color: #fff; font-size: 20px; font-weight: 800; }
-    .sejarah-panel p { margin: 14px 0; color: rgba(255,255,255,.82); line-height: 1.95; }
-    .sejarah-panel ul { margin: 16px 0; padding-left: 22px; }
-    .sejarah-panel li { margin: 10px 0; color: rgba(255,255,255,.85); line-height: 1.85; }
-    .sejarah-panel strong { color: #fff; font-weight: 700; }
-    .sejarah-panel .highlight-box {
-        background: rgba(255,255,255,.03);
-        border: 1px solid rgba(255,255,255,.1);
-        border-radius: 8px;
-        padding: 20px;
-        margin: 20px 0;
-        font-style: italic;
-        color: rgba(255,255,255,.88);
-        border-left: 3px solid #4ade80;
-    }
-
-    /* PILAR GRID */
-    .pilar-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 20px;
-        margin: 24px 0 8px;
-    }
-    .pilar-item {
-        display: flex;
-        gap: 16px;
-        padding: 20px;
-        background: rgba(255,255,255,.02);
-        border: 1px solid rgba(255,255,255,.06);
-        border-radius: 10px;
-        transition: border-color .2s, background .2s, transform .2s;
-    }
-    .pilar-item:hover {
-        border-color: rgba(255,255,255,.15);
-        background: rgba(255,255,255,.05);
-        transform: translateY(-2px);
-    }
-    .pilar-icon {
-        flex-shrink: 0;
-        width: 48px; height: 48px;
-        border-radius: 10px;
-        display: flex; align-items: center; justify-content: center;
-        background: rgba(34,197,94,.12);
-        color: #4ade80;
-    }
-    .pilar-icon svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; }
-    .pilar-content strong { display: block; color: #fff; font-size: 14.5px; font-weight: 800; margin-bottom: 6px; }
-    .pilar-content p { margin: 0; color: rgba(255,255,255,.72); font-size: 13.5px; line-height: 1.7; }
-
-    /* TAB BUTTONS - fix icon alignment */
-    .sejarah-tabs { 
-        display: flex; gap: 8px; margin-bottom: 40px; 
-        border-bottom: 1px solid rgba(255,255,255,.1);
-        padding-bottom: 8px;
-    }
-    .sejarah-tab {
-        display: inline-flex; align-items: center; gap: 10px;
-        padding: 14px 28px;
-        border: 1px solid rgba(255,255,255,.1);
-        border-radius: 8px 8px 0 0;
-        background: rgba(255,255,255,.03);
-        color: rgba(255,255,255,.7);
-        font-size: 14px; font-weight: 700; letter-spacing: .05em;
-        cursor: pointer;
-        transition: all .2s;
-        border-bottom: none;
-        margin-bottom: -1px;
-    }
-    .sejarah-tab:hover { color: #fff; background: rgba(255,255,255,.06); }
-    .sejarah-tab.active {
-        background: #001A3A; color: #fff;
-        border-color: rgba(255,255,255,.2);
-        box-shadow: 0 -4px 20px rgba(0,0,0,.2);
-    }
-    .sejarah-tab svg { 
-        width: 18px; height: 18px; 
-        flex-shrink: 0; 
-        stroke: currentColor; 
-        stroke-width: 2; 
-        fill: none; 
-        stroke-linecap: round; 
-        stroke-linejoin: round;
-    }
-
-    .tab-pane { display: none; }
-    .tab-pane.active { display: block; animation: fadeIn .3s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-
-    @media (max-width: 720px) {
-        .sejarah-wrap { width: min(100% - 28px, 1180px); }
-        .sejarah-hero-inner { padding: 48px 0 46px; }
-        .sejarah-section { padding: 40px 0 52px; }
-        .sejarah-tabs { flex-wrap: wrap; }
-        .sejarah-tab { flex: 1; text-align: center; padding: 12px 16px; font-size: 13px; }
-        .sejarah-timeline { padding-left: 28px; }
-        .timeline-item { padding-left: 36px; }
-        .timeline-marker { left: -34px; width: 28px; height: 28px; }
-        .timeline-content { padding: 20px; }
-        .sejarah-panel { padding: 24px; }
-    }
-</style>
-
-<div class="sejarah-page">
-    <section class="sejarah-hero">
-        <div class="sejarah-wrap sejarah-hero-inner">
-            <p class="sejarah-eyebrow">Profil Lembaga</p>
-            <h1>Sejarah</h1>
-            <p class="sejarah-hero-copy">
-                Menelusuri perjalanan Keluarga Mahasiswa Universitas Islam Indonesia dari lahirnya Student Government hingga perjuangan mahasiswa UII dalam membangun peradaban.
-            </p>
-        </div>
-    </section>
-
-    <section class="sejarah-section">
-        <div class="sejarah-wrap">
-            {{-- TABS --}}
-            <nav class="sejarah-tabs" role="tablist" aria-label="Sejarah tabs">
-                <button class="sejarah-tab active" role="tab" aria-selected="true" data-tab="student-government">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    Sejarah Student Government
-                </button>
-                <button class="sejarah-tab" role="tab" aria-selected="false" data-tab="km-uii">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                    Sejarah KM UII
-                </button>
-            </nav>
-
-            {{-- STUDENT GOVERNMENT TAB --}}
-            <div class="tab-pane active" id="student-government" role="tabpanel">
-                <article class="sejarah-panel">
-                    <h3>Pengertian Student Government</h3>
-                    <p>
-                        Keluarga Mahasiswa Universitas Islam Indonesia (KM UII) secara resmi berdiri pada tanggal <strong>21 September 1950</strong>. Ciri khas utama yang melekat pada KM UII adalah dikenalnya istilah <strong>"student government"</strong> sebagai dasar pelaksanaan sistem kelembagaan di KM UII.
-                    </p>
-                    <p>
-                        Secara umum, <strong>student government bermakna pemerintahan dari, untuk dan oleh mahasiswa</strong>. Dengan demikian maka pelaksanaan atau sistem kelembagaan di KM UII dilakukan oleh mahasiswa UII, dari mahasiswa UII untuk mahasiswa UII itu sendiri.
-                    </p>
-                    <p>
-                        Pelaksanaan sistem kelembagaan yang demikian itu mensyaratkan adanya dua aspek fundamental, yakni <strong>kemandirian</strong> dan <strong>independensi</strong> dalam berlembaga.
-                    </p>
-
-                    <div class="highlight-box">
-                        <strong>Kemandirian</strong> dimaknai sebagai sesuatu yang berdiri sendiri dan tidak bergantung kepada pihak manapun.<br>
-                        <strong>Independensi</strong> bermakna bebas dan merdeka.<br>
-                        Dengan demikian, maka pemerintahan mahasiswa yang dikehendaki oleh KM UII adalah pemerintahan yang tidak bergantung, berdiri sendiri, bebas dan merdeka.
-                    </div>
-
-                    <p>
-                        Hal ini sejalan dengan spirit atau nilai juang yang melatar belakangi lahirnya student government. Mahasiswa UII menempatkan lembaga mahasiswa sebagai <strong>"kawah candradimuka"</strong> untuk meningkatkan potensi dan kualitas diri, baik dalam kualitas spiritual, moral dan intelektual. Hal ini tidak lepas dari tujuan KM UII itu sendiri, yakni <strong>"Terbinanya mahasiswa UII menjadi Insan Ulil Albab yang turut bertanggungjawab atas terwujudnya tatanan masyarakat yang diridhoi Allah SWT"</strong>.
-                    </p>
-                </article>
-
-                <article class="sejarah-panel">
-                    <h3>Lima Pilar Wujud Student Government</h3>
-                    <p>Nilai-nilai yang termuat dalam student government (kemandirian dan independensi) dapat diwujudkan melalui lima hal:</p>
-                    <div class="pilar-grid">
-                        <div class="pilar-item">
-                            <div class="pilar-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                            </div>
-                            <div class="pilar-content">
-                                <strong>Regenerasi Fungsionaris</strong>
-                                <p>Segala proses regenerasi dilaksanakan oleh mahasiswa secara mandiri dan independen, tanpa ada pengaruh dari pihak manapun.</p>
-                            </div>
-                        </div>
-                        <div class="pilar-item">
-                            <div class="pilar-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                            </div>
-                            <div class="pilar-content">
-                                <strong>Kegiatan</strong>
-                                <p>Seluruh proses perencanaan, pelaksanaan hingga pertanggungjawaban dilaksanakan mandiri oleh lembaga mahasiswa. Bebas intervensi, "pesanan", dan tekanan pihak manapun.</p>
-                            </div>
-                        </div>
-                        <div class="pilar-item">
-                            <div class="pilar-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                            </div>
-                            <div class="pilar-content">
-                                <strong>Keuangan</strong>
-                                <p>Seluruh proses penerimaan, pengelolaan, pendistribusian hingga pertanggungjawaban dana kemahasiswaan dilaksanakan mandiri oleh lembaga mahasiswa.</p>
-                            </div>
-                        </div>
-                        <div class="pilar-item">
-                            <div class="pilar-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                            </div>
-                            <div class="pilar-content">
-                                <strong>Organisasi</strong>
-                                <p>KM UII tidak terikat struktural dengan UII, tidak di bawah Rektorat/Dekanat. Tetap bagian UII yang tak terpisahkan — hubungan koordinatif, sinergis, harmonis.</p>
-                            </div>
-                        </div>
-                        <div class="pilar-item">
-                            <div class="pilar-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 0 9.27 6.91 8.26 12 2"/></svg>
-                            </div>
-                            <div class="pilar-content">
-                                <strong>Sikap Politik</strong>
-                                <p>KM UII memiliki sikap politik bebas dan merdeka. Tidak ada pihak yang dapat mengintervensi atau mempengaruhi penentuan sikap politik.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="highlight-box" style="border-left-color: #fbbf24;">
-                        <strong>Responsibility:</strong> Bersamaan dengan datangnya kekuatan yang besar, maka datang pula pertanggungjawaban yang besar. Sistem kelembagaan yang menganut student government ini menuntut tanggung jawab besar. Seluruh fungsionaris wajib menjaga integritas dan tanggung jawab. Seluruh civitas akademika wajib melakukan pengawasan terukur. Inilah <strong>check and balance</strong> dalam student government.
-                    </div>
-                </article>
-            </div>
-
-            {{-- KM UII TAB --}}
-            <div class="tab-pane" id="km-uii" role="tabpanel">
-                <article class="sejarah-panel">
-                    <h3>Sejarah Lembaga Kemahasiswaan</h3>
-                    <p>
-                        Sekolah Tinggi Islam yang berdiri pada hari ahad tanggal 27 Rajab 1364 bertepatan dengan tanggal <strong>8 Juli 1945</strong> dan kini bernama Universitas Islam Indonesia, tidak terlepas dari kiprah mahasiswa untuk senantiasa memberikan peran positif yang maksimal untuk bangsanya.
-                    </p>
-                    <p>
-                        Sejak berdirinya STI, mahasiswa yang waktu itu hanya diterima 14 orang dari 78 pendaftar telah membulatkan tekadnya dalam membangun bangsa, dengan ikrar menyerahkan segenap tenaga dalam menuntut ilmu serta menjunjung tinggi akhlak dan budi pekerti Islam.
-                    </p>
-                    <p>
-                        Seiring berjalannya waktu dan seiring pula kepindahannya STI ke Yogyakarta (<strong>10 April 1946</strong>), mahasiswa STI terus berkarya dan menjadikan momentum kepindahan tersebut sebagai kebangkitan mahasiswa STI dengan mendirikan dua lembaga kemahasiswaan:
-                    </p>
-                    <ul>
-                        <li><strong>Senat Mahasiswa STI</strong> — dipimpin oleh Ketua I Djanamar Adjam, Ketua II Amin Syahri, Ketua III Lafran Pane</li>
-                        <li><strong>Himpunan Mahasiswa Islam</strong> — inisiatif Lafran Pane dengan cita-cita keseimbangan dunia-akhirat, akal-qalbu, iman-ilmu pengetahuan</li>
-                    </ul>
-                    <p>
-                        Perkembangan senat mahasiswa di tingkat fakultas dinamakan komisariat senat mahasiswa (fakultas: ekonomi, hukum, pendidikan, agama, dan kelas pendahuluan). Karena tata kerja dan struktur yang sempit, maka pada <strong>21 September 1950</strong> diadakan Sidang Umum yang menghasilkan keputusan dibentuknya <strong>Majelis Permusyawaratan Mahasiswa (MPM)</strong> dan <strong>Dewan Mahasiswa (DEMA)</strong> dengan merujuk pada konsep negara — MPM sebagai legislatif, DEMA sebagai eksekutif. <strong>Inilah yang dinamakan Student Government dan tanggal 21 September 1950 diperingati sebagai hari kelahiran Keluarga Mahasiswa Universitas Islam Indonesia.</strong>
-                    </p>
-                </article>
-
-                <article class="sejarah-panel">
-                    <h3>Era BKK-KUA (1978–1993)</h3>
-                    <p>
-                        Sudah 20 tahun lebih lembaga kemahasiswaan UII menggunakan konsep student government dengan nama MPM dan DEMA. Akan tetapi rintangan menghadang seluruh organisasi kemahasiswaan di Indonesia tepatnya dengan dikeluarkannya SK Menteri Pendidikan dan Kebudayaan Syarif Tayep tanggal <strong>23 Januari 1974</strong> (SK 029-74) mengenai dibekukannya seluruh kegiatan Dewan Mahasiswa.
-                    </p>
-                    <p>
-                        Menjelang Sidang Umum MPR Tahun 1978, suhu politik Indonesia naik. Di Yogyakarta seluruh DEMA bersatu, menuntut pemerintah yang sudah berjalan menyimpang. Akibatnya sebagian mahasiswa ditangkap — salah satunya <strong>Maqdir Ismail</strong> (ketua departemen ekstern DEMA UII, kini Dr. Maqdir Ismail, SH., L.LM).
-                    </p>
-                    <p>
-                        Pemerintah mengeluarkan <strong>Normalisasi Kehidupan Kampus (NKK)</strong> via SK No. 0156/U/1978 (19 April 1978) dan Instruksi Dirjen Dikti No. 002/DJ/Inst/1978 (17 Mei 1978). Konsep ini ditolak mahasiswa. Di internal UII, Rektor mengeluarkan SK No. 718/B.VI/1978 yang berisi:
-                    </p>
-                    <ul>
-                        <li>Likuidasi seluruh lembaga kemahasiswaan (dilaksanakan MPM, selesai minggu III Desember 1978)</li>
-                        <li>Mengadakan pemilu mahasiswa sesuai instruksi Dirjen Dikti</li>
-                    </ul>
-                    <p>
-                        Berdasarkan hal tersebut dibentuklah <strong>Badan Koordinasi Kemahasiswaan (BKK)</strong> dan <strong>Koordinator Unit Aktivitas (KUA)</strong>, masing-masing sebagai pemegang legislatif dan eksekutif. BKK diketuai oleh Pembantu Rektor III dengan anggota Pembantu Dekan dan wakil mahasiswa terpilih.
-                    </p>
-                </article>
-
-                <article class="sejarah-panel">
-                    <h3>Era DPM-LEM (1993–Sekarang)</h3>
-                    <p>
-                        Pada <strong>15 Mei 1993</strong>, Sidang Umum XXII menghasilkan keputusan dibentuknya <strong>Dewan Permusyawaratan Mahasiswa (DPM)</strong> dan <strong>Lembaga Eksekutif Mahasiswa (LEM)</strong> tingkat Universitas, serta <strong>Badan Perwakilan Mahasiswa (BPM)</strong> dan <strong>Senat Mahasiswa Fakultas (SMF)</strong> tingkat Fakultas.
-                    </p>
-                    <p>
-                        Pada Sidang Umum XXV tahun <strong>1998</strong> terjadi perubahan nama di tingkat fakultas: eksekutif menjadi <strong>Lembaga Eksekutif Mahasiswa Fakultas (LEMF)</strong> dan legislatif menjadi <strong>Dewan Perwakilan Mahasiswa Fakultas (DPMF)</strong>. Konsep inilah yang bertahan sampai sekarang. Pada tahun 1998 KM UII juga ikut berperan dalam menggulingkan rezim Soeharto, dan melahirkan orde reformasi.
-                    </p>
-                </article>
-
-                <article class="sejarah-panel">
-                    <h3>Realita Kemahasiswaan & Tantangan</h3>
-                    <p>
-                        Kebijakan pasca-NKK yang dipengaruhi era globalisasi berdampak pada pendidikan Perguruan Tinggi yang semakin kental dengan sistem kurikulum feodalistik: materi pembelajaran lebih diperkental daripada pengembangan pikiran, mementingkan formalisasi materi, tidak menempatkan peserta didik sebagai mitra belajar, tidak menghormati nilai pilihan pribadi pelajar.
-                    </p>
-                    <p>
-                        Mahasiswa sebagai <strong>agent of change, guardian of value, social control, moral force, dan iron stock</strong> seharusnya mengemban amanah besar. Namun realitasnya: disorientasi fungsi nilai luhur terganggu pragmatisme praktis, penurunan keterlibatan mahasiswa atas isu sosial dan keumatan akibat perkembangan teknologi, pengaruh global, dan komersialisasi pendidikan.
-                    </p>
-                    <p>
-                        Menjadi evaluasi periode <strong>2021/2022</strong> untuk terus meningkatkan dan mengembalikan marwah agar lembaga mahasiswa memiliki daya tawar dan daya serap aspirasi mahasiswa yang komprehensif guna memperjuangkan hak-hak mahasiswa.
-                    </p>
-                </article>
-            </div>
-        </div>
-    </section>
+<!-- ================= SUBNAV ================= -->
+<div class="subnav" id="subnav">
+  <div class="container subnav-inner">
+    <ol id="toc">
+      <li><a href="#awal"><em>01</em>Awal Mula</a></li>
+      <li><a href="#mpm"><em>02</em>MPM dan DEMA</a></li>
+      <li><a href="#bkk"><em>03</em>BKK-KUA</a></li>
+      <li><a href="#dpm-lem"><em>04</em>DPM-LEM</a></li>
+      <li><a href="#realita"><em>05</em>Realita</a></li>
+      <li><a href="#sg"><em>06</em>Student Government</a></li>
+    </ol>
+  </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.sejarah-tab');
-    const panes = document.querySelectorAll('.tab-pane');
+<!-- ================= 01 AWAL MULA ================= -->
+<section class="band" id="awal" aria-labelledby="h-awal">
+  <div class="container band-grid">
+    <header class="band-head">
+      <span class="big-no" aria-hidden="true">01</span>
+      <h2 id="h-awal">Awal Mula</h2>
+      <p>Sekolah Tinggi Islam dan lahirnya lembaga kemahasiswaan pertama.</p>
+    </header>
+    <div class="prose">
+      <p>Sekolah Tinggi Islam (STI) berdiri pada hari Ahad, 27 Rajab 1364 H, bertepatan dengan 8 Juli 1945, dan kini bernama Universitas Islam Indonesia. Sejak awal, mahasiswa senantiasa memberikan peran positif yang maksimal bagi bangsanya. Pada saat STI berdiri, mahasiswa yang diterima hanya 14 orang dari 78 pendaftar, dan mereka telah membulatkan tekad membangun bangsa dengan ikrar berikut:</p>
+      <blockquote class="bq">Kami pelajar-pelajar Sekolah Tinggi Islam di Jakarta, mengikrarkan janji dan membulatkan niat akan menyerahkan segenap tenaga kami dalam menuntut ilmu-ilmu yang diajarkan pada Sekolah Tinggi Islam serta menjunjung tinggi akan akhlak dan budi pekerti Islam, agar kami dengan pertolongan Allah SWT., menjadi muslim Indonesia yang utama dan anggota yang berguna bagi masyarakat Indonesia, sejajar dengan lain-lain bangsa Asia Timur Raya, serta dapatlah menunaikan kewajiban kami sebagai pemimpin Islam Indonesia pada masa yang akan datang sesuai dengan amanat P.J.M. Gunseikan dan tuan Rektor kami.<cite>Ikrar pelajar Sekolah Tinggi Islam</cite></blockquote>
+      <p>Seiring kepindahan STI ke Yogyakarta (10 April 1946), mahasiswa terus berkarya dan menjadikan momentum tersebut sebagai kebangkitan mahasiswa STI dengan mendirikan dua lembaga kemahasiswaan: pertama, Senat Mahasiswa STI; kedua, Himpunan Mahasiswa Islam. Senat STI dipimpin oleh Ketua I (Penanggung Jawab Umum) Djanamar Adjam, Ketua II (aktivitas kemasyarakatan dan agama) Amin Syahri, dan Ketua III (kemahasiswaan) Lafran Pane.</p>
+      <p>Karena posisinya sebagai ketua yang membidangi kemahasiswaan, Lafran Pane berinisiatif mendirikan Himpunan Mahasiswa Islam, mengingat yang berstudi di STI tidak hanya mahasiswa Islam. Cita-cita Lafran Pane adalah:</p>
+      <blockquote class="bq">Sebagai alat mengajak mahasiswa-mahasiswa mempelajari, mendalami ajaran Islam agar mereka kelak sebagai calon sarjana, tokoh masyarakat maupun negarawan, terdapat keseimbangan dunia, akhirat, akal dan qalbu, iman dan ilmu pengetahuan, yang sekarang ini keadaan mahasiswa kemahasiswaan di Indonesia diancam krisis keseimbangan yang sangat membahayakan, karena sistem pendidikan barat.<cite>Lafran Pane</cite></blockquote>
+    </div>
+  </div>
+</section>
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
-            panes.forEach(p => p.classList.remove('active'));
+<!-- ================= 02 MPM dan DEMA ================= -->
+<section class="band alt" id="mpm" aria-labelledby="h-mpm">
+  <div class="container band-grid">
+    <header class="band-head">
+      <span class="big-no" aria-hidden="true">02</span>
+      <h2 id="h-mpm">Era MPM dan DEMA</h2>
+      <p>Lahirnya student government pada 1950.</p>
+    </header>
+    <div class="prose">
+      <p>Perkembangan senat mahasiswa di tingkat fakultas dinamakan komisariat senat mahasiswa. Selain empat fakultas, yaitu ekonomi, hukum, pendidikan, dan agama, komisariat di fakultas juga ada pada kelas pendahuluan. Karena tata kerja dan struktur yang sempit, pada <strong>21 September 1950</strong> diadakan Sidang Umum yang menghasilkan keputusan membentuk Majelis Permusyawaratan Mahasiswa (MPM) dan Dewan Mahasiswa (DEMA), dengan merujuk pada konsep negara: MPM sebagai lembaga legislatif dan DEMA sebagai lembaga eksekutif.</p>
+      <p>Inilah yang dinamakan Student Government, dan tanggal 21 September 1950 diperingati sebagai hari kelahiran Keluarga Mahasiswa Universitas Islam Indonesia.</p>
+      <div class="dg">
+        <div><b>21 September 1950</b><span>Sidang Umum membentuk MPM dan DEMA; hari lahir KM UII</span></div>
+      </div>
+      <h3 class="ph">Tugas pokok Dewan Mahasiswa</h3>
+      <p>Dewan Mahasiswa mempunyai dua tugas pokok, yaitu ke dalam dan ke luar.</p>
+      <div class="two">
+        <div>
+          <h4>Ke dalam</h4>
+          <ul class="pl">
+            <li>Memelihara dan mempertinggi mutu mahasiswa dan siswa UII lahir batin;</li>
+            <li>Menyalurkan segala tenaga mahasiswa ke arah yang dicita-citakan.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Ke luar</h4>
+          <ul class="pl">
+            <li>Memberikan bantuan yang sebesar-besarnya kepada instansi-instansi di universitas dalam usahanya menyempurnakan bentuk dan isi universitas;</li>
+            <li>Mengadakan hubungan yang erat dengan organisasi-organisasi mahasiswa lain, baik di dalam maupun di luar negeri;</li>
+            <li>Mengadakan kerja sama yang erat dengan masyarakat di luar universitas untuk mencapai kesejahteraan dan kebahagiaan lahir dan batin.</li>
+          </ul>
+        </div>
+      </div>
+      <p>Pada periode ini peran mahasiswa untuk universitas sangat besar, terlebih dalam mencarikan dosen-dosen yang diperlukan, ikut menggali dana untuk realisasi pembangunan gedung UII, bahkan lembaga mahasiswa juga berperan dalam proses perolehan status disamakan bagi fakultas-fakultas di lingkungan UII. Era ini juga memiliki sejarah penting pada tahun 1960-an, ketika gerakan mahasiswa melahirkan satu angkatan muda terkemuka, yaitu Angkatan 1966, yang bersama militer turut menumbangkan Orde Lama dan membubarkan PKI.</p>
+    </div>
+  </div>
+</section>
 
-            tab.classList.add('active');
-            tab.setAttribute('aria-selected', 'true');
-            document.getElementById(tab.dataset.tab).classList.add('active');
-        });
-    });
-});
-</script>
+<!-- ================= 03 BKK-KUA ================= -->
+<section class="band" id="bkk" aria-labelledby="h-bkk">
+  <div class="container band-grid">
+    <header class="band-head">
+      <span class="big-no" aria-hidden="true">03</span>
+      <h2 id="h-bkk">Era BKK-KUA</h2>
+      <p>Pembekuan Dewan Mahasiswa dan kebijakan NKK.</p>
+    </header>
+    <div class="prose">
+      <p>Sudah lebih dari 20 tahun lembaga kemahasiswaan UII menggunakan konsep student government dengan nama MPM dan DEMA. Namun rintangan menghadang seluruh organisasi kemahasiswaan di Indonesia dengan dikeluarkannya SK Menteri Pendidikan dan Kebudayaan Syarif Thayeb tanggal <strong>23 Januari 1974</strong>, atau dikenal dengan SK 029-74, yang membekukan seluruh kegiatan Dewan Mahasiswa di universitas, perguruan tinggi, dan institut, karena banyaknya gerakan mahasiswa di kampus-kampus di bawah bendera masing-masing Dewan Mahasiswa.</p>
+      <p>Menjelang Sidang Umum MPR 1978, suhu politik Indonesia naik dan kampus-kampus di Indonesia (Jakarta, Bandung, Yogyakarta, Surabaya, dan lainnya) dipenuhi aksi demonstrasi di bawah bendera Dewan Mahasiswa masing-masing. Hal ini menyebabkan dikeluarkannya SK Kepala Staf PANGKOPKAMTIB (Panglima Komando Pemulihan Keamanan dan Ketertiban) No. SKEP-02/KOPKAM/I/1978 pada 21 Januari 1978, yang memerintahkan pembekuan kegiatan Dewan Mahasiswa dari semua universitas, perguruan tinggi, dan institut.</p>
+      <p>Di Yogyakarta seluruh DEMA bersatu menuntut pemerintah yang dinilai berjalan menyimpang. Akibatnya sebagian mahasiswa ditangkap dan diajukan ke pengadilan. Salah satu mahasiswa UII yang ditahan adalah Maqdir Ismail, mantan ketua departemen ekstern DEMA UII (kini advokat di Jakarta, DR. Maqdir Ismail, S.H., LL.M.).</p>
+      <p>Upaya pemerintah menghadapi gejolak tersebut adalah kebijakan Normalisasi Kehidupan Kampus (NKK) melalui SK No. 0156/U/1978 tanggal 19 April 1978, disusul instruksi Direktur Jenderal Pendidikan Tinggi tanggal 17 Mei 1978 Nomor 002/DJ/Inst/1978, yang pada intinya memerintahkan “untuk menata kembali lembaga-lembaga kemahasiswaan di perguruan tinggi sesuai dengan pedoman NKK”. Konsep ini ditolak mahasiswa. Di Daerah Istimewa Yogyakarta, mahasiswa yang diwakili UII, UGM, dan IKIP (UNY) mendatangi DPR RI untuk menolak konsep NKK.</p>
+      <p>Di internal UII pun terjadi gerakan penolakan terhadap NKK, namun tidak membuahkan hasil yang diinginkan. Akhirnya, dengan desakan pemerintah dan Koordinator Perguruan Tinggi Swasta (KOPERTIS), Rektor UII mengeluarkan SK No. 718/B.VI/1978 tentang pedoman pelaksanaan NKK di UII yang berisi:</p>
+      <ol class="pl num">
+        <li>Likuidasi seluruh lembaga kemahasiswaan yang ada di UII;</li>
+        <li>Likuidasi dilakukan oleh Majelis Permusyawaratan Mahasiswa (MPM) dan harus selesai paling lambat minggu ketiga bulan Desember 1978;</li>
+        <li>Mengadakan pemilu mahasiswa sesuai dengan instruksi Dirjen Perguruan Tinggi.</li>
+      </ol>
+      <p>Berdasarkan hal tersebut dibentuklah Badan Koordinasi Kemahasiswaan (BKK) dan Koordinator Unit Aktivitas (KUA), masing-masing sebagai pemegang legislatif dan eksekutif. BKK diketuai oleh Pembantu Rektor III dengan anggota Pembantu Dekan di lingkungan UII serta wakil mahasiswa yang terpilih melalui pemilu mahasiswa.</p>
+      <div class="dg">
+        <div><b>23 Jan 1974</b><span>SK 029-74 membekukan Dewan Mahasiswa</span></div>
+        <div><b>21 Jan 1978</b><span>SK PANGKOPKAMTIB SKEP-02/KOPKAM/I/1978</span></div>
+        <div><b>19 Apr 1978</b><span>SK No. 0156/U/1978 tentang NKK</span></div>
+        <div><b>Des 1978</b><span>Batas likuidasi lembaga kemahasiswaan UII</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 DPM-LEM ================= -->
+<section class="band alt" id="dpm-lem" aria-labelledby="h-dpm-lem">
+  <div class="container band-grid">
+    <header class="band-head">
+      <span class="big-no" aria-hidden="true">04</span>
+      <h2 id="h-dpm-lem">Era DPM-LEM</h2>
+      <p>Berdirinya DPM dan LEM sejak 1993.</p>
+    </header>
+    <div class="prose">
+      <p>Pada <strong>15 Mei 1993</strong>, Sidang Umum XXII menghasilkan keputusan dibentuknya <strong>Dewan Permusyawaratan Mahasiswa (DPM)</strong> dan <strong>Lembaga Eksekutif Mahasiswa (LEM)</strong> untuk tingkat universitas, serta <strong>Badan Perwakilan Mahasiswa (BPM)</strong> dan <strong>Senat Mahasiswa Fakultas (SMF)</strong> di tingkat fakultas.</p>
+      <p>Pada Sidang Umum XXV tahun <strong>1998</strong> terjadi perubahan nama lembaga mahasiswa pada tingkat fakultas: eksekutif bernama <strong>Lembaga Eksekutif Mahasiswa Fakultas (LEMF)</strong> dan legislatif bernama <strong>Dewan Perwakilan Mahasiswa Fakultas (DPMF)</strong>. Konsep inilah yang bertahan sampai sekarang. Pada tahun 1998 KM UII juga ikut berperan dalam menggulingkan rezim Soeharto dan melahirkan orde reformasi.</p>
+      <div class="dg">
+        <div><b>15 Mei 1993</b><span>Sidang Umum XXII membentuk DPM dan LEM</span></div>
+        <div><b>1998</b><span>Sidang Umum XXV: LEMF dan DPMF; peran dalam Reformasi</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 REALITA ================= -->
+<section class="band" id="realita" aria-labelledby="h-realita">
+  <div class="container band-grid">
+    <header class="band-head">
+      <span class="big-no" aria-hidden="true">05</span>
+      <h2 id="h-realita">Realita Kemahasiswaan</h2>
+      <p>Sistem perwakilan dan tantangan yang dihadapi lembaga mahasiswa.</p>
+    </header>
+    <div class="prose">
+      <p>Sejak kebijakan setelah NKK yang dipengaruhi era globalisasi, pendidikan di perguruan tinggi semakin kental dengan sistem kurikulum yang feodalistik. Pertama, materi pembelajaran lebih diperkental daripada aspek pengembangan pikiran. Kedua, lebih mementingkan formalisasi materi daripada substansi materi yang berujung pada pengembangan kepribadian dan identitas individual. Ketiga, tidak menempatkan peserta didik sebagai mitra belajar. Keempat, tidak menghormati nilai-nilai pilihan pribadi pelajar.</p>
+      <p>Student Government merupakan konsep pemerintahan dari mahasiswa, oleh mahasiswa, dan untuk mahasiswa. Dari konsep tersebut, Lembaga Legislatif merupakan lembaga mahasiswa tertinggi yang memegang kedaulatan mahasiswa dalam Student Government KM UII, yang disebut Dewan Permusyawaratan Mahasiswa (DPM) pada tingkat universitas dan Dewan Perwakilan Mahasiswa Fakultas (DPMF) pada tingkat fakultas. Dengan lembaga-lembaga tersebut, Keluarga Mahasiswa UII memakai sistem demokrasi tidak langsung atau demokrasi perwakilan, sehingga mahasiswa tidak lagi secara langsung memilih dan meminta pertanggungjawaban Ketua Umum Lembaga Eksekutif Mahasiswa, baik di tingkat universitas maupun fakultas.</p>
+      <p>Kehendak mahasiswa untuk menentukan haluan Keluarga Mahasiswa disalurkan kepada wakil-wakilnya yang duduk di DPM UII dan DPMF. Anggota Lembaga Legislatif ini dipilih secara langsung oleh mahasiswa UII melalui Pemilu Mahasiswa. Anggota terpilih kemudian bersidang untuk membentuk pengurus DPM UII/DPMF serta memilih mandataris DPM (Ketua Lembaga Eksekutif Mahasiswa) pada tingkat universitas dan mandataris DPMF (Ketua Lembaga Eksekutif Mahasiswa Fakultas) pada tingkat fakultas.</p>
+      <h3 class="ph">Tantangan</h3>
+      <p>Pelaksanaan sistem Student Government di KM UII dewasa ini masih jauh dari sempurna atau ideal, dan banyak hal yang perlu dilakukan. Beberapa permasalahan umum adalah belum maksimalnya penerapan prinsip transparansi dan koordinasi antarlembaga di KM UII dalam penyelenggaraan sistem Student Government, yang berakibat pada rendahnya tingkat kepercayaan mahasiswa terhadap lembaga di KM UII.</p>
+      <p>Selain itu, mahasiswa yang dikenal dengan semangat juang dan idealismenya semestinya mengemban amanah dan tugas besar sebagai <em>agent of change, guardian of value, social control, moral force,</em> dan <em>iron stock</em>, yang perlu dibandingkan dengan realitas keterlibatan mahasiswa dalam kerja-kerja sosialnya. Realitas dewasa ini, disorientasi mahasiswa akan fungsi dan nilai luhurnya terganggu oleh pragmatisme praktis yang menjamur di tengah mahasiswa, sehingga menghambat aktualisasi peran yang seharusnya. Perkembangan teknologi, pengaruh situasi global, serta komersialisasi pendidikan memberikan efek domino terhadap mahasiswa, yang pada kenyataannya menurunkan keterlibatan mahasiswa atas isu sosial dan keumatan.</p>
+      <p>Dengan demikian, hal ini menjadi evaluasi pada periode <strong>2021/2022</strong> untuk terus meningkatkan dan mengembalikan marwah agar lembaga mahasiswa memiliki daya tawar dan daya serap aspirasi mahasiswa yang komprehensif guna memperjuangkan hak-hak mahasiswa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 06 STUDENT GOVERNMENT ================= -->
+<section class="band alt" id="sg" aria-labelledby="h-sg">
+  <div class="container band-grid">
+    <header class="band-head">
+      <span class="big-no" aria-hidden="true">06</span>
+      <h2 id="h-sg">Student Government</h2>
+      <p>Kemandirian, independensi, dan tanggung jawab.</p>
+    </header>
+    <div class="prose">
+      <p>Keluarga Mahasiswa Universitas Islam Indonesia (KM UII) secara resmi berdiri pada 21 September 1950. Ciri khas utama yang melekat pada KM UII adalah dikenalnya istilah "student government" sebagai dasar pelaksanaan sistem kelembagaan. Secara umum, student government bermakna pemerintahan dari, untuk, dan oleh mahasiswa. Dengan demikian, sistem kelembagaan di KM UII dilakukan oleh mahasiswa UII, dari mahasiswa UII, untuk mahasiswa UII itu sendiri.</p>
+      <p>Sistem kelembagaan yang demikian mensyaratkan dua aspek, yakni <strong>kemandirian</strong> dan <strong>independensi</strong> dalam berlembaga. Kemandirian dimaknai sebagai sesuatu yang berdiri sendiri dan tidak bergantung kepada pihak mana pun. Independensi bermakna bebas dan merdeka. Pemerintahan mahasiswa yang dikehendaki KM UII adalah pemerintahan yang tidak bergantung, berdiri sendiri, bebas, dan merdeka.</p>
+      <p>Hal ini sejalan dengan spirit atau nilai juang yang melatarbelakangi lahirnya student government. Mahasiswa UII menempatkan lembaga mahasiswa sebagai "kawah candradimuka" untuk meningkatkan potensi dan kualitas diri, baik spiritual, moral, maupun intelektual. Hal ini tidak lepas dari tujuan KM UII itu sendiri:</p>
+      <blockquote class="bq">Terbinanya mahasiswa UII menjadi Insan Ulil Albab yang turut bertanggung jawab atas terwujudnya tatanan masyarakat yang diridhoi Allah SWT.<cite>Tujuan KM UII</cite></blockquote>
+      <p>Oleh UII, Insan Ulil Albab diterjemahkan sebagai Cendekiawan Muslim dan Pemimpin Bangsa sebagaimana tertera dalam Visi UII.</p>
+      <h3 class="ph">Lima perwujudan kemandirian dan independensi</h3>
+      <div class="five">
+        <article>
+          <b>01</b>
+          <h4>Regenerasi</h4>
+          <p>Segala proses regenerasi fungsionaris lembaga dilaksanakan oleh mahasiswa secara mandiri dan independen, tanpa pengaruh pihak mana pun.</p>
+        </article>
+        <article>
+          <b>02</b>
+          <h4>Kegiatan</h4>
+          <p>Seluruh proses perencanaan, pelaksanaan, hingga pertanggungjawaban dilaksanakan secara mandiri oleh lembaga mahasiswa. Hal ini memungkinkan lembaga mahasiswa berkreasi leluasa, tanpa intervensi, "pesanan", dan tekanan dari pihak mana pun.</p>
+        </article>
+        <article>
+          <b>03</b>
+          <h4>Keuangan</h4>
+          <p>Seluruh proses penerimaan, pengelolaan, dan pendistribusian hingga pertanggungjawaban dana kemahasiswaan dilaksanakan secara mandiri oleh lembaga mahasiswa.</p>
+        </article>
+        <article>
+          <b>04</b>
+          <h4>Struktur dan hubungan dengan UII</h4>
+          <p>Organisasi KM UII tidak terikat struktural dengan UII, tidak berada di bawah Rektorat maupun Dekanat. Namun KM UII merupakan bagian dari UII yang tidak dapat dipisahkan. Hubungan keduanya dijalankan secara koordinatif, dengan mengedepankan hubungan yang sinergis dan harmonis, baik di lingkup universitas maupun fakultas.</p>
+        </article>
+        <article>
+          <b>05</b>
+          <h4>Sikap politik</h4>
+          <p>KM UII memiliki sikap politik yang bebas dan merdeka. Dalam menentukan sikap politik, tidak ada pihak mana pun yang dapat mengintervensi atau memengaruhinya.</p>
+        </article>
+      </div>
+      <h3 class="ph">Responsibility dan check and balance</h3>
+      <p>Satu aspek yang sangat fundamental dalam student government adalah <em>responsibility</em>. Bersamaan dengan datangnya kekuatan yang besar, datang pula pertanggungjawaban yang besar. Sistem kelembagaan student government menuntut tanggung jawab besar. Karena itu, seluruh fungsionaris lembaga di KM UII wajib menjaga integritas dan tanggung jawabnya. Sebaliknya, seluruh civitas akademika UII, baik mahasiswa maupun pimpinan UII, wajib melakukan pengawasan yang terukur. Proses inilah yang dimaknai sebagai <em>check and balance</em> dalam student government.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRATINJAU DIALOG ================= -->
+<dialog class="pdlg" id="pdlg" aria-labelledby="pdTitle">
+  <div class="pdlg-head">
+    <div class="t"><small id="pdLabel"></small><strong id="pdTitle"></strong></div>
+    <a class="btn sm" id="pdOpen" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Buka di Drive</span></a>
+    <a class="btn sm" id="pdDl" href="#" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg><span>Unduh</span></a>
+    <button class="pdlg-x" id="pdClose" type="button" aria-label="Tutup pratinjau"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="pdlg-body"><div class="pdlg-load">Memuat dokumen...</div><iframe id="pdFrame" title="Pratinjau dokumen" loading="lazy"></iframe></div>
+</dialog>
 @endsection
+
+@push('scripts')
+<script>
+  // ---------- Sub-navigasi, progres baca ----------
+  (function () {
+    const links = [...document.querySelectorAll('#toc a')];
+    const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+    const io = new IntersectionObserver(es => {
+      es.forEach(en => {
+        if (en.isIntersecting) {
+          links.forEach(a => a.removeAttribute('aria-current'));
+          const a = map.get(en.target.id);
+          if (a) a.setAttribute('aria-current', 'true');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    map.forEach((a, id) => { const s = document.getElementById(id); if (s) io.observe(s); });
+
+    const bar = document.getElementById('subnav');
+    const first = document.getElementById('awal');
+    let ticking = false;
+    function prog() {
+      const start = first.offsetTop - 200;
+      const end = document.documentElement.scrollHeight - window.innerHeight;
+      const p = Math.min(1, Math.max(0, (window.scrollY - start) / Math.max(1, end - start)));
+      bar.style.setProperty('--p', p.toFixed(3));
+      ticking = false;
+    }
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(prog);
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true }); prog();
+  })();
+</script>
+@endpush

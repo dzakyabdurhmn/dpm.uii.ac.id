@@ -99,7 +99,7 @@ class LegalProductSeeder extends Seeder
                     'year' => $year,
                     'period_id' => $this->findPeriodId($periods, $year),
                     'title' => $this->cleanTitle($filename, 'gbhkm'),
-                    'description' => 'Garis-Garis Besar Haluan Keluarga Mahasiswa (GBHKM) berisi arah kebijakan KM UII per periode: visi, misi, dan strategi pengembangan organisasi.',
+                    'description' => 'GBHKM merupakan manifestasi dari arah gerak dan cita-cita mahasiswa UII yang disusun dan disahkan oleh DPM UII melalui Sidang Umum atau Sidang Istimewa. Dokumen ini berfungsi sebagai pedoman resmi dan landasan penyusunan rencana kerja yang berkesinambungan bagi seluruh lembaga kemahasiswaan di lingkungan KM UII.',
                     'file_path' => 'uploads/produk-hukum/GBHKM/' . $filename,
                     'mime_type' => 'application/pdf',
                     'size' => $file->getSize(),

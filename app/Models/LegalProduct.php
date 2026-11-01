@@ -30,8 +30,8 @@ class LegalProduct extends Model
         'gbhkm' => [
             'label' => 'GBHKM',
             'name' => 'Garis-Garis Besar Haluan Keluarga Mahasiswa',
-            'numbered' => false,
-            'description' => 'Arah kebijakan KM UII per periode: visi, misi, dan strategi pengembangan organisasi.',
+            'numbered' => true,
+            'description' => 'GBHKM merupakan manifestasi dari arah gerak dan cita-cita mahasiswa UII yang disusun dan disahkan oleh DPM UII melalui Sidang Umum atau Sidang Istimewa. Dokumen ini berfungsi sebagai pedoman resmi dan landasan penyusunan rencana kerja yang berkesinambungan bagi seluruh lembaga kemahasiswaan di lingkungan KM UII.',
         ],
         'pkm' => [
             'label' => 'PKM',
@@ -40,7 +40,7 @@ class LegalProduct extends Model
             'description' => 'Peraturan teknis yang menjabarkan PDKM dan GBHKM, disusun per nomor dan tahun.',
         ],
         'pdpm' => [
-            'label' => 'PDPM',
+            'label' => 'PDPM-U',
             'name' => 'Peraturan Dewan Permusyawaratan Mahasiswa',
             'numbered' => true,
             'description' => 'Peraturan internal DPM: tata tertib, mekanisme kerja, persidangan, dan hal teknis operasional.',

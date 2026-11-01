@@ -15,7 +15,6 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UnitController as AdminUnitController;
 use App\Http\Controllers\Site\AboutController;
-use App\Http\Controllers\Site\BioLinkController;
 use App\Http\Controllers\Site\DocumentController;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\LegalProductController;
@@ -52,18 +51,12 @@ Route::get('/pengumuman', [NewsController::class, 'announcements'])->name('news.
 Route::get('/berita/kategori/{postCategory:slug}', [NewsController::class, 'category'])->name('news.category');
 Route::get('/berita/{post:slug}', [NewsController::class, 'show'])->name('news.show');
 
-Route::get('/humas/unduh', [App\Http\Controllers\Site\HumasController::class, 'download'])->name('humas.download');
-Route::get('/humas/unduh/{filename}', [App\Http\Controllers\Site\HumasController::class, 'downloadFile'])->name('humas.download.file');
-Route::get('/humas/sosialisasi', [App\Http\Controllers\Site\HumasController::class, 'sosialisasi'])->name('humas.sosialisasi');
-
 Route::get('/tentang/{section}', [AboutController::class, 'show'])
     ->whereIn('section', SiteContent::keys())
     ->name('about.show');
 
 Route::get('/alat-kelengkapan', [UnitController::class, 'index'])->name('units.index');
 Route::get('/unit/{unit:slug}', [UnitController::class, 'show'])->name('units.show');
-
-Route::get('/bio-link', [BioLinkController::class, 'index'])->name('bio-link.index');
 
 /*
 |--------------------------------------------------------------------------
