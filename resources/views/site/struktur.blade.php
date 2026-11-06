@@ -93,7 +93,7 @@
       </nav>
       <span class="eyebrow">Tentang DPM UII</span>
       <h1>Struktur Lembaga KM UII</h1>
-      <p class="pg-desc">Bagan hubungan lembaga dalam Keluarga Mahasiswa Universitas Islam Indonesia, dari tingkat universitas hingga fakultas.</p>
+      <p class="pg-desc">Bagan Hubungan Lembaga dalam Keluarga Mahasiswa Universitas Islam Indonesia, dari Tingkat Universitas hingga Fakultas.</p>
       <div class="meta">
         <span><small>Tingkat</small> Universitas</span>
         <span><small>Tingkat</small> Fakultas</span>

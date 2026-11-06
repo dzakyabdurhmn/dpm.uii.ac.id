@@ -14,8 +14,9 @@ class LegalProductSeeder extends Seeder
     {
         $basePath = public_path('uploads/produk-hukum');
 
-        if (!File::isDirectory($basePath)) {
+        if (! File::isDirectory($basePath)) {
             $this->command->error("Directory not found: {$basePath}");
+
             return;
         }
 
@@ -47,14 +48,15 @@ class LegalProductSeeder extends Seeder
         $this->importPdpm($basePath, $periods);
 
         $this->command->info('Legal products imported successfully!');
-        $this->command->info('Total: ' . LegalProduct::count() . ' records');
+        $this->command->info('Total: '.LegalProduct::count().' records');
     }
 
     private function importPdkm(string $basePath, array $periods): void
     {
-        $dir = $basePath . '/PDKM UII';
-        if (!File::isDirectory($dir)) {
+        $dir = $basePath.'/PDKM UII';
+        if (! File::isDirectory($dir)) {
             $this->command->warn("PDKM directory not found: {$dir}");
+
             return;
         }
 
@@ -69,7 +71,7 @@ class LegalProductSeeder extends Seeder
                     'period_id' => $this->findPeriodId($periods, $this->extractYearFromFilename($filename) ?? 2024),
                     'title' => $this->cleanTitle($filename, 'pdkm'),
                     'description' => 'Peraturan Dasar Keluarga Mahasiswa (PDKM) merupakan konstitusi tertinggi KM UII yang mengatur asas, tujuan, kelembagaan, dan sistem pemerintahan mahasiswa.',
-                    'file_path' => 'uploads/produk-hukum/PDKM UII/' . $filename,
+                    'file_path' => 'uploads/produk-hukum/PDKM UII/'.$filename,
                     'mime_type' => 'application/pdf',
                     'size' => $file->getSize(),
                     'is_published' => true,
@@ -82,9 +84,10 @@ class LegalProductSeeder extends Seeder
 
     private function importGbhkm(string $basePath, array $periods): void
     {
-        $dir = $basePath . '/GBHKM';
-        if (!File::isDirectory($dir)) {
+        $dir = $basePath.'/GBHKM';
+        if (! File::isDirectory($dir)) {
             $this->command->warn("GBHKM directory not found: {$dir}");
+
             return;
         }
 
@@ -100,7 +103,7 @@ class LegalProductSeeder extends Seeder
                     'period_id' => $this->findPeriodId($periods, $year),
                     'title' => $this->cleanTitle($filename, 'gbhkm'),
                     'description' => 'GBHKM merupakan manifestasi dari arah gerak dan cita-cita mahasiswa UII yang disusun dan disahkan oleh DPM UII melalui Sidang Umum atau Sidang Istimewa. Dokumen ini berfungsi sebagai pedoman resmi dan landasan penyusunan rencana kerja yang berkesinambungan bagi seluruh lembaga kemahasiswaan di lingkungan KM UII.',
-                    'file_path' => 'uploads/produk-hukum/GBHKM/' . $filename,
+                    'file_path' => 'uploads/produk-hukum/GBHKM/'.$filename,
                     'mime_type' => 'application/pdf',
                     'size' => $file->getSize(),
                     'is_published' => true,
@@ -113,9 +116,10 @@ class LegalProductSeeder extends Seeder
 
     private function importPkm(string $basePath, array $periods): void
     {
-        $dir = $basePath . '/PKM UII';
-        if (!File::isDirectory($dir)) {
+        $dir = $basePath.'/PKM UII';
+        if (! File::isDirectory($dir)) {
             $this->command->warn("PKM directory not found: {$dir}");
+
             return;
         }
 
@@ -124,7 +128,7 @@ class LegalProductSeeder extends Seeder
 
         foreach ($files as $file) {
             $filename = $file->getFilename();
-            if (!Str::endsWith($filename, '.pdf')) {
+            if (! Str::endsWith($filename, '.pdf')) {
                 continue;
             }
 
@@ -136,8 +140,9 @@ class LegalProductSeeder extends Seeder
             // Use base filename (without version suffixes) for parsing
             $baseFilename = $this->getBaseFilename($filename);
             $data = $this->parsePkmFilename($baseFilename);
-            if (!$data) {
+            if (! $data) {
                 $this->command->warn("Could not parse PKM filename: {$filename}");
+
                 continue;
             }
 
@@ -148,7 +153,7 @@ class LegalProductSeeder extends Seeder
                 'period_id' => $this->findPeriodId($periods, $data['year']),
                 'title' => $data['title'],
                 'description' => $data['description'] ?? 'Peraturan Keluarga Mahasiswa (PKM) merupakan peraturan teknis yang menjabarkan PDKM dan GBHKM, disusun per nomor dan tahun.',
-                'file_path' => 'uploads/produk-hukum/PKM UII/' . $filename,
+                'file_path' => 'uploads/produk-hukum/PKM UII/'.$filename,
                 'mime_type' => 'application/pdf',
                 'size' => $file->getSize(),
                 'is_published' => true,
@@ -160,9 +165,10 @@ class LegalProductSeeder extends Seeder
 
     private function importPdpm(string $basePath, array $periods): void
     {
-        $dir = $basePath . '/PDPM UII';
-        if (!File::isDirectory($dir)) {
+        $dir = $basePath.'/PDPM UII';
+        if (! File::isDirectory($dir)) {
             $this->command->warn("PDPM directory not found: {$dir}");
+
             return;
         }
 
@@ -171,7 +177,7 @@ class LegalProductSeeder extends Seeder
 
         foreach ($files as $file) {
             $filename = $file->getFilename();
-            if (!Str::endsWith($filename, '.pdf')) {
+            if (! Str::endsWith($filename, '.pdf')) {
                 continue;
             }
 
@@ -183,8 +189,9 @@ class LegalProductSeeder extends Seeder
             // Use base filename (without version suffixes) for parsing
             $baseFilename = $this->getBaseFilename($filename);
             $data = $this->parsePdpmFilename($baseFilename);
-            if (!$data) {
+            if (! $data) {
                 $this->command->warn("Could not parse PDPM filename: {$filename}");
+
                 continue;
             }
 
@@ -195,7 +202,7 @@ class LegalProductSeeder extends Seeder
                 'period_id' => $this->findPeriodId($periods, $data['year']),
                 'title' => $data['title'],
                 'description' => $data['description'] ?? 'Peraturan Dewan Permusyawaratan Mahasiswa (PDPM) merupakan peraturan internal DPM: tata tertib, mekanisme kerja, persidangan, dan hal teknis operasional.',
-                'file_path' => 'uploads/produk-hukum/PDPM UII/' . $filename,
+                'file_path' => 'uploads/produk-hukum/PDPM UII/'.$filename,
                 'mime_type' => 'application/pdf',
                 'size' => $file->getSize(),
                 'is_published' => true,
@@ -367,6 +374,7 @@ class LegalProductSeeder extends Seeder
         if (preg_match('/(?:20\d{2}|19\d{2})/', $filename, $matches)) {
             return (int) $matches[0];
         }
+
         return null;
     }
 
@@ -392,6 +400,7 @@ class LegalProductSeeder extends Seeder
                 }
             }
         }
+
         return false;
     }
 
@@ -414,6 +423,7 @@ class LegalProductSeeder extends Seeder
                 'pkm' => 'Peraturan Keluarga Mahasiswa',
                 'pdpm' => 'Peraturan Dewan Permusyawaratan Mahasiswa',
             ];
+
             return $typeLabels[$type] ?? Str::ucfirst($type);
         }
 
@@ -450,7 +460,7 @@ class LegalProductSeeder extends Seeder
             'Bpa' => 'BPA',
             'Baleg' => 'Baleg',
             'Bawas' => 'Bawas',
-            'Bosaj' => 'Bosaj',
+            'Bksaj' => 'Bksaj',
             'Mentari' => 'Mentari',
             'Panwas' => 'Panwas',
             'Mo' => 'MO',
@@ -490,19 +500,20 @@ class LegalProductSeeder extends Seeder
     private function findPeriodId(array $periods, int $year): ?int
     {
         // Map year to period name (e.g., 2024 -> 2024/2025)
-        $periodName = $year . '/' . ($year + 1);
+        $periodName = $year.'/'.($year + 1);
+
         return $periods[$periodName] ?? null;
     }
 
     private function createLegalProduct(array $data): void
     {
-        $slug = Str::slug($data['title'] . '-' . $data['type'] . '-' . ($data['number'] ?? 'single') . '-' . $data['year']);
+        $slug = Str::slug($data['title'].'-'.$data['type'].'-'.($data['number'] ?? 'single').'-'.$data['year']);
 
         // Ensure unique slug
         $originalSlug = $slug;
         $counter = 1;
         while (LegalProduct::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $counter++;
+            $slug = $originalSlug.'-'.$counter++;
         }
 
         LegalProduct::create(array_merge($data, [

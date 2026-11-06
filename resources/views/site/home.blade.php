@@ -277,7 +277,7 @@
         <div class="slide-text">
           <div class="hero-label">Produk Hukum</div>
           <h1>Landasan Hukum Keluarga Mahasiswa UII</h1>
-          <p class="lead">Arsip resmi PDKM, GBHKM, PKM, dan PDPM-U yang dapat diakses oleh seluruh civitas kemahasiswaan Universitas Islam Indonesia.</p>
+          <p class="lead">Arsip resmi PDKM, GBHKM, PKM, dan PDPM UII yang dapat diakses oleh seluruh civitas kemahasiswaan Universitas Islam Indonesia.</p>
           <div class="hero-actions">
             <a href="/produk-hukum" class="btn">Akses Produk Hukum <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
             <a href="/keputusan" class="btn">Surat Keputusan</a>
@@ -367,7 +367,7 @@
     <div class="sec-head reveal">
       <div>
         <span class="eyebrow">Tentang DPM UII</span>
-        <h2>3 Fungsi Utama</h2>
+        <h2>THREE CORE FUNCTIONS.</h2>
         <p>Dewan Permusyawaratan Mahasiswa <br>Universitas Islam Indonesia</p>
       </div>
       <a href="/tentang/profil-dewan" class="link-more">Profil Dewan
@@ -404,7 +404,7 @@
     <div class="sec-head reveal">
       <div>
         <span class="eyebrow">Produk Hukum</span>
-        <h2>Landasan hukum Keluarga Mahasiswa UII</h2>
+        <h2>Landasan Hukum Keluarga Mahasiswa UII</h2>
         <p>Akses arsip peraturan resmi berdasarkan jenisnya.</p>
       </div>
       <a href="/produk-hukum" class="link-more">Lihat semua arsip
@@ -433,7 +433,7 @@
       </a>
       <a href="{{ route('legal-products.type', 'pdpm') }}" class="card law reveal d3">
         <span class="tag">Produk Hukum</span>
-        <div class="abbr">PDPM-U</div>
+        <div class="abbr">PDPM UII</div>
         <p>Peraturan Dewan Permusyawaratan Mahasiswa</p>
         <span class="go">Buka arsip <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
@@ -447,7 +447,7 @@
     <div class="sec-head reveal">
       <div>
         <span class="eyebrow">Alat Kelengkapan</span>
-        <h2>Badan dan unit kerja DPM UII</h2>
+        <h2>Badan dan Unit Kerja DPM UII</h2>
         <p>Enam alat kelengkapan yang menggerakkan kerja parlemen mahasiswa.</p>
       </div>
     </div>
@@ -456,7 +456,7 @@
       <a href="/unit/mentari" class="card unit reveal"><div><h3>Mentari</h3><p>Media &amp; Kesekretariatan</p></div></a>
       <a href="/unit/badan-legislasi" class="card unit reveal d1"><div><h3>Baleg</h3><p>Badan Legislasi</p></div></a>
       <a href="/unit/badan-pengawasan" class="card unit reveal d2"><div><h3>Bawas</h3><p>Badan Pengawasan</p></div></a>
-      <a href="/unit/badan-kerjasama-advokasi-dan-jaringan" class="card unit reveal"><div><h3>Bosaj</h3><p>Badan Kerjasama, Advokasi &amp; Jaringan</p></div></a>
+      <a href="/unit/badan-kerjasama-advokasi-dan-jaringan" class="card unit reveal"><div><h3>Bksaj</h3><p>Badan Kerjasama, Advokasi &amp; Jaringan</p></div></a>
       <a href="/unit/badan-audit-kemahasiswaan" class="card unit reveal d1"><div><h3>BAK</h3><p>Badan Audit Kemahasiswaan</p></div></a>
       <a href="/unit/badan-pengelola-aset" class="card unit reveal d2"><div><h3>BPA</h3><p>Badan Pengelola Aset</p></div></a>
     </div>
@@ -534,7 +534,7 @@
     <div class="sec-head reveal">
       <div>
         <span class="eyebrow">Transparansi</span>
-        <h2>Keuangan, laporan, dan keputusan</h2>
+        <h2>Keuangan, Laporan, dan Keputusan</h2>
         <p>Dokumen publik sebagai bentuk akuntabilitas kepada seluruh mahasiswa.</p>
       </div>
     </div>
@@ -555,8 +555,8 @@
   <div class="container aspirasi">
     <div class="reveal">
       <span class="eyebrow">Aspirasi</span>
-      <h2>Suaramu menentukan arah Keluarga Mahasiswa</h2>
-      <p style="color:var(--t-sub);font-size:15.5px;max-width:480px">Sampaikan kritik, saran, atau gagasanmu langsung kepada DPM UII. Setiap aspirasi dicatat dan diteruskan kepada pihak yang berwenang.</p>
+      <h2>Suaramu Menentukan Arah Keluarga Mahasiswa</h2>
+      <p style="color:var(--t-sub);font-size:15.5px;max-width:480px">Sampaikan kritik, saran, atau gagasanmu langsung kepada DPM UII. Setiap aspirasi dicatat dan diteruskan kepada pihak yang terkait</p>
       <span class="hash">#RumahAspirasiMahasiswa</span>
     </div>
 

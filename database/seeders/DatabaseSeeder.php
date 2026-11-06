@@ -2,17 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\BioLink;
-use App\Models\BioLinkFeature;
-use App\Models\BioLinkGroup;
-use App\Models\BioLinkItem;
 use App\Models\Complaint;
 use App\Models\DocumentCategory;
-use App\Models\LegalProduct;
 use App\Models\Menu;
 use App\Models\OrganizationalUnit;
 use App\Models\Period;
-use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\Setting;
 use App\Models\SiteContent;
@@ -33,7 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->seedUnits();
         $this->seedMenus();
         $this->seedComplaints();
-        $this->seedBioLink();
+        // $this->seedBioLink(); // BioLink models not available
         $this->call(LegalProductSeeder::class);
         $this->call(DocumentSeeder::class);
         $this->call(PostSeeder::class);
@@ -120,12 +114,30 @@ class DatabaseSeeder extends Seeder
 
     private function seedPostCategories(): void
     {
-        foreach (['Pengumuman', 'Kegiatan'] as $name) {
+        $categories = [
+            [
+                'name' => 'Pengumuman',
+                'description' => 'Seruan aksi, informasi resmi, dan pemberitahuan DPM UII untuk seluruh Keluarga Mahasiswa UII.',
+            ],
+            [
+                'name' => 'Berita Kegiatan',
+                'description' => 'Kegiatan, agenda legislasi, dan lipsutan terbaru Dewan Permusyawaratan Mahasiswa UII.',
+            ],
+            [
+                'name' => 'Sosialisasi',
+                'description' => 'Sosialisasi peraturan, kebijakan, program, dan kegiatan DPM UII bagi civitas kemahasiswaan.',
+            ],
+        ];
+
+        foreach ($categories as $category) {
             PostCategory::query()->firstOrCreate(
-                ['slug' => str($name)->slug()->value()],
-                ['name' => $name],
+                ['slug' => str($category['name'])->slug()->value()],
+                $category,
             );
         }
+
+        // Kategori lama "Kegiatan" digantikan oleh "Berita Kegiatan".
+        PostCategory::query()->where('slug', 'kegiatan')->delete();
     }
 
     /**
@@ -152,9 +164,14 @@ class DatabaseSeeder extends Seeder
             ['type' => 'lembaga', 'name' => 'Mentari', 'abbreviation' => 'Mentari', 'sort_order' => 2],
             ['type' => 'badan', 'name' => 'Badan Legislasi', 'abbreviation' => 'Baleg', 'sort_order' => 3],
             ['type' => 'badan', 'name' => 'Badan Pengawasan', 'abbreviation' => 'Bawas', 'sort_order' => 4],
-            ['type' => 'badan', 'name' => 'Badan Kerjasama, Advokasi, dan Jaringan', 'abbreviation' => 'Bosaj', 'sort_order' => 5],
+            ['type' => 'badan', 'name' => 'Badan Kerjasama, Advokasi, dan Jaringan', 'abbreviation' => 'Bksaj', 'sort_order' => 5],
             ['type' => 'badan', 'name' => 'Badan Audit Kemahasiswaan', 'abbreviation' => 'BAK', 'sort_order' => 6],
             ['type' => 'badan', 'name' => 'Badan Pengelola Aset', 'abbreviation' => 'BPA', 'sort_order' => 7],
+            // Komisi Dewan
+            ['type' => 'komisi', 'name' => 'Komisi I', 'abbreviation' => 'I', 'description' => 'Bidang Hukum, Peraturan, dan Ketertiban Dewan', 'sort_order' => 10],
+            ['type' => 'komisi', 'name' => 'Komisi II', 'abbreviation' => 'II', 'description' => 'Bidang Anggaran, Keuangan, dan Aset Dewan', 'sort_order' => 11],
+            ['type' => 'komisi', 'name' => 'Komisi III', 'abbreviation' => 'III', 'description' => 'Bidang Aspirasi, Kemitraan, dan Jaringan Dewan', 'sort_order' => 12],
+            ['type' => 'komisi', 'name' => 'Komisi IV', 'abbreviation' => 'IV', 'description' => 'Bidang SDM, Organisasi, dan Protokol Dewan', 'sort_order' => 13],
         ];
 
         foreach ($units as $unit) {
@@ -214,7 +231,7 @@ class DatabaseSeeder extends Seeder
                     ['label' => 'Mentari', 'url' => '/unit/mentari', 'description' => 'Media & Kesekretariatan'],
                     ['label' => 'Baleg', 'url' => '/unit/badan-legislasi', 'description' => 'Badan Legislasi'],
                     ['label' => 'Bawas', 'url' => '/unit/badan-pengawasan', 'description' => 'Badan Pengawasan'],
-                    ['label' => 'Bosaj', 'url' => '/unit/badan-kerjasama-advokasi-dan-jaringan', 'description' => 'Badan Kerjasama, Advokasi & Jaringan'],
+                    ['label' => 'Bksaj', 'url' => '/unit/badan-kerjasama-advokasi-dan-jaringan', 'description' => 'Badan Kerjasama, Advokasi & Jaringan'],
                     ['label' => 'BAK', 'url' => '/unit/badan-audit-kemahasiswaan', 'description' => 'Badan Audit Kemahasiswaan'],
                     ['label' => 'BPA', 'url' => '/unit/badan-pengelola-aset', 'description' => 'Badan Pengelola Aset'],
                 ],
@@ -256,28 +273,32 @@ class DatabaseSeeder extends Seeder
                 'url' => '/laporan-kinerja',
             ],
             [
-                'label' => 'Keputusan',
-                'url' => '/keputusan',
-                'description' => 'Ketetapan, surat keputusan, dan regulasi penetapan yang diterbitkan oleh DPM UII.',
-                'mega_eyebrow' => 'Ketetapan & Regulasi',
+                'label' => 'Publikasi',
+                'url' => '#publikasi',
+                'description' => 'Publikasi resmi DPM UII: keputusan, ketetapan, dan regulasi.',
+                'mega_eyebrow' => 'Publikasi Resmi',
                 'mega_image' => 'images/menu-keputusan.jpg',
-                'mega_caption_title' => 'Arsip Keputusan',
-                'mega_caption_desc' => 'Telusuri ketetapan dan surat keputusan resmi DPM UII.',
+                'mega_caption_title' => 'Arsip Publikasi',
+                'mega_caption_desc' => 'Telusuri keputusan dan ketetapan DPM UII per periode.',
                 'children' => [
-                    ['label' => 'Surat Keputusan DPM UII', 'url' => '/dokumen/kategori/surat-keputusan', 'description' => 'Surat keputusan resmi DPM UII'],
-                    ['label' => 'Ketetapan DPM UII', 'url' => '/dokumen/kategori/surat-ketetapan', 'description' => 'Ketetapan sidang pleno'],
-                    ['label' => 'Keputusan Bersama', 'url' => '/keputusan?jenis=skb', 'description' => 'DPM bersama LEM / lembaga lain'],
-                    ['label' => 'Semua Keputusan', 'url' => '/keputusan', 'description' => 'Lihat seluruh arsip keputusan →'],
+                    ['label' => 'Keputusan', 'url' => '/keputusan', 'description' => 'Surat keputusan, ketetapan, dan keputusan bersama per periode'],
+                    ['label' => 'Semua Publikasi', 'url' => '/keputusan', 'description' => 'Lihat seluruh arsip keputusan →'],
                 ],
             ],
             [
-                'label' => 'Keterangan Akademik',
-                'url' => '/dokumen/kategori/keterangan-akademik',
-                'description' => 'Surat keterangan akademik yang diterbitkan DPM UII untuk keperluan mahasiswa.',
+                'label' => 'Berita Kegiatan',
+                'url' => '/berita-kegiatan',
+                'description' => 'Kegiatan dan agenda DPM UII serta parsip mahasiswa.',
             ],
             [
-                'label' => 'Berita',
-                'url' => '/#berita',
+                'label' => 'Pengumuman',
+                'url' => '/pengumuman',
+                'description' => 'Seruan aksi, informasi resmi, dan pemberitahuan untuk KM UII.',
+            ],
+            [
+                'label' => 'Sosialisasi',
+                'url' => '/sosialisasi',
+                'description' => 'Sosialisasi peraturan, kebijakan, program, dan kegiatan DPM UII.',
             ],
             [
                 'label' => 'Aspirasi',

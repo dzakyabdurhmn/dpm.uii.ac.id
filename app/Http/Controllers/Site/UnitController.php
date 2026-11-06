@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\Official;
 use App\Models\OrganizationalUnit;
 use App\Models\Period;
 use Illuminate\View\View;
@@ -25,27 +26,77 @@ class UnitController extends Controller
     {
         abort_unless($unit->is_active, 404);
 
-        $officials = $unit->officials()
+        $periods = Period::query()->orderByDesc('name')->get(['id', 'name', 'is_active']);
+        $activePeriod = Period::active()->first(['id', 'name']);
+
+        $periodIds = $periods->pluck('id')->toArray();
+
+        // Get all officials for all periods for this unit
+        $allOfficials = Official::query()
+            ->where('organizational_unit_id', $unit->id)
             ->where('is_active', true)
-            ->with('period')
+            ->whereIn('period_id', $periodIds)
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->get();
+            ->get(['id', 'name', 'position', 'fakultas', 'prodi', 'angkatan', 'nim', 'description', 'photo_path', 'email', 'instagram', 'linkedin', 'period_id', 'sort_order']);
 
-        // Anggota dikelompokkan per periode kepengurusan; periode aktif tampil
-        // lebih dulu, lalu periode lama secara menurun.
-        $periods = Period::query()
-            ->whereIn('id', $officials->pluck('period_id')->filter()->unique())
-            ->orderByDesc('is_active')
-            ->orderByDesc('name')
-            ->get();
+        // Group by period
+        $officialsByPeriod = $allOfficials->groupBy('period_id');
+
+        $unitData = [];
+        foreach ($periods as $period) {
+            $members = $officialsByPeriod[$period->id] ?? collect();
+            $unitData[$period->name] = [
+                'period' => $period,
+                'members' => $members->map(function ($o) {
+                    return [
+                        'name' => $o->name,
+                        'position' => $o->position,
+                        'fakultas' => $o->fakultas,
+                        'prodi' => $o->prodi,
+                        'angkatan' => $o->angkatan,
+                        'nim' => $o->nim,
+                        'description' => $o->description,
+                        'photo_path' => $o->photo_path,
+                        'email' => $o->email,
+                        'instagram' => $o->instagram,
+                        'linkedin' => $o->linkedin,
+                        'sort_order' => $o->sort_order,
+                    ];
+                })->toArray(),
+            ];
+        }
+
+        // Also get unassigned
+        $unassigned = Official::query()
+            ->where('organizational_unit_id', $unit->id)
+            ->where('is_active', true)
+            ->whereNull('period_id')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get(['id', 'name', 'position', 'fakultas', 'prodi', 'angkatan', 'nim', 'description', 'photo_path', 'email', 'instagram', 'linkedin', 'sort_order'])
+            ->map(function ($o) {
+                return [
+                    'name' => $o->name,
+                    'position' => $o->position,
+                    'fakultas' => $o->fakultas,
+                    'prodi' => $o->prodi,
+                    'angkatan' => $o->angkatan,
+                    'nim' => $o->nim,
+                    'description' => $o->description,
+                    'photo_path' => $o->photo_path,
+                    'email' => $o->email,
+                    'instagram' => $o->instagram,
+                    'linkedin' => $o->linkedin,
+                    'sort_order' => $o->sort_order,
+                ];
+            })->toArray();
 
         return view('site.units.show', [
             'unit' => $unit,
-            'officials' => $officials,
-            'periods' => $periods,
-            'unassigned' => $officials->whereNull('period_id'),
-            'units' => OrganizationalUnit::query()->active()->whereNull('parent_id')->orderBy('sort_order')->get(),
+            'unitData' => $unitData,
+            'activePeriod' => $activePeriod?->name,
+            'unassigned' => $unassigned,
         ]);
     }
 }

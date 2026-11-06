@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Schema;
 class DumpDatabaseMysql extends Command
 {
     protected $signature = 'dump:database-mysql {--output= : Output file path} {--tables=* : Specific tables to dump}';
+
     protected $description = 'Dump all database data to MySQL/MariaDB compatible SQL format';
 
     public function handle(): int
@@ -31,10 +32,10 @@ class DumpDatabaseMysql extends Command
 
         // Filter out system tables
         $tables = array_filter($tables, function ($table) {
-            return !in_array($table, ['migrations', 'personal_access_tokens', 'password_reset_tokens', 'failed_jobs', 'job_batches', 'cache', 'cache_locks', 'sessions']);
+            return ! in_array($table, ['migrations', 'personal_access_tokens', 'password_reset_tokens', 'failed_jobs', 'job_batches', 'cache', 'cache_locks', 'sessions']);
         });
 
-        $this->info("Dumping MySQL-compatible SQL for " . count($tables) . " tables...");
+        $this->info('Dumping MySQL-compatible SQL for '.count($tables).' tables...');
 
         $output = $this->dumpMysqlSql($tables);
 
@@ -50,23 +51,24 @@ class DumpDatabaseMysql extends Command
 
     private function dumpMysqlSql(array $tables): string
     {
-        $sql = "-- Database dump generated at " . now()->toDateTimeString() . "\n";
-        $sql .= "-- Tables: " . implode(', ', $tables) . "\n";
+        $sql = '-- Database dump generated at '.now()->toDateTimeString()."\n";
+        $sql .= '-- Tables: '.implode(', ', $tables)."\n";
         $sql .= "-- MySQL/MariaDB compatible\n\n";
         $sql .= "SET FOREIGN_KEY_CHECKS = 0;\n\n";
 
         foreach ($tables as $table) {
             $columns = Schema::getColumnListing($table);
-            
+
             // Skip tables with no columns
             if (empty($columns)) {
                 continue;
             }
 
             $rows = DB::table($table)->get()->toArray();
-            
+
             if (empty($rows)) {
                 $sql .= "-- Table `{$table}` is empty\n\n";
+
                 continue;
             }
 
@@ -74,8 +76,8 @@ class DumpDatabaseMysql extends Command
             $sql .= "TRUNCATE TABLE `{$table}`;\n\n";
 
             // Backtick column names
-            $columnList = '`' . implode('`, `', $columns) . '`';
-            
+            $columnList = '`'.implode('`, `', $columns).'`';
+
             foreach ($rows as $row) {
                 $values = [];
                 foreach ($columns as $col) {
@@ -89,14 +91,14 @@ class DumpDatabaseMysql extends Command
                     } else {
                         // Escape single quotes and backslashes for MySQL
                         $escaped = str_replace(
-                            ["'", "\\", "\0", "\n", "\r", "\x1a"],
-                            ["''", "\\\\", "\\0", "\\n", "\\r", "\\Z"],
+                            ["'", '\\', "\0", "\n", "\r", "\x1a"],
+                            ["''", '\\\\', '\\0', '\\n', '\\r', '\\Z'],
                             (string) $value
                         );
                         $values[] = "'{$escaped}'";
                     }
                 }
-                $sql .= "INSERT INTO `{$table}` ({$columnList}) VALUES (" . implode(', ', $values) . ");\n";
+                $sql .= "INSERT INTO `{$table}` ({$columnList}) VALUES (".implode(', ', $values).");\n";
             }
             $sql .= "\n";
         }

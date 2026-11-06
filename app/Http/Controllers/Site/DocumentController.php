@@ -22,15 +22,90 @@ class DocumentController extends Controller
      */
     public function reports(Request $request): View
     {
-        return $this->listing($request, 'laporan-kinerja');
+        $year = $this->queryString($request, 'tahun');
+        $quarter = $this->queryString($request, 'triwulan');
+        $period = $this->queryString($request, 'periode');
+        $search = $this->queryString($request, 'q');
+
+        $documents = Document::query()
+            ->published()
+            ->with('category')
+            ->whereHas('category', fn ($query) => $query->where('slug', 'laporan-kinerja'))
+            ->when($year, fn ($query) => $query->where('year', (int) $year))
+            ->when($quarter, fn ($query) => $query->where('quarter', (int) $quarter))
+            ->when($period, fn ($query) => $query->where('period_id', (int) $period))
+            ->when($search, fn ($query) => $query->where('title', 'like', "%{$search}%"))
+            ->orderByDesc('year')
+            ->orderByDesc('quarter')
+            ->latest('published_at')
+            ->paginate(15)
+            ->withQueryString();
+
+        // Handle AJAX request for live search
+        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return view('site.documents._list', [
+                'documents' => $documents,
+            ])->render();
+        }
+
+        $periods = Period::query()->orderByDesc('name')->get();
+        $activePeriod = Period::active();
+
+        // Count documents per period
+        $periodCounts = [];
+        foreach ($periods as $p) {
+            $periodCounts[$p->id] = Document::query()
+                ->published()
+                ->whereHas('category', fn ($query) => $query->where('slug', 'laporan-kinerja'))
+                ->where('period_id', $p->id)
+                ->count();
+        }
+
+        $selectedPeriod = $period ? $periods->firstWhere('id', (int) $period) : $activePeriod;
+
+        return view('site.documents.kinerja', [
+            'documents' => $documents,
+            'periods' => $periods,
+            'activePeriod' => $activePeriod,
+            'selectedPeriod' => $selectedPeriod,
+            'periodCounts' => $periodCounts,
+            'totalCount' => $documents->total(),
+            'filters' => [
+                'kategori' => 'laporan-kinerja',
+                'tahun' => $year,
+                'triwulan' => $quarter,
+                'periode' => $period,
+                'q' => $search,
+            ],
+        ]);
     }
 
     /**
-     * Surat keputusan yang dikeluarkan DPM UII.
+     * Semua keputusan & ketetapan DPM UII (grup Keputusan), filterable by periode.
      */
     public function decisions(Request $request): View
     {
-        return $this->listing($request, 'surat-keputusan');
+        $documents = $this->documents($request, null)
+            ->whereHas('category', fn ($query) => $query->where('group', 'Keputusan'))
+            ->paginate(15)
+            ->withQueryString();
+
+        // Handle AJAX request for live search
+        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return view('site.documents._list', [
+                'documents' => $documents,
+            ])->render();
+        }
+
+        return view('site.documents.index', [
+            'documents' => $documents,
+            'categories' => $this->categoryList(),
+            'years' => $this->years(),
+            'periods' => $this->periods(),
+            'filters' => $this->filters($request, null),
+            'heading' => 'Keputusan',
+            'description' => 'Surat keputusan, ketetapan, keputusan badan, DPM Fakultas, dan lembaga DPM UII per periode.',
+        ]);
     }
 
     /**

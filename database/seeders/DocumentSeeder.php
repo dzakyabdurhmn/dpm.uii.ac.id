@@ -6,6 +6,7 @@ use App\Models\Document;
 use App\Models\DocumentCategory;
 use App\Models\Period;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -15,8 +16,9 @@ class DocumentSeeder extends Seeder
     {
         $basePath = public_path('uploads/produk-hukum');
 
-        if (!File::isDirectory($basePath)) {
+        if (! File::isDirectory($basePath)) {
             $this->command->error("Directory not found: {$basePath}");
+
             return;
         }
 
@@ -28,7 +30,7 @@ class DocumentSeeder extends Seeder
         $this->ensureCategories();
 
         // Get periods for reference
-        $periods = Period::query()->pluck('id', 'name')->toArray();
+        $periods = Period::query()->orderBy('starts_on')->get();
 
         // ============================================================
         // Import all folders
@@ -44,7 +46,7 @@ class DocumentSeeder extends Seeder
         $this->importKeteranganAkademik($basePath, $periods);
 
         $this->command->info('Documents imported successfully!');
-        $this->command->info('Total: ' . Document::count() . ' records');
+        $this->command->info('Total: '.Document::count().' records');
     }
 
     private function ensureCategories(): void
@@ -62,7 +64,7 @@ class DocumentSeeder extends Seeder
                 'name' => 'Badan Kelengkapan Dewan',
                 'slug' => 'badan-kelengkapan-dewan',
                 'group' => 'Keputusan',
-                'description' => 'Surat keputusan dari badan-badan kelengkapan Dewan: Baleg, Bawas, BAK, BPA, Bosaj, Mentari, Pimpinan, KPU, Panwas, Sekretariat.',
+                'description' => 'Surat keputusan dari badan-badan kelengkapan Dewan: Baleg, Bawas, BAK, BPA, Bksaj, Mentari, Pimpinan, KPU, Panwas, Sekretariat.',
                 'sort_order' => 1,
                 'type' => 'sub',
                 'parent_slug' => 'surat-keputusan',
@@ -101,6 +103,14 @@ class DocumentSeeder extends Seeder
                 'sort_order' => 8,
                 'type' => 'main',
             ],
+            [
+                'name' => 'Laporan Kinerja',
+                'slug' => 'laporan-kinerja',
+                'group' => 'Kinerja',
+                'description' => 'Laporan kinerja DPM UII: Foraslak, Laporan Akhir, Evaluasi Kinerja, dan dokumen penilaian kinerja per periode.',
+                'sort_order' => 9,
+                'type' => 'main',
+            ],
         ];
 
         $parentIds = [];
@@ -130,11 +140,12 @@ class DocumentSeeder extends Seeder
         }
     }
 
-    private function importSuratKeputusan(string $basePath, array $periods): void
+    private function importSuratKeputusan(string $basePath, $periods): void
     {
-        $dir = $basePath . '/SURAT KEPUTUSAN';
-        if (!File::isDirectory($dir)) {
+        $dir = $basePath.'/SURAT KEPUTUSAN';
+        if (! File::isDirectory($dir)) {
             $this->command->warn("Surat Keputusan directory not found: {$dir}");
+
             return;
         }
 
@@ -144,25 +155,28 @@ class DocumentSeeder extends Seeder
 
         foreach ($files as $file) {
             $filename = $file->getFilename();
-            if (!Str::endsWith($filename, '.pdf')) {
+            if (! Str::endsWith($filename, '.pdf')) {
                 continue;
             }
 
             // Skip if file doesn't exist or is 0 bytes
-            if (!$file->isFile() || $file->getSize() === 0) {
+            if (! $file->isFile() || $file->getSize() === 0) {
                 $skipped++;
+
                 continue;
             }
 
             // Skip duplicate files (keep best version)
             if ($this->isDuplicate($files, $filename)) {
                 $skipped++;
+
                 continue;
             }
 
             $data = $this->parseSuratKeputusanFilename($filename);
-            if (!$data) {
+            if (! $data) {
                 $this->command->warn("Could not parse Surat Keputusan filename: {$filename}");
+
                 continue;
             }
 
@@ -173,8 +187,9 @@ class DocumentSeeder extends Seeder
             // Fallback to main category
             $category = $subCategory ?? DocumentCategory::where('slug', 'surat-keputusan')->first();
 
-            if (!$category) {
+            if (! $category) {
                 $this->command->error('Surat Keputusan category not found');
+
                 continue;
             }
 
@@ -187,7 +202,7 @@ class DocumentSeeder extends Seeder
                     'title' => $data['title'],
                     'slug' => $this->generateUniqueSlug($data['title']),
                     'description' => $data['description'] ?? 'Surat Keputusan DPM UII',
-                    'file_path' => 'uploads/produk-hukum/SURAT KEPUTUSAN/' . $filename,
+                    'file_path' => 'uploads/produk-hukum/SURAT KEPUTUSAN/'.$filename,
                     'mime_type' => 'application/pdf',
                     'size' => $file->getSize(),
                     'year' => $year,
@@ -201,7 +216,7 @@ class DocumentSeeder extends Seeder
                 $this->command->info("Created Document: {$catLabel} | {$year} | {$data['title']}");
                 $processed++;
             } catch (\Exception $e) {
-                $this->command->error("Failed to create document for {$filename}: " . $e->getMessage());
+                $this->command->error("Failed to create document for {$filename}: ".$e->getMessage());
                 $skipped++;
             }
         }
@@ -209,17 +224,19 @@ class DocumentSeeder extends Seeder
         $this->command->info("Surat Keputusan: {$processed} imported, {$skipped} duplicates skipped");
     }
 
-    private function importSuratKetetapan(string $basePath, array $periods): void
+    private function importSuratKetetapan(string $basePath, $periods): void
     {
-        $dir = $basePath . '/SURAT KETETAPAN';
-        if (!File::isDirectory($dir)) {
+        $dir = $basePath.'/SURAT KETETAPAN';
+        if (! File::isDirectory($dir)) {
             $this->command->warn("Surat Ketetapan directory not found: {$dir}");
+
             return;
         }
 
         $category = DocumentCategory::where('slug', 'surat-ketetapan')->first();
-        if (!$category) {
+        if (! $category) {
             $this->command->error('Surat Ketetapan category not found');
+
             return;
         }
 
@@ -229,19 +246,21 @@ class DocumentSeeder extends Seeder
 
         foreach ($files as $file) {
             $filename = $file->getFilename();
-            if (!Str::endsWith($filename, '.pdf')) {
+            if (! Str::endsWith($filename, '.pdf')) {
                 continue;
             }
 
             // Skip duplicate files
             if ($this->isDuplicate($files, $filename)) {
                 $skipped++;
+
                 continue;
             }
 
             $data = $this->parseSuratKetetapanFilename($filename);
-            if (!$data) {
+            if (! $data) {
                 $this->command->warn("Could not parse Surat Ketetapan filename: {$filename}");
+
                 continue;
             }
 
@@ -253,7 +272,7 @@ class DocumentSeeder extends Seeder
                 'title' => $data['title'],
                 'slug' => $this->generateUniqueSlug($data['title']),
                 'description' => $data['description'] ?? 'Surat Ketetapan DPM UII',
-                'file_path' => 'uploads/produk-hukum/SURAT KETETAPAN/' . $filename,
+                'file_path' => 'uploads/produk-hukum/SURAT KETETAPAN/'.$filename,
                 'mime_type' => 'application/pdf',
                 'size' => $file->getSize(),
                 'year' => $year,
@@ -270,17 +289,19 @@ class DocumentSeeder extends Seeder
         $this->command->info("Surat Ketetapan: {$processed} imported, {$skipped} duplicates skipped");
     }
 
-    private function importKeteranganAkademik(string $basePath, array $periods): void
+    private function importKeteranganAkademik(string $basePath, $periods): void
     {
-        $dir = $basePath . '/KETERANGAN AKADEMIK';
-        if (!File::isDirectory($dir)) {
+        $dir = $basePath.'/KETERANGAN AKADEMIK';
+        if (! File::isDirectory($dir)) {
             $this->command->warn("Keterangan Akademik directory not found: {$dir}");
+
             return;
         }
 
         $category = DocumentCategory::where('slug', 'keterangan-akademik')->first();
-        if (!$category) {
+        if (! $category) {
             $this->command->error('Keterangan Akademik category not found');
+
             return;
         }
 
@@ -290,19 +311,21 @@ class DocumentSeeder extends Seeder
 
         foreach ($files as $file) {
             $filename = $file->getFilename();
-            if (!Str::endsWith($filename, '.pdf')) {
+            if (! Str::endsWith($filename, '.pdf')) {
                 continue;
             }
 
             // Skip duplicate files
             if ($this->isDuplicate($files, $filename)) {
                 $skipped++;
+
                 continue;
             }
 
             $data = $this->parseKeteranganAkademikFilename($filename);
-            if (!$data) {
+            if (! $data) {
                 $this->command->warn("Could not parse Keterangan Akademik filename: {$filename}");
+
                 continue;
             }
 
@@ -314,7 +337,7 @@ class DocumentSeeder extends Seeder
                 'title' => $data['title'],
                 'slug' => $this->generateUniqueSlug($data['title']),
                 'description' => $data['description'] ?? 'Keterangan Akademik DPM UII',
-                'file_path' => 'uploads/produk-hukum/KETERANGAN AKADEMIK/' . $filename,
+                'file_path' => 'uploads/produk-hukum/KETERANGAN AKADEMIK/'.$filename,
                 'mime_type' => 'application/pdf',
                 'size' => $file->getSize(),
                 'year' => $year,
@@ -351,7 +374,7 @@ class DocumentSeeder extends Seeder
         $title = preg_replace('/^SK\s*[-_]?\s*/i', '', $title);
         // Remove trailing year
         if ($year) {
-            $title = preg_replace('/\s+' . preg_quote((string)$year, '/') . '\s*$/i', '', $title);
+            $title = preg_replace('/\s+'.preg_quote((string) $year, '/').'\s*$/i', '', $title);
         }
         // Remove version suffixes
         $title = preg_replace('/[-_](final|v?\d+)$/i', '', $title);
@@ -382,7 +405,7 @@ class DocumentSeeder extends Seeder
         $title = preg_replace('/^S-TAP-SU-/i', '', $title);
         $title = preg_replace('/_DPM\s*UII/i', '', $title);
         if ($year) {
-            $title = preg_replace('/\s+' . preg_quote((string)$year, '/') . '\s*$/i', '', $title);
+            $title = preg_replace('/\s+'.preg_quote((string) $year, '/').'\s*$/i', '', $title);
         }
         $title = preg_replace('/[-_](final|v?\d+)$/i', '', $title);
 
@@ -420,7 +443,7 @@ class DocumentSeeder extends Seeder
         $title = preg_replace('/^KA\s+/i', '', $title);
         $title = preg_replace('/^RPKM\s+/i', '', $title);
         if ($year) {
-            $title = preg_replace('/\s+' . preg_quote((string)$year, '/') . '\s*$/i', '', $title);
+            $title = preg_replace('/\s+'.preg_quote((string) $year, '/').'\s*$/i', '', $title);
         }
         $title = preg_replace('/[-_](final|v?\d+)$/i', '', $title);
 
@@ -461,6 +484,7 @@ class DocumentSeeder extends Seeder
         if (preg_match('/(?:20\d{2}|19\d{2})/', $filename, $matches)) {
             return (int) $matches[0];
         }
+
         return null;
     }
 
@@ -473,6 +497,7 @@ class DocumentSeeder extends Seeder
         $name = preg_replace('/[-_](\d+)(?=\.pdf$)/i', '', $name);
         // Then remove -final, _final, -finall
         $name = preg_replace('/[-_](final|finall)(?=\.pdf$)/i', '', $name);
+
         return $name;
     }
 
@@ -492,7 +517,7 @@ class DocumentSeeder extends Seeder
                 $score -= 1000; // Prefer final versions
             }
 
-            if (!isset($bestFiles[$base]) || $score < $bestFiles[$base]['score']) {
+            if (! isset($bestFiles[$base]) || $score < $bestFiles[$base]['score']) {
                 $bestFiles[$base] = ['name' => $name, 'score' => $score];
             }
         }
@@ -529,7 +554,7 @@ class DocumentSeeder extends Seeder
             'Bpa' => 'BPA',
             'Baleg' => 'Baleg',
             'Bawas' => 'Bawas',
-            'Bosaj' => 'Bosaj',
+            'Bksaj' => 'Bksaj',
             'Mentari' => 'Mentari',
             'Panwas' => 'Panwas',
             'Mo' => 'MO',
@@ -576,10 +601,42 @@ class DocumentSeeder extends Seeder
         return $text;
     }
 
-    private function findPeriodId(array $periods, int $year): ?int
+    /**
+     * Map a document year to the closest period. Dokumen lawas sebelum periode
+     * tercatat tetap dikelompokkan ke periode terdekat.
+     *
+     * @param  Collection<int, Period>  $periods
+     */
+    private function findPeriodId($periods, int $year): ?int
     {
-        $periodName = $year . '/' . ($year + 1);
-        return $periods[$periodName] ?? null;
+        // 1. Cocokkan nama periode akademik secara persis: 2024 -> "2024/2025".
+        foreach ($periods as $period) {
+            if ($period->name === $year.'/'.($year + 1)) {
+                return $period->id;
+            }
+        }
+
+        // 2. Periode yang mulai pada tahun yang sama.
+        foreach ($periods as $period) {
+            if ((int) $period->starts_on->year === $year) {
+                return $period->id;
+            }
+        }
+
+        // 3. Periode terdekat berdasarkan selisih tahun.
+        $nearest = null;
+        $nearestDistance = null;
+
+        foreach ($periods as $period) {
+            $distance = abs((int) $period->starts_on->year - $year);
+
+            if ($nearestDistance === null || $distance < $nearestDistance) {
+                $nearest = $period;
+                $nearestDistance = $distance;
+            }
+        }
+
+        return $nearest?->id;
     }
 
     private function generateUniqueSlug(string $title): string
@@ -589,7 +646,7 @@ class DocumentSeeder extends Seeder
         $counter = 1;
 
         while (Document::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $counter++;
+            $slug = $originalSlug.'-'.$counter++;
         }
 
         return $slug;
@@ -602,7 +659,7 @@ class DocumentSeeder extends Seeder
         // Badan Kelengkapan Dewan (Central bodies)
         $badanKeywords = [
             'BALEG', 'BALLEG', 'BAWAS', 'PANWAS', 'PANITIA PENGAWAS', 'PENGAWAS PEMILU', 'PEMILU',
-            'BAK', 'BPA', 'BOSAJ', 'MENTARI',
+            'BAK', 'BPA', 'BKSAJ', 'MENTARI',
             'PIMPINAN', 'KPU', 'KOMISI', 'SEKRETARIS', 'DIREKTORAT',
             'STRUKTUR KPSU', 'TIM MO', 'TIM AD', 'TIM PRODUKSI',
             'PEMBENTUKAN DPM FPSB',

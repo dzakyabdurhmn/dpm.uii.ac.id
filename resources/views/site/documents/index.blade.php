@@ -12,7 +12,8 @@
         .docs-hero h1 { margin: 0; color: #fff; font-size: clamp(30px, 4.6vw, 44px); font-weight: 800; letter-spacing: -.03em; }
         .docs-hero-copy { max-width: 720px; margin: 14px 0 0; color: rgba(255,255,255,.82); font-size: 15px; line-height: 1.85; }
         .docs-section { padding: 48px 0 70px; background: #001E43; }
-        .docs-search { display: flex; gap: 12px; margin-bottom: 18px; }
+        .docs-toolbar { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; align-items: center; }
+        .docs-search { display: flex; gap: 12px; flex: 1; min-width: 280px; }
         .docs-search-input { flex: 1; height: 48px; padding: 0 18px 0 48px; border-radius: 8px; border: 1px solid rgba(255,255,255,.18); background: #001A3A; color: #fff; font-size: 14px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 14px center; background-size: 20px; }
         .docs-search-input::placeholder { color: rgba(255,255,255,.5); }
         .docs-search-input:focus { outline: none; border-color: rgba(255,255,255,.5); box-shadow: 0 0 0 3px rgba(255,255,255,.1); }
@@ -22,6 +23,10 @@
         .docs-search-btn svg { width: 18px; height: 18px; stroke: currentColor; }
         .docs-search-btn .btn-text { display: none; }
         @media (min-width: 480px) { .docs-search-btn .btn-text { display: inline; } }
+        .docs-filter { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .docs-filter select { height: 48px; padding: 0 40px 0 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.18); background: #001A3A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 14px center / 18px; color: #fff; font-size: 13px; appearance: none; cursor: pointer; min-width: 180px; }
+        .docs-filter select:focus { outline: none; border-color: rgba(255,255,255,.5); box-shadow: 0 0 0 3px rgba(255,255,255,.1); }
+        .docs-filter select option { background: #001E43; color: #fff; }
         .docs-list { overflow: hidden; border: 1px solid rgba(255,255,255,.1); border-radius: 8px; background: #001A3A; }
         .docs-list-item { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px 22px; transition: background .15s; }
         .docs-list-item:hover { background: rgba(255,255,255,.03); }
@@ -42,7 +47,7 @@
         .docs-pagination nav { display: flex; gap: 8px; }
         .docs-pagination .page-link { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 38px; padding: 0 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.8); font-size: 12px; }
         .docs-pagination .page-item.active .page-link { border-color: rgba(255,255,255,.52); color: #fff; }
-        @media (max-width: 640px) { .docs-wrap { width: min(100% - 28px, 1180px); } .docs-hero-inner { padding: 48px 0 46px; } .docs-section { padding: 34px 0 52px; } .docs-search { flex-direction: column; } .docs-search-input { padding: 0 18px; background-image: none; } .docs-list-item { padding: 16px; } }
+        @media (max-width: 640px) { .docs-wrap { width: min(100% - 28px, 1180px); } .docs-hero-inner { padding: 48px 0 46px; } .docs-section { padding: 34px 0 52px; } .docs-toolbar { flex-direction: column; align-items: stretch; } .docs-search { width: 100%; } .docs-search-input { padding: 0 18px; background-image: none; } .docs-filter { justify-content: stretch; } .docs-filter select { flex: 1; min-width: 0; } .docs-list-item { padding: 16px; } }
     </style>
 
     <div class="docs-page">
@@ -57,25 +62,61 @@
         <section class="docs-section">
             <div class="docs-wrap">
                 <div x-data="documentSearch('{{ url()->current() }}', {{ json_encode($filters) }})" class="docs-search-wrapper">
-                    <div class="docs-search" role="search" aria-label="Cari dokumen">
-                        <label for="doc-search" class="sr-only">Cari dokumen</label>
-                        <input type="search"
-                               id="doc-search"
-                               name="q"
-                               :value="query"
-                               @input="debounceSearch($event.target.value)"
-                               placeholder="{{ $heading ? 'Cari ' . strtolower($heading) . '…' : 'Cari judul dokumen…' }}"
-                               class="docs-search-input"
-                               autocomplete="off"
-                               aria-describedby="search-hint">
-                        <button type="button"
-                                @click="performSearch()"
-                                class="docs-search-btn"
-                                aria-label="Cari">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-                            <span class="btn-text">Cari</span>
-                        </button>
+                    <div class="docs-toolbar" role="search" aria-label="Filter dan cari dokumen">
+                        <div class="docs-search">
+                            <label for="doc-search" class="sr-only">Cari dokumen</label>
+                            <input type="search"
+                                   id="doc-search"
+                                   name="q"
+                                   :value="query"
+                                   @input="debounceSearch($event.target.value)"
+                                   placeholder="{{ $heading ? 'Cari ' . strtolower($heading) . '…' : 'Cari judul dokumen…' }}"
+                                   class="docs-search-input"
+                                   autocomplete="off"
+                                   aria-describedby="search-hint">
+                            <button type="button"
+                                    @click="performSearch()"
+                                    class="docs-search-btn"
+                                    aria-label="Cari">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                                <span class="btn-text">Cari</span>
+                            </button>
+                        </div>
+
+                        <div class="docs-filter" x-data="{ initFilters: @json($filters), periods: @json($periods ?? []), years: @json($years ?? []) }" x-init="
+                            const urlParams = new URLSearchParams(window.location.search);
+                            this.filters.periode = urlParams.get('periode') || '';
+                            this.filters.tahun = urlParams.get('tahun') || '';
+                            this.filters.triwulan = urlParams.get('triwulan') || '';
+                        ">
+                            @if ($periods && $periods->count() > 0)
+                                <select name="periode" @change="applyFilters()" x-model="filters.periode" aria-label="Filter periode">
+                                    <option value="">Semua Periode</option>
+                                    @foreach ($periods as $period)
+                                        <option value="{{ $period->id }}" {{ $filters['periode'] == $period->id ? 'selected' : '' }}>{{ $period->name }}</option>
+                                    @endforeach
+                                </select>
+                            @endif
+
+                            @if ($years && $years->count() > 0)
+                                <select name="tahun" @change="applyFilters()" x-model="filters.tahun" aria-label="Filter tahun">
+                                    <option value="">Semua Tahun</option>
+                                    @foreach ($years as $year)
+                                        <option value="{{ $year }}" {{ $filters['tahun'] == $year ? 'selected' : '' }}>{{ $year }}</option>
+                                    @endforeach
+                                </select>
+                            @endif
+
+                            <select name="triwulan" @change="applyFilters()" x-model="filters.triwulan" aria-label="Filter triwulan">
+                                <option value="">Semua Triwulan</option>
+                                <option value="1" {{ $filters['triwulan'] == '1' ? 'selected' : '' }}>Triwulan I</option>
+                                <option value="2" {{ $filters['triwulan'] == '2' ? 'selected' : '' }}>Triwulan II</option>
+                                <option value="3" {{ $filters['triwulan'] == '3' ? 'selected' : '' }}>Triwulan III</option>
+                                <option value="4" {{ $filters['triwulan'] == '4' ? 'selected' : '' }}>Triwulan IV</option>
+                            </select>
+                        </div>
                     </div>
+
                     <div x-show="isSearching" class="sr-only" aria-live="polite" id="search-hint">Sedang mencari…</div>
 
                     <div class="docs-list" x-ref="listContainer">
@@ -118,6 +159,12 @@
         function documentSearch(baseUrl, initialFilters) {
             return {
                 query: initialFilters.q || '',
+                filters: {
+                    kategori: initialFilters.kategori || '',
+                    tahun: initialFilters.tahun || '',
+                    triwulan: initialFilters.triwulan || '',
+                    periode: initialFilters.periode || '',
+                },
                 isSearching: false,
                 debounceTimer: null,
 
@@ -125,6 +172,10 @@
                     this.query = value;
                     clearTimeout(this.debounceTimer);
                     this.debounceTimer = setTimeout(() => this.performSearch(), 300);
+                },
+
+                applyFilters() {
+                    this.performSearch();
                 },
 
                 async performSearch() {
@@ -135,10 +186,9 @@
                         params.set('q', this.query.trim());
                     }
 
-                    // Preserve other filters from URL
-                    const urlParams = new URLSearchParams(window.location.search);
-                    ['kategori', 'tahun', 'triwulan', 'periode'].forEach(key => {
-                        if (urlParams.has(key)) params.set(key, urlParams.get(key));
+                    // Add filters
+                    Object.entries(this.filters).forEach(([key, value]) => {
+                        if (value) params.set(key, value);
                     });
 
                     const url = `${baseUrl}?${params.toString()}`;

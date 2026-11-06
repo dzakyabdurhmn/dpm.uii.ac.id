@@ -200,7 +200,7 @@
     <div class="sec-head reveal">
       <div>
         <span class="eyebrow">Produk Hukum</span>
-        <h2>Landasan hukum Keluarga Mahasiswa UII</h2>
+        <h2>Landasan Hukum Keluarga Mahasiswa UII</h2>
         <p>Akses arsip peraturan resmi berdasarkan jenisnya.</p>
       </div>
       <a href="/produk-hukum" class="link-more">Lihat semua arsip
@@ -243,7 +243,7 @@
     <div class="sec-head reveal">
       <div>
         <span class="eyebrow">Alat Kelengkapan</span>
-        <h2>Badan dan unit kerja DPM UII</h2>
+        <h2>Badan dan Unit Kerja DPM UII</h2>
         <p>Enam alat kelengkapan yang menggerakkan kerja parlemen mahasiswa.</p>
       </div>
     </div>
@@ -252,7 +252,7 @@
       <a href="/unit/mentari" class="card unit reveal"><div><h3>Mentari</h3><p>Media &amp; Kesekretariatan</p></div></a>
       <a href="/unit/badan-legislasi" class="card unit reveal d1"><div><h3>Baleg</h3><p>Badan Legislasi</p></div></a>
       <a href="/unit/badan-pengawasan" class="card unit reveal d2"><div><h3>Bawas</h3><p>Badan Pengawasan</p></div></a>
-      <a href="/unit/badan-kerjasama-advokasi-dan-jaringan" class="card unit reveal"><div><h3>Bosaj</h3><p>Badan Kerjasama, Advokasi &amp; Jaringan</p></div></a>
+      <a href="/unit/badan-kerjasama-advokasi-dan-jaringan" class="card unit reveal"><div><h3>Bksaj</h3><p>Badan Kerjasama, Advokasi &amp; Jaringan</p></div></a>
       <a href="/unit/badan-audit-kemahasiswaan" class="card unit reveal d1"><div><h3>BAK</h3><p>Badan Audit Kemahasiswaan</p></div></a>
       <a href="/unit/badan-pengelola-aset" class="card unit reveal d2"><div><h3>BPA</h3><p>Badan Pengelola Aset</p></div></a>
     </div>
@@ -351,8 +351,8 @@
   <div class="container aspirasi">
     <div class="reveal">
       <span class="eyebrow">Aspirasi</span>
-      <h2>Suaramu menentukan arah Keluarga Mahasiswa</h2>
-      <p style="color:var(--t-sub);font-size:15.5px;max-width:480px">Sampaikan kritik, saran, atau gagasanmu langsung kepada DPM UII. Setiap aspirasi dicatat dan diteruskan kepada pihak yang berwenang.</p>
+      <h2>Suaramu Menentukan Arah Keluarga Mahasiswa</h2>
+      <p style="color:var(--t-sub);font-size:15.5px;max-width:480px">Sampaikan kritik, saran, atau gagasanmu langsung kepada DPM UII. Setiap aspirasi dicatat dan diteruskan kepada pihak yang terkait</p>
       <span class="hash">#RumahAspirasiMahasiswa</span>
     </div>
 

@@ -3,6 +3,7 @@
 @php
     $isEdit = $post->exists;
     $selectedImage = old('featured_image', $post->featured_image);
+    $socializationCategory = $categories->firstWhere('slug', \App\Models\Post::SOCIALIZATION_CATEGORY_SLUG);
 @endphp
 
 @section('title', $isEdit ? 'Ubah berita' : 'Berita baru')
@@ -60,7 +61,8 @@
 
                 <div>
                     <label for="post_category_id" class="block text-xs font-medium text-slate-600">Kategori</label>
-                    <select id="post_category_id" name="post_category_id" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                    <select id="post_category_id" name="post_category_id" data-post-category-select
+                            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
                         <option value="">Tanpa kategori</option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}" @selected((string) old('post_category_id', $post->post_category_id) === (string) $category->id)>
@@ -68,6 +70,21 @@
                             </option>
                         @endforeach
                     </select>
+                </div>
+
+                <div data-socialization-type
+                     data-category-id="{{ $socializationCategory?->id }}"
+                     @class(['hidden', ! $socializationCategory || ! $post->isSocialization()])>
+                    <label for="type" class="block text-xs font-medium text-slate-600">Jenis Sosialisasi</label>
+                    <select id="type" name="type" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                        <option value="">Tanpa jenis</option>
+                        @foreach (\App\Models\Post::SOCIALIZATION_TYPES as $typeKey => $typeLabel)
+                            <option value="{{ $typeKey }}" @selected(old('type', $post->type) === $typeKey)>
+                                {{ $typeLabel }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <p class="mt-1 text-xs text-slate-400">Dipakai untuk mengelompokkan materi sosialisasi di halaman publik.</p>
                 </div>
 
                 <div>

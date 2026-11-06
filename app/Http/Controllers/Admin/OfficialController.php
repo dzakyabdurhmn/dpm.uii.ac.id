@@ -62,6 +62,10 @@ class OfficialController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:150'],
             'position' => ['nullable', 'string', 'max:150'],
+            'fakultas' => ['nullable', 'string', 'max:150'],
+            'prodi' => ['nullable', 'string', 'max:150'],
+            'angkatan' => ['nullable', 'string', 'max:20'],
+            'nim' => ['nullable', 'string', 'max:20'],
             'description' => ['nullable', 'string', 'max:255'],
             'period_id' => ['nullable', 'integer', 'exists:periods,id'],
             'email' => ['nullable', 'email', 'max:150'],

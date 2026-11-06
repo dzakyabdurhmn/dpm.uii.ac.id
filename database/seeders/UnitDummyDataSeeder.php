@@ -38,7 +38,7 @@ class UnitDummyDataSeeder extends Seeder
                 'description' => $this->getDescription($unit->name),
                 'tasks' => $this->getTasks($unit->name),
                 'work_programs' => $this->getWorkPrograms($unit->name),
-                'email' => Str::slug($unit->name) . '@dpm.uii.ac.id',
+                'email' => Str::slug($unit->name).'@dpm.uii.ac.id',
             ]);
 
             // Clear existing officials for this unit
@@ -49,7 +49,7 @@ class UnitDummyDataSeeder extends Seeder
 
             foreach ($officialsData as $order => $data) {
                 // Generate and save photo using ui-avatars
-                $photoPath = $this->savePhotoFromUrl($data['name'], $unit->slug . '-' . Str::slug($data['position']));
+                $photoPath = $this->savePhotoFromUrl($data['name'], $unit->slug.'-'.Str::slug($data['position']));
 
                 Official::create([
                     'organizational_unit_id' => $unit->id,
@@ -58,7 +58,7 @@ class UnitDummyDataSeeder extends Seeder
                     'position' => $data['position'],
                     'description' => $data['description'],
                     'photo_path' => $photoPath,
-                    'email' => Str::slug($data['name']) . '@students.uii.ac.id',
+                    'email' => Str::slug($data['name']).'@students.uii.ac.id',
                     'instagram' => Str::slug($data['name']),
                     'linkedin' => Str::slug($data['name']),
                     'sort_order' => $order,
@@ -69,13 +69,13 @@ class UnitDummyDataSeeder extends Seeder
             // Add some previous period officials
             if ($period2024) {
                 $prevOfficials = [
-                    ['name' => 'Mantan ' . $officialsData[0]['name'], 'position' => $officialsData[0]['position'], 'description' => 'Pengurus periode sebelumnya'],
-                    ['name' => 'Mantan ' . $officialsData[1]['name'], 'position' => $officialsData[1]['position'], 'description' => 'Pengurus periode sebelumnya'],
+                    ['name' => 'Mantan '.$officialsData[0]['name'], 'position' => $officialsData[0]['position'], 'description' => 'Pengurus periode sebelumnya'],
+                    ['name' => 'Mantan '.$officialsData[1]['name'], 'position' => $officialsData[1]['position'], 'description' => 'Pengurus periode sebelumnya'],
                 ];
 
                 foreach ($prevOfficials as $order => $data) {
                     // Generate and save photo using ui-avatars
-                    $photoPath = $this->savePhotoFromUrl($data['name'], $unit->slug . '-prev-' . Str::slug($data['position']));
+                    $photoPath = $this->savePhotoFromUrl($data['name'], $unit->slug.'-prev-'.Str::slug($data['position']));
 
                     Official::create([
                         'organizational_unit_id' => $unit->id,
@@ -84,7 +84,7 @@ class UnitDummyDataSeeder extends Seeder
                         'position' => $data['position'],
                         'description' => $data['description'],
                         'photo_path' => $photoPath,
-                        'email' => Str::slug($data['name']) . '@students.uii.ac.id',
+                        'email' => Str::slug($data['name']).'@students.uii.ac.id',
                         'instagram' => Str::slug($data['name']),
                         'linkedin' => Str::slug($data['name']),
                         'sort_order' => $order + 100,
@@ -94,18 +94,18 @@ class UnitDummyDataSeeder extends Seeder
             }
 
             // Add one unassigned official
-            $photoPath = $this->savePhotoFromUrl('Anggota ' . $unit->short_name, $unit->slug . '-unassigned');
+            $photoPath = $this->savePhotoFromUrl('Anggota '.$unit->short_name, $unit->slug.'-unassigned');
 
             Official::create([
                 'organizational_unit_id' => $unit->id,
                 'period_id' => null,
-                'name' => 'Anggota ' . $unit->short_name,
+                'name' => 'Anggota '.$unit->short_name,
                 'position' => 'Anggota',
                 'description' => 'Anggota biasa tanpa periode kepengurusan tertentu',
                 'photo_path' => $photoPath,
-                'email' => Str::slug('anggota-' . $unit->short_name) . '@students.uii.ac.id',
-                'instagram' => Str::slug('anggota-' . $unit->short_name),
-                'linkedin' => Str::slug('anggota-' . $unit->short_name),
+                'email' => Str::slug('anggota-'.$unit->short_name).'@students.uii.ac.id',
+                'instagram' => Str::slug('anggota-'.$unit->short_name),
+                'linkedin' => Str::slug('anggota-'.$unit->short_name),
                 'sort_order' => 999,
                 'is_active' => true,
             ]);
@@ -120,12 +120,13 @@ class UnitDummyDataSeeder extends Seeder
             'Mentari' => 'Mentari',
             'Badan Legislasi' => 'Baleg',
             'Badan Pengawasan' => 'Bawas',
-            'Badan Kerjasama, Advokasi & Jaringan' => 'Bosaj',
+            'Badan Kerjasama, Advokasi & Jaringan' => 'Bksaj',
             'Badan Audit Kemahasiswaan' => 'BAK',
             'Badan Pengelola Aset' => 'BPA',
             'Pimpinan Dewan' => 'Pimpinan',
         ];
         $abbr = $abbreviations[$name] ?? $name;
+
         // Limit to 32 chars for DB column
         return Str::limit($abbr, 32, '');
     }
@@ -141,6 +142,7 @@ class UnitDummyDataSeeder extends Seeder
             'Badan Pengelola Aset' => "Mengelola inventaris aset DPM\nMencatat dan memelihara aset\nMenyusun laporan pengelolaan aset\nMengkoordinasikan pengadaan barang",
             'Pimpinan Dewan' => "Memimpin rapat paripurna dewan\nMewakili dewan dalam forum eksternal\nMengkoordinasikan kerja alat kelengkapan\nMenetapkan agenda kebijakan dewan",
         ];
+
         return $tasks[$name] ?? "Tugas dan fungsi {$name} akan diisi.";
     }
 
@@ -155,6 +157,7 @@ class UnitDummyDataSeeder extends Seeder
             'Badan Pengelola Aset' => "Inventarisasi Aset Lengkap\nSistem Manajemen Aset Digital\nPemeliharaan Rutin Aset\nPengadaan Perlengkapan Sidang",
             'Pimpinan Dewan' => "Rapat Paripurna Bulanan\nKoordinasi Alat Kelengkapan\nAdvokasi Kebijakan Mahasiswa\nEvaluasi Kinerja Dewan",
         ];
+
         return $programs[$name] ?? "Program kerja {$name} akan diisi.";
     }
 
@@ -164,11 +167,12 @@ class UnitDummyDataSeeder extends Seeder
             'Mentari' => 'Mentari adalah alat kelengkapan Dewan Permusyawaratan Mahasiswa UII yang bertanggung jawab atas media komunikasi, kesekretariatan, dokumentasi, dan penerbitan publikasi resmi DPM. Unit ini menjadi jembatan informasi antara dewan dengan mahasiswa dan publik.',
             'Badan Legislasi' => 'Badan Legislasi (Baleg) berfungsi menyusun, mengkaji, dan mengkoordinasikan proses pembentukan produk hukum DPM UII. Termasuk rancangan peraturan, kajian hukum, serta pengarsipan dan dokumentasi produk hukum.',
             'Badan Pengawasan' => 'Badan Pengawasan (Bawas) menjalankan fungsi pengawasan terhadap pelaksanaan fungsi dewan, pengelolaan dana dan aset, serta investigasi pelanggaran. Menyusun laporan pengawasan berkala untuk akuntabilitas dewan.',
-            'Badan Kerjasama, Advokasi & Jaringan' => 'Badan Kerjasama, Advokasi & Jaringan (Bosaj) membangun kerjasama antar lembaga, mengadvokasi aspirasi mahasiswa ke forum tingkat tinggi, mengelola jaringan alumni DPM, serta mengkoordinasikan program kerja sama antar lembaga.',
+            'Badan Kerjasama, Advokasi & Jaringan' => 'Badan Kerjasama, Advokasi & Jaringan (Bksaj) membangun kerjasama antar lembaga, mengadvokasi aspirasi mahasiswa ke forum tingkat tinggi, mengelola jaringan alumni DPM, serta mengkoordinasikan program kerja sama antar lembaga.',
             'Badan Audit Kemahasiswaan' => 'Badan Audit Kemahasiswaan (BAK) bertugas mengaudit keuangan seluruh lembaga KM UII, memeriksa kelayakan pengelolaan dana, menyusun Laporan Hasil Audit (LHA), dan memberikan rekomendasi perbaikan pengelolaan keuangan.',
             'Badan Pengelola Aset' => 'Badan Pengelola Aset (BPA) mengelola inventaris aset DPM, mencatat dan memelihara aset, menyusun laporan pengelolaan aset, serta mengkoordinasikan pengadaan barang dan jasa untuk kebutuhan dewan.',
             'Pimpinan Dewan' => 'Pimpinan Dewan memimpin rapat paripurna, mewakili dewan dalam forum eksternal, mengkoordinasikan kerja seluruh alat kelengkapan, serta menetapkan agenda kebijakan dewan untuk periode kepengurusan.',
         ];
+
         return $descriptions[$name] ?? "Deskripsi {$name} akan diisi.";
     }
 
@@ -242,11 +246,11 @@ class UnitDummyDataSeeder extends Seeder
         ];
 
         return $officials[$name] ?? [
-            ['name' => 'Ketua ' . $name, 'position' => 'Ketua', 'description' => 'Ketua ' . $name],
-            ['name' => 'Wakil ' . $name, 'position' => 'Wakil Ketua', 'description' => 'Wakil Ketua ' . $name],
-            ['name' => 'Sekretaris ' . $name, 'position' => 'Sekretaris', 'description' => 'Sekretaris ' . $name],
-            ['name' => 'Bendahara ' . $name, 'position' => 'Bendahara', 'description' => 'Bendahara ' . $name],
-            ['name' => 'Anggota ' . $name, 'position' => 'Anggota', 'description' => 'Anggota ' . $name],
+            ['name' => 'Ketua '.$name, 'position' => 'Ketua', 'description' => 'Ketua '.$name],
+            ['name' => 'Wakil '.$name, 'position' => 'Wakil Ketua', 'description' => 'Wakil Ketua '.$name],
+            ['name' => 'Sekretaris '.$name, 'position' => 'Sekretaris', 'description' => 'Sekretaris '.$name],
+            ['name' => 'Bendahara '.$name, 'position' => 'Bendahara', 'description' => 'Bendahara '.$name],
+            ['name' => 'Anggota '.$name, 'position' => 'Anggota', 'description' => 'Anggota '.$name],
         ];
     }
 
@@ -254,24 +258,26 @@ class UnitDummyDataSeeder extends Seeder
     {
         try {
             // Use ui-avatars.com for generated avatars
-            $url = 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&size=400&background=001E43&color=fff&bold=true&format=png';
+            $url = 'https://ui-avatars.com/api/?name='.urlencode($name).'&size=400&background=001E43&color=fff&bold=true&format=png';
             $contents = file_get_contents($url);
             if ($contents === false) {
                 return null;
             }
 
-            $path = 'uploads/fungsionaris/' . Str::slug($filename) . '.png';
-            $fullPath = storage_path('app/public/' . $path);
+            $path = 'uploads/fungsionaris/'.Str::slug($filename).'.png';
+            $fullPath = storage_path('app/public/'.$path);
 
             // Ensure directory exists
-            if (!file_exists(dirname($fullPath))) {
+            if (! file_exists(dirname($fullPath))) {
                 mkdir(dirname($fullPath), 0755, true);
             }
 
             file_put_contents($fullPath, $contents);
+
             return $path;
         } catch (\Exception $e) {
-            $this->command->warn("Failed to download photo for {$name}: " . $e->getMessage());
+            $this->command->warn("Failed to download photo for {$name}: ".$e->getMessage());
+
             return null;
         }
     }

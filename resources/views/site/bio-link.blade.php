@@ -16,6 +16,7 @@
 .bio-socials { display: flex; justify-content: center; gap: 12px; margin: 18px 0 8px; }
 .bio-socials a { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center; color: #fff; transition: background .2s; }
 .bio-socials a:hover { background: rgba(255,255,255,.18); }
+.bio-socials svg { width: 16px; height: 16px; fill: currentColor; }
 .bio-feature { margin: 24px 0; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,.1), rgba(255,255,255,.03)); border: 1px solid rgba(255,255,255,.12); padding: 18px; }
 .bio-feature .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); margin: 0 0 6px; }
 .bio-feature .title { font-size: 16px; font-weight: 800; margin: 0 0 6px; }
@@ -56,7 +57,11 @@
                     @foreach($bioLink->social_links as $social)
                         @if(!empty($social['url']))
                             <a href="{{ $social['url'] }}" target="_blank" rel="noopener" aria-label="{{ $social['label'] ?? 'Social' }}">
-                                <i class="{{ $social['icon'] ?? 'fa-solid fa-link' }}"></i>
+                                @if (! empty($social['svg']))
+                                    {!! $social['svg'] !!}
+                                @else
+                                    <i class="{{ $social['icon'] ?? 'fa-solid fa-link' }}"></i>
+                                @endif
                             </a>
                         @endif
                     @endforeach

@@ -163,7 +163,7 @@
                 <ul style="margin: 0; padding-left: 22px; color: rgba(255,255,255,.8); line-height: 2;">
                     <li><strong>Font UII:</strong> Install file <code>UII Font.ttf</code> di sistem operasi (Windows: klik kanan → Install / Mac: double-click → Install Font). Gunakan untuk dokumen resmi DPM UII.</li>
                     <li><strong>Template Surat:</strong> Buka <code>template-surat.docx</code> dengan Microsoft Word atau LibreOffice. Ganti bagian-bagian yang diberi tanda kurung [...] dengan data yang sesuai.</li>
-                    <li><strong>Konsistensi:</strong> Selalu gunakan font dan template ini untuk surat resmi, SK, dan dokumen internal DPM UII agar identitas visual tetap konsisten.</                    </li>
+                    <li><strong>Konsistensi:</strong> Selalu gunakan font dan template ini untuk surat resmi, SK, dan dokumen internal DPM UII agar identitas visual tetap konsisten.</li>
                 </ul>
             </div>
         </div>

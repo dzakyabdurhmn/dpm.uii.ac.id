@@ -37,6 +37,11 @@ class SiteTest extends TestCase
             ->assertOk()
             ->assertSee('Wewenang');
 
+        $this->get(route('about.show', 'struktur'))
+            ->assertOk()
+            ->assertSee('Struktur Lembaga KM UII')
+            ->assertSee('Kelompok Lembaga');
+
         // Tidak ada halaman bebas: seksi tak dikenal = 404.
         $this->get('/tentang/halaman-bebas')->assertNotFound();
     }
@@ -78,6 +83,40 @@ class SiteTest extends TestCase
             ->assertRedirect('https://drive.google.com/file/d/example/view');
 
         $this->assertSame(1, $document->fresh()->downloads);
+    }
+
+    public function test_bio_link_page_renders_quick_links(): void
+    {
+        $this->get(route('bio-link'))
+            ->assertOk()
+            ->assertSee('@dpmuii')
+            ->assertSee('Produk Hukum')
+            ->assertSee('Surat Keputusan');
+    }
+
+    public function test_humas_download_page_lists_and_serves_internal_files(): void
+    {
+        $this->get(route('humas.download'))
+            ->assertOk()
+            ->assertSee('UII Font')
+            ->assertSee('Template Surat');
+
+        $this->get(route('publikasi.download.file', ['file' => 'UII Font.ttf']))
+            ->assertOk();
+
+        // Hanya file yang ada di daftar putih yang boleh diunduh.
+        $this->get(route('publikasi.download.file', ['file' => 'rahasia.pdf']))
+            ->assertNotFound();
+    }
+
+    public function test_humas_sosialisasi_page_explains_regulations(): void
+    {
+        $this->get(route('humas.sosialisasi'))
+            ->assertOk()
+            ->assertSee('PDKM')
+            ->assertSee('GBHKM')
+            ->assertSee('PKM')
+            ->assertSee('PDPM');
     }
 
     public function test_documents_support_quarter_filtering(): void

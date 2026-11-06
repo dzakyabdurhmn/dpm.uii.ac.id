@@ -4,8 +4,8 @@ namespace App\Models;
 
 use App\Models\Concerns\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DocumentCategory extends Model
 {
@@ -61,8 +61,9 @@ class DocumentCategory extends Model
     public function getFullGroupAttribute(): string
     {
         if ($this->parent) {
-            return $this->parent->name . ' > ' . $this->name;
+            return $this->parent->name.' > '.$this->name;
         }
+
         return $this->group;
     }
 }

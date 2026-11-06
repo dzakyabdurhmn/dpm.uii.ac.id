@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Schema;
 class DumpDatabase extends Command
 {
     protected $signature = 'dump:database {--format=sql : Export format (sql or json)} {--output= : Output file path} {--tables=* : Specific tables to dump}';
+
     protected $description = 'Dump all database data to SQL or JSON format';
 
     public function handle(): int
@@ -17,8 +18,9 @@ class DumpDatabase extends Command
         $outputPath = $this->option('output');
         $specificTables = $this->option('tables');
 
-        if (!in_array($format, ['sql', 'json'])) {
+        if (! in_array($format, ['sql', 'json'])) {
             $this->error('Format must be "sql" or "json"');
+
             return Command::FAILURE;
         }
 
@@ -34,13 +36,13 @@ class DumpDatabase extends Command
             ");
             $tables = array_column($tables, 'tablename');
         }
-        
+
         // Filter out migration table and pivot tables if needed
         $tables = array_filter($tables, function ($table) {
-            return !in_array($table, ['migrations', 'personal_access_tokens', 'password_reset_tokens', 'failed_jobs', 'job_batches', 'cache', 'cache_locks', 'sessions']);
+            return ! in_array($table, ['migrations', 'personal_access_tokens', 'password_reset_tokens', 'failed_jobs', 'job_batches', 'cache', 'cache_locks', 'sessions']);
         });
 
-        $this->info("Dumping {$format} for " . count($tables) . " tables...");
+        $this->info("Dumping {$format} for ".count($tables).' tables...');
 
         $output = $format === 'sql' ? $this->dumpSql($tables) : $this->dumpJson($tables);
 
@@ -56,29 +58,30 @@ class DumpDatabase extends Command
 
     private function dumpSql(array $tables): string
     {
-        $sql = "-- Database dump generated at " . now()->toDateTimeString() . "\n";
-        $sql .= "-- Tables: " . implode(', ', $tables) . "\n\n";
+        $sql = '-- Database dump generated at '.now()->toDateTimeString()."\n";
+        $sql .= '-- Tables: '.implode(', ', $tables)."\n\n";
 
         foreach ($tables as $table) {
             $columns = Schema::getColumnListing($table);
-            
+
             // Skip tables with no columns
             if (empty($columns)) {
                 continue;
             }
 
             $rows = DB::table($table)->get()->toArray();
-            
+
             if (empty($rows)) {
                 $sql .= "-- Table {$table} is empty\n\n";
+
                 continue;
             }
 
             $sql .= "-- Table: {$table}\n";
             $sql .= "TRUNCATE TABLE \"{$table}\" RESTART IDENTITY CASCADE;\n\n";
 
-            $columnList = '"' . implode('", "', $columns) . '"';
-            
+            $columnList = '"'.implode('", "', $columns).'"';
+
             foreach ($rows as $row) {
                 $values = [];
                 foreach ($columns as $col) {
@@ -95,7 +98,7 @@ class DumpDatabase extends Command
                         $values[] = "'{$escaped}'";
                     }
                 }
-                $sql .= "INSERT INTO \"{$table}\" ({$columnList}) VALUES (" . implode(', ', $values) . ");\n";
+                $sql .= "INSERT INTO \"{$table}\" ({$columnList}) VALUES (".implode(', ', $values).");\n";
             }
             $sql .= "\n";
         }
@@ -112,13 +115,13 @@ class DumpDatabase extends Command
 
         foreach ($tables as $table) {
             $columns = Schema::getColumnListing($table);
-            
+
             if (empty($columns)) {
                 continue;
             }
 
             $rows = DB::table($table)->get()->toArray();
-            
+
             $data['tables'][$table] = [
                 'columns' => $columns,
                 'count' => count($rows),
@@ -127,6 +130,7 @@ class DumpDatabase extends Command
                     foreach ($columns as $col) {
                         $result[$col] = $row->$col ?? null;
                     }
+
                     return $result;
                 }, $rows),
             ];

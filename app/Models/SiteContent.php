@@ -26,7 +26,7 @@ class SiteContent extends Model
     public const SECTIONS = [
         'sambutan' => [
             'title' => 'Sambutan',
-            'subtitle' => 'Pimpinan DPM UII',
+            'subtitle' => 'Sambutan Ketua DPM UII',
             'show_units' => false,
             'show_officials' => false,
         ],

@@ -138,7 +138,7 @@
 <section class="visi-band" id="visi" aria-labelledby="h-visi">
   <div class="container">
     <span class="tag" id="h-visi">Visi</span>
-    <blockquote>Terbinanya mahasiswa Universitas Islam Indonesia menjadi <em>Insan Ulil Albab</em>, yang turut bertanggung jawab atas terwujudnya tatanan masyarakat yang diridhoi Allah SWT.</blockquote>
+    <blockquote>Terbinanya Mahasiswa Universitas Islam Indonesia Menjadi Insan Ulil Albab yang Turut Bertanggung Jawab atas Terwujudnya Tatanan Masyarakat yang Diridhai oleh Allah SWT.</blockquote>
     <div class="rule"></div>
   </div>
 </section>
@@ -149,7 +149,6 @@
     <div class="misi-head">
       <div>
         <h2 id="h-misi">Misi</h2>
-        <p>13 misi DPM UII.</p>
       </div>
       <span class="misi-count" aria-hidden="true">13</span>
     </div>

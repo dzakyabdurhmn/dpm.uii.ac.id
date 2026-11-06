@@ -121,8 +121,7 @@
       </nav>
       <span class="eyebrow">Tentang DPM UII</span>
       <h1>Sejarah Keluarga Mahasiswa UII</h1>
-      <p class="pg-desc">Perjalanan lembaga kemahasiswaan Universitas Islam Indonesia, dari Senat Mahasiswa STI hingga sistem student government yang berjalan hari ini.</p>
-      <div class="meta">
+      <p class="pg-desc">Perjalanan Lembaga Kemahasiswaan Universitas Islam Indonesia, dari Senat Mahasiswa STI hingga Sistem Student Government yang Berjalan Hari Ini.</p>      <div class="meta">
         <span><small>STI berdiri</small> 1945</span>
         <span><small>KM UII lahir</small> 21 Sep 1950</span>
       </div>

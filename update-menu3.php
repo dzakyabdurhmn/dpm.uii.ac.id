@@ -1,13 +1,14 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
-$app = require_once __DIR__ . '/bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$app = require_once __DIR__.'/bootstrap/app.php';
+$kernel = $app->make(Kernel::class);
 $kernel->bootstrap();
 
 use App\Models\Menu;
 use App\Models\MenuItem;
+use Illuminate\Contracts\Console\Kernel;
 
 $menu = Menu::where('location', 'header')->first();
 
@@ -33,7 +34,7 @@ $tree = [
             ['label' => 'Mentari', 'url' => '/unit/mentari', 'description' => 'Media & Kesekretariatan'],
             ['label' => 'Baleg', 'url' => '/unit/badan-legislasi', 'description' => 'Badan Legislasi'],
             ['label' => 'Bawas', 'url' => '/unit/badan-pengawasan', 'description' => 'Badan Pengawasan'],
-            ['label' => 'Bosaj', 'url' => '/unit/badan-kerjasama-advokasi-dan-jaringan', 'description' => 'Badan Kerjasama, Advokasi & Jaringan'],
+            ['label' => 'Bksaj', 'url' => '/unit/badan-kerjasama-advokasi-dan-jaringan', 'description' => 'Badan Kerjasama, Advokasi & Jaringan'],
             ['label' => 'BAK', 'url' => '/unit/badan-audit-kemahasiswaan', 'description' => 'Badan Audit Kemahasiswaan'],
             ['label' => 'BPA', 'url' => '/unit/badan-pengelola-aset', 'description' => 'Badan Pengelola Aset'],
         ],
@@ -83,7 +84,8 @@ $tree = [
     ],
 ];
 
-function createItems($menu, $items, $parentId = null) {
+function createItems($menu, $items, $parentId = null)
+{
     foreach ($items as $i => $item) {
         $c = $menu->items()->create([
             'menu_id' => $menu->id,
@@ -94,11 +96,11 @@ function createItems($menu, $items, $parentId = null) {
             'sort_order' => $i + 1,
             'is_active' => true,
         ]);
-        if (!empty($item['children'])) {
+        if (! empty($item['children'])) {
             createItems($menu, $item['children'], $c->id);
         }
     }
 }
 
 createItems($menu, $tree);
-echo "Menu updated! Now " . MenuItem::where('menu_id', $menu->id)->whereNull('parent_id')->count() . " top-level items\n";
+echo 'Menu updated! Now '.MenuItem::where('menu_id', $menu->id)->whereNull('parent_id')->count()." top-level items\n";

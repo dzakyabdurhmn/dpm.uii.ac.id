@@ -29,6 +29,10 @@
         .news-pagination .page-link { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 38px; padding: 0 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.8); font-size: 12px; }
         .news-pagination .page-item.active .page-link { border-color: rgba(255,255,255,.52); color: #fff; }
         .news-pagination .page-link:hover { border-color: rgba(255,255,255,.38); color: #fff; }
+        .news-filter { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+        .news-filter a { display: inline-flex; align-items: center; padding: 8px 16px; border: 1px solid rgba(255,255,255,.18); border-radius: 999px; color: rgba(255,255,255,.82); font-size: 13px; font-weight: 600; text-decoration: none; transition: all .2s; }
+        .news-filter a:hover { border-color: rgba(255,255,255,.42); color: #fff; background: rgba(255,255,255,.06); }
+        .news-filter a.active { border-color: #fff; color: #fff; background: rgba(255,255,255,.12); }
         @media (max-width: 980px) { .news-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
         @media (max-width: 640px) { .news-wrap { width: min(100% - 28px, 1180px); } .news-hero-inner { padding: 48px 0 46px; } .news-section { padding: 34px 0 52px; } .news-grid { grid-template-columns: 1fr; } }
     </style>
@@ -44,6 +48,15 @@
 
         <section class="news-section">
             <div class="news-wrap">
+                @if (isset($socializationTypes) && isset($selectedType))
+                    <div class="news-filter">
+                        <a href="{{ url()->current() }}" class="{{ !$selectedType ? 'active' : '' }}">Semua</a>
+                        @foreach ($socializationTypes as $key => $label)
+                            <a href="{{ url()->current() . '?jenis=' . $key }}" class="{{ $selectedType === $key ? 'active' : '' }}">{{ $label }}</a>
+                        @endforeach
+                    </div>
+                @endif
+
                 @if ($posts->isEmpty())
                     <div class="news-empty">Belum ada berita yang dipublikasikan.</div>
                 @else
@@ -61,6 +74,9 @@
                                     <div class="news-card-meta">
                                         @if ($post->published_at)<span>{{ $post->published_at->translatedFormat('d F Y') }}</span>@endif
                                         @if ($post->category)<span>{{ $post->category->name }}</span>@endif
+                                        @if ($post->type && $post->isSocialization())
+                                            <span>{{ $post->type_label }}</span>
+                                        @endif
                                     </div>
                                     <a class="news-card-title" href="{{ $post->url }}">{{ $post->title }}</a>
                                     @if ($post->excerpt)<p class="news-card-excerpt">{{ $post->excerpt }}</p>@endif

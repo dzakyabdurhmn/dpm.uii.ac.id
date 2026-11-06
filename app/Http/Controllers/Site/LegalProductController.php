@@ -125,6 +125,7 @@ class LegalProductController extends Controller
         if (is_array($value)) {
             return $value[0] ?? null;
         }
+
         return $value !== '' ? $value : null;
     }
 }

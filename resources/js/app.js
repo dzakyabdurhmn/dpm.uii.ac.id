@@ -145,6 +145,24 @@ document.querySelectorAll('[data-media-picker]').forEach((picker) => {
     render(input.value);
 });
 
+/* ------------------------------------------------- Sosialisasi type toggle */
+
+document.querySelectorAll('[data-socialization-type]').forEach((wrapper) => {
+    const categorySelect = document.querySelector('[data-post-category-select]');
+    const categoryId = wrapper.dataset.categoryId;
+
+    if (!categorySelect || !categoryId) {
+        return;
+    }
+
+    const sync = () => {
+        wrapper.classList.toggle('hidden', categorySelect.value !== categoryId);
+    };
+
+    categorySelect.addEventListener('change', sync);
+    sync();
+});
+
 /* --------------------------------------------------------- Misc helpers */
 
 document.querySelectorAll('[data-confirm]').forEach((form) => {

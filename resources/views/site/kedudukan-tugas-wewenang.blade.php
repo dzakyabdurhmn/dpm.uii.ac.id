@@ -175,7 +175,7 @@
 <section class="statement">
   <div class="container">
     <span class="eyebrow">Kedudukan DPM UII</span>
-    <blockquote>Perwakilan seluruh mahasiswa, memegang kekuasaan tertinggi di tingkat universitas.</blockquote>
+    <blockquote>Perwakilan Seluruh Mahasiswa dan Memegang Kekuasaan Tertinggi di Tingkat Universitas.</blockquote>
   </div>
 </section>
 
@@ -267,7 +267,7 @@
       <ol class="nlist">
         <li><b>01</b><span>Menetapkan alat kelengkapan dewan yang dipilih dari dan oleh anggota.</span></li>
         <li><b>02</b><span>Membentuk Organ Pekerja.</span></li>
-        <li><b>03</b><span>Membuat dan menetapkan PDPM-U.</span></li>
+        <li><b>03</b><span>Membuat dan menetapkan PDPM UII.</span></li>
         <li><b>04</b><span>Menyusun, membahas, dan mengesahkan PKM UII atas persetujuan Ketua LEM UII.</span></li>
         <li><b>05</b><span>Mengusulkan dan memutuskan perubahan dalam Peraturan Dasar KM UII sebagaimana dimaksud pada Pasal 56 PDKM UII.</span></li>
       </ol>
@@ -298,7 +298,7 @@
         <div class="law reveal d2">
           <div class="law-t">
             <small>Peraturan DPM</small>
-            <strong>Peraturan DPM UII (PDPM-U)</strong>
+            <strong>Peraturan DPM UII (PDPM UII)</strong>
           </div>
           <div class="law-actions">
             <a class="btn sm" href="{{ route('legal-products.type', 'pdpm') }}">

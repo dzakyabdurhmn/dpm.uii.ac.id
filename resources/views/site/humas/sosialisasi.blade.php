@@ -3,276 +3,257 @@
 @section('title', 'Sosialisasi Peraturan — '.($siteSettings['site_name'] ?? 'DPM UII'))
 @section('meta_description', 'Panduan mudah memahami peraturan KM UII: PDKM, GBHKM, PKM, dan PDPM untuk mahasiswa UII.')
 
-@section('content')
+@push('styles')
 <style>
-    .sosialisasi-page { color: rgba(255,255,255,.85); }
-    .sosialisasi-hero { background: linear-gradient(135deg, #002A5A 0%, #001E43 55%, #001633 100%); }
-    .sosialisasi-wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
-    .sosialisasi-hero-inner { padding: 68px 0 64px; position: relative; overflow: hidden; }
-    .sosialisasi-hero-inner::before {
-        content: '';
-        position: absolute; inset: 0;
-        background: repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 1px, transparent 1px 26px);
-        pointer-events: none;
-    }
-    .sosialisasi-eyebrow { margin: 0 0 10px; color: rgba(255,255,255,.72); font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
-    .sosialisasi-hero h1 { margin: 0; color: #fff; font-size: clamp(30px, 4.6vw, 44px); font-weight: 800; letter-spacing: -.03em; }
-    .sosialisasi-hero-copy { max-width: 720px; margin: 14px 0 0; color: rgba(255,255,255,.82); font-size: 15px; line-height: 1.85; }
+  /* ============ SOSIALISASI PERATURAN ============ */
+  .sos-page [id] { scroll-margin-top: 110px; }
+  .sos-page :focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
 
-    .sosialisasi-section { padding: 56px 0 70px; background: #001E43; }
+  /* hero */
+  .sos-page .pg-head { position: relative; overflow: hidden; border-bottom: 1px solid var(--b-default); padding: 56px 0 64px;
+    background: linear-gradient(135deg, #002A5A 0%, #001E43 55%, #001633 100%); }
+  .sos-page .pg-head::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 28px); }
+  .sos-page .hero-grid { position: relative; display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; align-items: center; }
+  .sos-page .crumb { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; font-size: 12.5px; color: var(--t-cap); }
+  .sos-page .crumb a { transition: color .2s; }
+  .sos-page .crumb a:hover { color: var(--white); }
+  .sos-page .crumb span[aria-hidden] { opacity: .5; }
+  .sos-page .crumb span[aria-current] { color: var(--white); font-weight: 600; }
+  .sos-page .pg-head h1 { font-size: clamp(34px, 5.6vw, 62px); letter-spacing: -1.6px; line-height: 1.06; margin-bottom: 18px; }
+  .sos-page .pg-desc { max-width: 620px; margin-bottom: 0; font-size: 16px; color: var(--t-sub); }
+  .sos-page .hero-art { display: flex; justify-content: flex-end; }
+  .sos-page .hero-art svg { width: min(100%, 420px); height: auto; }
 
-    /* INTRO CARD */
-    .intro-card {
-        background: linear-gradient(145deg, #001A3A 0%, #001633 100%);
-        border: 1px solid rgba(255,255,255,.08);
-        border-radius: 16px;
-        padding: 40px;
-        margin-bottom: 48px;
-    }
-    .intro-card h2 { margin: 0 0 16px; color: #fff; font-size: 24px; font-weight: 800; }
-    .intro-card p { margin: 0; color: rgba(255,255,255,.78); line-height: 1.9; font-size: 15.5px; }
-    .intro-card .highlight { color: #4ade80; font-weight: 700; }
+  /* intro */
+  .sos-page .intro { padding: 64px 0; border-bottom: 1px solid var(--b-default); background: var(--navy-card); }
+  .sos-page .intro .container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; align-items: start; }
+  .sos-page .intro h2 { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: -1px; line-height: 1.2; }
+  .sos-page .intro p { font-size: 16px; line-height: 1.9; color: var(--t-sub); }
+  .sos-page .intro p + p { margin-top: 14px; }
+  .sos-page .intro strong { color: var(--white); }
+  .sos-page .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .sos-page .chips a { padding: 7px 14px; border: 1px solid var(--b-btn); border-radius: 100px; font-size: 13px; font-weight: 600; transition: background .2s, border-color .2s; }
+  .sos-page .chips a:hover { background: var(--navy-hover); border-color: var(--b-btn-hover); }
 
-    /* REGULATION CARDS */
-    .regs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px; }
-    .reg-card {
-        background: linear-gradient(145deg, #001A3A 0%, #001633 100%);
-        border: 1px solid rgba(255,255,255,.08);
-        border-radius: 16px;
-        overflow: hidden;
-        transition: border-color .2s, box-shadow .2s, transform .2s;
-        display: flex; flex-direction: column;
-    }
-    .reg-card:hover {
-        border-color: rgba(255,255,255,.2);
-        box-shadow: 0 16px 48px rgba(0,0,0,.35);
-        transform: translateY(-4px);
-    }
-    .reg-card-header {
-        padding: 28px 32px 20px;
-        border-bottom: 1px solid rgba(255,255,255,.08);
-        background: rgba(255,255,255,.02);
-        position: relative;
-    }
-    .reg-card-header::before {
-        content: '';
-        position: absolute; top: 0; left: 0; right: 0; height: 4px;
-        background: var(--reg-color);
-    }
-    .reg-type {
-        display: inline-block;
-        font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
-        color: rgba(255,255,255,.5); margin-bottom: 6px;
-    }
-    .reg-card-header h2 { margin: 0; color: #fff; font-size: 22px; font-weight: 800; letter-spacing: -.01em; }
-    .reg-card-header .full-name { margin: 4px 0 0; color: rgba(255,255,255,.6); font-size: 13px; font-weight: 500; }
+  /* sections */
+  .sos-page .sec { padding: 72px 0; border-bottom: 1px solid var(--b-default); }
+  .sos-page .sec-h { margin-bottom: 32px; }
+  .sos-page .sec-h h2 { font-size: clamp(26px, 3.2vw, 38px); letter-spacing: -.9px; }
+  .sos-page .sec-h p { margin-top: 8px; font-size: 14.5px; color: var(--t-cap); }
 
-    .reg-card-body { padding: 24px 32px 32px; flex: 1; display: flex; flex-direction: column; }
-    .reg-desc { color: rgba(255,255,255,.78); font-size: 14.5px; line-height: 1.85; margin-bottom: 20px; }
-    .reg-simple {
-        background: rgba(255,255,255,.03);
-        border: 1px solid rgba(255,255,255,.08);
-        border-left: 3px solid var(--reg-color);
-        border-radius: 8px;
-        padding: 18px 20px;
-        margin-bottom: 24px;
-        font-size: 14px; line-height: 1.8;
-        color: rgba(255,255,255,.85);
-    }
-    .reg-simple strong { color: var(--reg-color); }
+  /* kartu peraturan */
+  .sos-page .rgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .sos-page .rc { display: flex; flex-direction: column; border: 1px solid var(--b-btn); border-radius: 12px; background: var(--navy-card); overflow: hidden; transition: border-color .2s, box-shadow .2s; }
+  .sos-page .rc:hover, .sos-page .rc:target { border-color: var(--b-btn-hover); box-shadow: var(--sh-md); }
+  .sos-page .rc-h { position: relative; display: flex; gap: 18px; align-items: center; padding: 26px 28px; border-bottom: 1px solid var(--b-default); background: linear-gradient(135deg, #002A5A 0%, #001A3A 75%); }
+  .sos-page .rc-no { flex: none; width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid var(--b-btn); border-radius: 8px; font-family: 'Wix Madefor Display', sans-serif; font-size: 20px; font-weight: 800; }
+  .sos-page .rc-t { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: var(--t-cap); }
+  .sos-page .rc-h h3 { font-size: 28px; letter-spacing: -.8px; line-height: 1.1; }
+  .sos-page .rc-h p { margin-top: 4px; font-size: 13.5px; color: var(--t-sub); }
+  .sos-page .rc-b { display: flex; flex-direction: column; flex: 1; padding: 24px 28px 28px; }
+  .sos-page .rc-d { font-size: 15px; line-height: 1.8; color: var(--t-body); }
+  .sos-page .rc-a { margin: 18px 0 22px; padding: 16px 20px; border-left: 2px solid var(--b-btn-hover); border-radius: 0 8px 8px 0; background: rgba(255,255,255,.04); font-size: 14.5px; line-height: 1.75; }
+  .sos-page .rc-b h4 { margin-bottom: 10px; font-size: 11.5px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--t-cap); }
+  .sos-page .rc-b ul { list-style: none; padding: 0; margin: 0 0 26px; display: grid; gap: 10px; }
+  .sos-page .rc-b li { position: relative; padding-left: 22px; font-size: 14px; line-height: 1.7; color: var(--t-body); }
+  .sos-page .rc-b li::before { content: ''; position: absolute; left: 2px; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: var(--white); opacity: .7; }
+  .sos-page .rc-l { margin-top: auto; width: 100%; justify-content: center; gap: 10px; }
+  .sos-page .rc-l svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-    .reg-points { margin-bottom: 24px; }
-    .reg-points h3 { margin: 0 0 12px; color: #fff; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
-    .reg-points ul { margin: 0; padding-left: 0; list-style: none; }
-    .reg-points li {
-        position: relative; padding-left: 24px; margin: 10px 0;
-        color: rgba(255,255,255,.82); line-height: 1.75; font-size: 13.5px;
-    }
-    .reg-points li::before {
-        content: ''; position: absolute; left: 0; top: 8px;
-        width: 7px; height: 7px; border-radius: 50%;
-        background: var(--reg-color); opacity: .8;
-    }
+  /* hierarki */
+  .sos-page .hier { background: var(--navy-card); }
+  .sos-page .steps { list-style: none; padding: 0; margin: 0 auto; max-width: 900px; display: grid; gap: 14px; }
+  .sos-page .hs { display: grid; grid-template-columns: 110px 1fr; gap: 20px; align-items: center; padding: 20px 24px; margin-left: calc(var(--i) * 36px); border: 1px solid var(--b-btn); border-radius: 12px; background: var(--navy); position: relative; }
+  .sos-page .hs:not(:last-child)::after { content: ''; position: absolute; left: 54px; bottom: -15px; width: 1px; height: 15px; background: var(--b-btn-hover); }
+  .sos-page .hs-lv { font-size: 11px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: var(--t-cap); }
+  .sos-page .hs h3 { font-size: 19px; }
+  .sos-page .hs h3 small { margin-left: 8px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; color: var(--t-cap); }
+  .sos-page .hs p { margin-top: 4px; font-size: 14px; line-height: 1.7; color: var(--t-sub); }
+  .sos-page .golden { max-width: 900px; margin: 28px auto 0; padding: 22px 26px; text-align: center; border: 1px solid var(--b-btn); border-radius: 12px; }
+  .sos-page .golden b { font-family: 'Wix Madefor Display', sans-serif; font-size: 17px; }
+  .sos-page .golden p { margin-top: 6px; font-size: 14.5px; color: var(--t-sub); }
+  .sos-page .golden code { display: block; margin-top: 12px; font-size: 13px; letter-spacing: 1px; color: var(--t-cap); }
 
-    .reg-link {
-        display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-        width: 100%; height: 44px;
-        border-radius: 10px; background: transparent; border: 2px solid var(--reg-color); color: var(--reg-color);
-        font-size: 13.5px; font-weight: 700; letter-spacing: .02em; text-decoration: none;
-        transition: all .2s;
-    }
-    .reg-link:hover { background: var(--reg-bg); transform: translateY(-2px); box-shadow: 0 8px 24px var(--reg-shadow); }
-    .reg-link svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+  /* faq */
+  .sos-page .faq { max-width: 900px; display: grid; gap: 10px; }
+  .sos-page .faq details { border: 1px solid var(--b-btn); border-radius: 8px; background: var(--navy-card); }
+  .sos-page .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 22px; font-family: 'Wix Madefor Display', sans-serif; font-size: 16px; font-weight: 700; }
+  .sos-page .faq summary::-webkit-details-marker { display: none; }
+  .sos-page .faq summary:hover { background: var(--bg-hover); }
+  .sos-page .faq summary i { flex: none; width: 10px; height: 10px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform .2s; }
+  .sos-page .faq details[open] summary i { transform: rotate(225deg); }
+  .sos-page .faq details > div { padding: 0 22px 20px; font-size: 15px; line-height: 1.8; color: var(--t-body); }
 
-    /* HIERARCHY VISUAL */
-    .hierarchy-section { margin-top: 56px; }
-    .hierarchy-title { margin: 0 0 28px; color: #fff; font-size: 24px; font-weight: 800; text-align: center; }
-    .hierarchy-flow {
-        display: flex; flex-direction: column; gap: 16px; align-items: center;
-    }
-    .hierarchy-item {
-        display: flex; align-items: center; gap: 16px; width: 100%; max-width: 800px;
-        padding: 20px 24px;
-        background: linear-gradient(145deg, #001A3A 0%, #001633 100%);
-        border: 1px solid rgba(255,255,255,.08);
-        border-radius: 12px;
-        transition: border-color .2s, transform .2s;
-    }
-    .hierarchy-item:hover { border-color: rgba(255,255,255,.15); transform: translateX(4px); }
-    .hierarchy-level {
-        width: 48px; height: 48px; border-radius: 10px;
-        display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0;
-        font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
-        color: #fff;
-    }
-    .hierarchy-content { flex: 1; }
-    .hierarchy-content h3 { margin: 0 0 6px; color: #fff; font-size: 16px; font-weight: 800; }
-    .hierarchy-content p { margin: 0; color: rgba(255,255,255,.65); font-size: 13.5px; line-height: 1.7; }
-    .hierarchy-arrow { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.05); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.4); margin: 0 0 8px; }
-    .hierarchy-arrow svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.5; }
-
-    @media (max-width: 720px) {
-        .sosialisasi-wrap { width: min(100% - 28px, 1180px); }
-        .sosialisasi-hero-inner { padding: 48px 0 46px; }
-        .sosialisasi-section { padding: 40px 0 52px; }
-        .intro-card { padding: 28px; }
-        .reg-card-header { padding: 24px; }
-        .reg-card-body { padding: 20px 24px 28px; }
-        .hierarchy-item { flex-direction: column; text-align: center; gap: 12px; }
-        .hierarchy-arrow { transform: rotate(90deg); }
-    }
+  @media (max-width: 1080px) {
+    .sos-page .hero-grid { grid-template-columns: 1fr; }
+    .sos-page .hero-art { display: none; }
+    .sos-page .intro .container { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    .sos-page .rgrid { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .sos-page .pg-head { padding: 36px 0 44px; }
+    .sos-page .sec, .sos-page .intro { padding: 48px 0; }
+    .sos-page .rc-h, .sos-page .rc-b { padding-left: 20px; padding-right: 20px; }
+    .sos-page .hs { grid-template-columns: minmax(0, 1fr); gap: 6px; margin-left: calc(var(--i) * 12px); }
+    .sos-page .hs:not(:last-child)::after { left: 30px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .sos-page * { transition: none !important; } }
 </style>
+@endpush
 
-<div class="sosialisasi-page">
-    <section class="sosialisasi-hero">
-        <div class="sosialisasi-wrap sosialisasi-hero-inner">
-            <p class="sosialisasi-eyebrow">Humas DPM UII</p>
-            <h1>Sosialisasi Peraturan</h1>
-            <p class="sosialisasi-hero-copy">
-                Memahami peraturan KM UII tidak harus rumit. Di sini kami jelaskan PDKM, GBHKM, PKM, dan PDPM dengan bahasa yang ringan & mudah dicerna untuk semua mahasiswa UII.
-            </p>
+@section('content')
+<div class="sos-page">
+  <!-- ================= PAGE HEADER ================= -->
+  <section class="pg-head">
+    <div class="container hero-grid">
+      <div>
+        <nav class="crumb" aria-label="Breadcrumb">
+          <a href="{{ route('home') }}">Beranda</a><span aria-hidden="true">/</span>
+          <span aria-current="page">Sosialisasi Peraturan</span>
+        </nav>
+        <span class="eyebrow">Humas DPM UII</span>
+        <h1>Sosialisasi Peraturan</h1>
+        <p class="pg-desc">Memahami peraturan KM UII tidak harus rumit. Di sini kami jelaskan PDKM, GBHKM, PKM, dan PDPM dengan bahasa yang ringan dan mudah dicerna untuk semua mahasiswa UII.</p>
+      </div>
+      <div class="hero-art">
+        <svg viewBox="0 0 460 340" role="img" aria-label="Empat tingkat peraturan KM UII">
+          <g fill="none" stroke="#fff" stroke-linejoin="round">
+            <g stroke-opacity=".9"><path d="M230 28 L330 62 L230 96 L130 62 Z" fill="#002451" stroke-width="1.6"/></g>
+            <path d="M130 62 V84 L230 118 L330 84 V62" fill="#001A3A" stroke-opacity=".7" stroke-width="1.4"/>
+            <path d="M230 96 V118" stroke-opacity=".4"/>
+            <path d="M230 112 L350 152 L230 192 L110 152 Z" fill="#001A3A" stroke-opacity=".7" stroke-width="1.4"/>
+            <path d="M110 152 V172 L230 212 L350 172 V152" fill="#001633" stroke-opacity=".5" stroke-width="1.2"/>
+            <path d="M230 206 L370 250 L230 294 L90 250 Z" fill="#001633" stroke-opacity=".5" stroke-width="1.2"/>
+            <path d="M90 250 V268 L230 312 L370 268 V250" fill="#001E43" stroke-opacity=".35" stroke-width="1.1"/>
+            <path d="M410 40 V300" stroke-opacity=".25" stroke-dasharray="3 6"/>
+            <path d="M404 290 L410 300 L416 290" stroke-opacity=".4"/>
+          </g>
+          <g fill="#fff" font-family="Wix Madefor Display, Inter, sans-serif" font-weight="800" text-anchor="middle" font-size="13" letter-spacing="1.5">
+            <text x="230" y="66" fill-opacity=".95">PDKM</text>
+            <text x="230" y="157" fill-opacity=".8">GBHKM</text>
+            <text x="230" y="254" fill-opacity=".62" font-size="13">PKM · PDPM</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PENGANTAR ================= -->
+  <section class="intro" id="pengantar">
+    <div class="container">
+      <div>
+        <h2>Kenapa perlu tahu peraturan?</h2>
+        <div class="chips">
+          <a href="#pdkm">PDKM</a><a href="#gbhkm">GBHKM</a><a href="#pkm">PKM</a><a href="#pdpm">PDPM</a><a href="#hierarki">Hierarki</a><a href="#faq">Tanya jawab</a>
         </div>
-    </section>
+      </div>
+      <div>
+        <p>Peraturan bukan sekadar “buku aturan kaku”, tetapi <strong>pedoman hidup bersama</strong> di KM UII. Tahu peraturan berarti kamu tahu <strong>hak</strong>, <strong>kewajiban</strong>, dan <strong>cara berorganisasi</strong> yang benar.</p>
+        <p>Di halaman ini kami pecah empat peraturan utama KM UII dengan bahasa sehari-hari, lengkap dengan analogi dan poin penting yang perlu diketahui mahasiswa UII.</p>
+      </div>
+    </div>
+  </section>
 
-    <section class="sosialisasi-section">
-        <div class="sosialisasi-wrap">
-            {{-- INTRO --}}
-            <article class="intro-card">
-                <h2>Kenapa Perlu Tahu Peraturan?</h2>
-                <p>
-                    Peraturan bukan cuma "buku aturan kaku" — tapi <span class="highlight">pedoman hidup bersama</span> di KM UII. 
-                    Tahu peraturan berarti kamu tahu <strong>hak</strong> kamu, <strong>kewajiban</strong> kamu, dan <strong>cara</strong> berorganisasi yang benar.
-                </p>
-                <p style="margin-top: 16px;">
-                    Di halaman ini kami pecah 4 peraturan utama KM UII dengan bahasa sehari-hari, 
-                    lengkap analogi & poin-poin penting yang <em>wajib</em> diketahui mahasiswa UII.
-                </p>
-            </article>
-
-            {{-- REGULATION CARDS --}}
-            <div class="regs-grid">
-                @foreach ($regulations as $reg)
-                    <article class="reg-card" style="--reg-color: {{ $reg['color'] }}; --reg-bg: {{ $reg['color'] }}20; --reg-shadow: {{ $reg['color'] }}40;">
-                        <header class="reg-card-header">
-                            <span class="reg-type">{{ $reg['type'] ?? 'Peraturan' }}</span>
-                            <h2>{{ $reg['title'] }}</h2>
-                            <p class="full-name">{{ $reg['full'] }}</p>
-                        </header>
-                        <div class="reg-card-body">
-                            <p class="reg-desc">{{ $reg['description'] }}</p>
-
-                            <div class="reg-simple">
-                                {{ $reg['simpleExplanation'] }}
-                            </div>
-
-                            <div class="reg-points">
-                                <h3>Poin Penting</h3>
-                                @if (is_array($reg['keyPoints']))
-                                    <ul>
-                                        @foreach ($reg['keyPoints'] as $point)
-                                            <li>{{ $point }}</li>
-                                        @endforeach
-                                    </ul>
-                                @else
-                                    <ul><li>{{ $reg['keyPoints'] }}</li></ul>
-                                @endif
-                            </div>
-
-                            <a href="{{ route('legal-products.type', $reg['slug']) }}" class="reg-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>
-                                <span>Lihat Arsip Lengkap</span>
-                            </a>
-                        </div>
-                    </article>
+  <!-- ================= EMPAT PERATURAN ================= -->
+  <section class="sec" id="peraturan">
+    <div class="container">
+      <div class="sec-h">
+        <h2>Empat peraturan utama</h2>
+        <p>Urut dari tingkat tertinggi. Tiap kartu menuju arsip lengkapnya.</p>
+      </div>
+      <div class="rgrid">
+        @foreach ($regulations as $reg)
+          <article class="rc" id="{{ $reg['slug'] }}">
+            <header class="rc-h">
+              <span class="rc-no" aria-hidden="true">{{ $loop->iteration }}</span>
+              <div>
+                <span class="rc-t">{{ $reg['type'] ?? 'Peraturan' }}</span>
+                <h3>{{ $reg['title'] }}</h3>
+                <p>{{ $reg['full'] }}</p>
+              </div>
+            </header>
+            <div class="rc-b">
+              <p class="rc-d">{{ $reg['description'] }}</p>
+              <p class="rc-a">{{ $reg['simpleExplanation'] }}</p>
+              <h4>Poin penting</h4>
+              <ul>
+                @foreach ((array) $reg['keyPoints'] as $point)
+                  <li>{{ $point }}</li>
                 @endforeach
+              </ul>
+              <a class="btn rc-l" href="{{ route('legal-products.type', $reg['slug']) }}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>
+                <span>Lihat arsip lengkap</span>
+              </a>
             </div>
+          </article>
+        @endforeach
+      </div>
+    </div>
+  </section>
 
-            {{-- HIERARCHY --}}
-            <section class="hierarchy-section">
-                <h2 class="hierarchy-title">Hierarki Peraturan KM UII</h2>
-                <div class="hierarchy-flow">
-                    <article class="hierarchy-item" style="border-left: 4px solid #4ade80;">
-                        <div class="hierarchy-level" style="background: linear-gradient(135deg, #4ade80, #22c55e);">LEVEL 1</div>
-                        <div class="hierarchy-content">
-                            <h3>PDKM — Konstitusi</h3>
-                            <p>Dasar hukum tertinggi, mengatur asas & struktur fundamental KM UII. Sulit diubah (butuh 2/3 DPM).</p>
-                        </div>
-                    </article>
-                    <div class="hierarchy-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
-                    <article class="hierarchy-item" style="border-left: 4px solid #fbbf24;">
-                        <div class="hierarchy-level" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">LEVEL 2</div>
-                        <div class="hierarchy-content">
-                            <h3>GBHKM — Arah Kebijakan</h3>
-                            <p>Roadmap periode kepengurusan: visi, misi, strategi 5 tahun. Ditetapkan awal periode.</p>
-                        </div>
-                    </article>
-                    <div class="hierarchy-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
-                    <article class="hierarchy-item" style="border-left: 4px solid #60a5fa;">
-                        <div class="hierarchy-level" style="background: linear-gradient(135deg, #60a5fa, #3b82f6);">LEVEL 3</div>
-                        <div class="hierarchy-content">
-                            <h3>PKM — Peraturan Teknis Tahunan</h3>
-                            <p>Mengatur detail teknis: dana, kegiatan, pemilu, organisasi. Bernomor & bertahun, bisa diubah setiap tahun.</p>
-                        </div>
-                    </article>
-                    <div class="hierarchy-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
-                    <article class="hierarchy-item" style="border-left: 4px solid #f472b6;">
-                        <div class="hierarchy-level" style="background: linear-gradient(135deg, #f472b6, #ec4899);">LEVEL 4</div>
-                        <div class="hierarchy-content">
-                            <h3>PDPM — Aturan Internal DPM</h3>
-                            <p>Tata tertib sidang, mekanisme legislasi, komisus, pengawasan. Khusus internal DPM.</p>
-                        </div>
-                    </article>
-                </div>
+  <!-- ================= HIERARKI ================= -->
+  <section class="sec hier" id="hierarki">
+    <div class="container">
+      <div class="sec-h">
+        <h2>Hierarki peraturan KM UII</h2>
+        <p>Semakin ke bawah, semakin teknis.</p>
+      </div>
+      <ol class="steps">
+        <li class="hs" style="--i:0">
+          <span class="hs-lv">Tingkat 1</span>
+          <div><h3>PDKM <small>Konstitusi</small></h3><p>Dasar hukum tertinggi. Mengatur asas dan struktur fundamental KM UII.</p></div>
+        </li>
+        <li class="hs" style="--i:1">
+          <span class="hs-lv">Tingkat 2</span>
+          <div><h3>GBHKM <small>Arah kebijakan</small></h3><p>Peta jalan gerak organisasi dan acuan penyusunan program kerja.</p></div>
+        </li>
+        <li class="hs" style="--i:2">
+          <span class="hs-lv">Tingkat 3</span>
+          <div><h3>PKM <small>Peraturan teknis</small></h3><p>Mengatur detail teknis yang mengikat anggota dan lembaga: dana, kegiatan, pemilu, organisasi.</p></div>
+        </li>
+        <li class="hs" style="--i:3">
+          <span class="hs-lv">Tingkat 4</span>
+          <div><h3>PDPM <small>Aturan internal DPM</small></h3><p>Tata tertib sidang dan pelaksanaan fungsi legislasi, anggaran, dan pengawasan DPM UII.</p></div>
+        </li>
+      </ol>
+      <div class="golden">
+        <b>Aturan emas</b>
+        <p>Peraturan di tingkat bawah tidak boleh bertentangan dengan tingkat di atasnya.</p>
+        <code>PDKM &gt; GBHKM &gt; PKM &gt; PDPM</code>
+      </div>
+    </div>
+  </section>
 
-                <div style="margin-top: 32px; padding: 24px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; text-align: center;">
-                    <p style="margin: 0 0 12px; color: rgba(255,255,255,.8); font-size: 14px;">
-                        <strong style="color: #fff;">Aturan emas:</strong> Peraturan level bawah <em>tidak boleh bertentangan</em> dengan level atasnya.
-                    </p>
-                    <p style="margin: 0; color: rgba(255,255,255,.6); font-size: 13px;">
-                        PDKM > GBHKM > PKM > PDPM
-                    </p>
-                </div>
-            </section>
-
-            {{-- FAQ QUICK --}}
-            <section style="margin-top: 48px;">
-                <h2 style="margin: 0 0 24px; color: #fff; font-size: 22px; font-weight: 800; text-align: center;">Tanya Jawab Cepat</h2>
-                <div class="regs-grid">
-                    @foreach ([
-                        ['q' => 'Mana yang paling atas?', 'a' => '<strong>PDKM.</strong> Dia konstitusi KM UII. Semua peraturan lain harus turun dari PDKM.'],
-                        ['q' => 'PKM sama PDPM bedanya apa?', 'a' => '<strong>PKM</strong> = untuk seluruh KM UII (universitas + fakultas). <strong>PDPM</strong> = khusus internal DPM Pusat (tata tertib sidang, mekanisme legislasi, dll).'],
-                        ['q' => 'GBHKM berubah tiap periode?', 'a' => '<strong>Iya.</strong> GBHKM dibuat baru tiap periode kepengurusan DPM (5 tahun). Isinya visi-misi & strategi periode itu.'],
-                        ['q' => 'Peraturan mana yang paling sering dibuka mahasiswa?', 'a' => '<strong>PKM.</strong> Karena PKM yang ngatur hal teknis dekat mahasiswa: dana, kegiatan, pemilu, UKM, dll.'],
-                    ] as $faq)
-                        <div style="background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 20px;">
-                            <p style="margin: 0 0 8px; color: #4ade80; font-weight: 700; font-size: 14px;">Q: {{ $faq['q'] }}</p>
-                            <p style="margin: 0; color: rgba(255,255,255,.8); line-height: 1.8;">{{ $faq['a'] }}</p>
-                        </div>
-                    @endforeach
-                </div>
-            </section>
-        </div>
-    </section>
+  <!-- ================= FAQ ================= -->
+  <section class="sec" id="faq">
+    <div class="container">
+      <div class="sec-h">
+        <h2>Tanya jawab cepat</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Mana yang paling atas?<i aria-hidden="true"></i></summary>
+          <div><strong>PDKM.</strong> Ia konstitusi KM UII, dan semua peraturan lain harus turun dari PDKM.</div>
+        </details>
+        <details>
+          <summary>PKM dan PDPM bedanya apa?<i aria-hidden="true"></i></summary>
+          <div><strong>PKM</strong> mengikat seluruh KM UII dan dibentuk DPM UII bersama Ketua LEM UII. <strong>PDPM</strong> dibuat dan disahkan DPM UII sendiri, untuk mengatur urusan internal DPM.</div>
+        </details>
+        <details>
+          <summary>Apakah GBHKM berubah tiap periode?<i aria-hidden="true"></i></summary>
+          <div>GBHKM disusun dan disahkan DPM UII lewat Sidang Umum atau Sidang Istimewa KM UII. Periodesasi kepengurusan DPM dan LEM sendiri 12 bulan sejak Sidang Umum.</div>
+        </details>
+        <details>
+          <summary>Peraturan mana yang paling sering dibuka mahasiswa?<i aria-hidden="true"></i></summary>
+          <div><strong>PKM.</strong> Ia mengatur hal teknis yang dekat dengan mahasiswa, seperti dana, kegiatan, dan pemilu.</div>
+        </details>
+        <details>
+          <summary>Bagaimana jika sebuah PKM diduga bertentangan dengan PDKM?<i aria-hidden="true"></i></summary>
+          <div>Dapat diajukan uji materi (<em>legislative review</em>) ke DPM UII, diusulkan sekurang-kurangnya 50%+1 DPM Fakultas.</div>
+        </details>
+      </div>
+    </div>
+  </section>
 </div>
 @endsection

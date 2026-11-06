@@ -442,7 +442,7 @@
               </div>
               <a class="mega-feature" href="{{ url('/tentang/struktur') }}">
                 <div class="mf-art" aria-hidden="true"><img src="{{ asset('uploads/assets/ulil lahar_compressed.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                <img src="{{ asset('images/menu-tentang.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
+                <img src="{{ asset('uploads/assets/perpus_fbe.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
                 <div class="mf-cap"><strong>Struktur Organisasi</strong><span>Lihat susunan dan hubungan kerja seluruh alat kelengkapan.</span></div>
                 <span class="mf-arrow" aria-hidden="true">↗</span>
               </a>
@@ -465,13 +465,13 @@
                 <a href="{{ url('/unit/mentari') }}"><span>Mentari<small>Media &amp; Kesekretariatan</small></span></a>
                 <a href="{{ url('/unit/badan-legislasi') }}"><span>Baleg<small>Badan Legislasi</small></span></a>
                 <a href="{{ url('/unit/badan-pengawasan') }}"><span>Bawas<small>Badan Pengawasan</small></span></a>
-                <a href="{{ url('/unit/badan-kerjasama-advokasi-dan-jaringan') }}"><span>Bosaj<small>Badan Kerjasama, Advokasi &amp; Jaringan</small></span></a>
+                <a href="{{ url('/unit/badan-kerjasama-advokasi-dan-jaringan') }}"><span>Bksaj<small>Badan Kerjasama, Advokasi &amp; Jaringan</small></span></a>
                 <a href="{{ url('/unit/badan-audit-kemahasiswaan') }}"><span>BAK<small>Badan Audit Kemahasiswaan</small></span></a>
                 <a href="{{ url('/unit/badan-pengelola-aset') }}"><span>BPA<small>Badan Pengelola Aset</small></span></a>
               </div>
               <a class="mega-feature" href="{{ url('/tentang/struktur') }}">
                 <div class="mf-art" aria-hidden="true"><img src="{{ asset('uploads/assets/embung_compressed.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                <img src="{{ asset('images/menu-unit.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
+                <img src="{{ asset('uploads/assets/faculty_law.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
                 <div class="mf-cap"><strong>Struktur Organisasi</strong><span>Lihat susunan dan hubungan kerja seluruh alat kelengkapan.</span></div>
                 <span class="mf-arrow" aria-hidden="true">↗</span>
               </a>
@@ -495,12 +495,12 @@
                 <a href="{{ route('legal-products.type', 'pdkm') }}"><span>PDKM<small>Peraturan Dasar Keluarga Mahasiswa</small></span></a>
                 <a href="{{ route('legal-products.type', 'gbhkm') }}"><span>GBHKM<small>Garis-Garis Besar Haluan Keluarga Mahasiswa</small></span></a>
                 <a href="{{ route('legal-products.type', 'pkm') }}"><span>PKM<small>Peraturan Keluarga Mahasiswa</small></span></a>
-                <a href="{{ route('legal-products.type', 'pdpm') }}"><span>PDPM-U<small>Peraturan Dewan Permusyawaratan Mahasiswa</small></span></a>
+                <a href="{{ route('legal-products.type', 'pdpm') }}"><span>PDPM UII<small>Peraturan Dewan Permusyawaratan Mahasiswa</small></span></a>
                 <a href="{{ route('legal-products.index') }}"><span>Semua Produk Hukum</span></a>
               </div>
               <a class="mega-feature" href="{{ route('legal-products.index') }}">
                 <div class="mf-art" aria-hidden="true"><img src="{{ asset('uploads/assets/perpus_compressed.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                <img src="{{ asset('images/menu-hukum.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
+                <img src="{{ asset('uploads/assets/masjid fbe_compressed.webp') }}" alt="" loading="lazy" onerror="this.remove()">
                 <div class="mf-cap"><strong>Arsip Produk Hukum</strong><span>Telusuri dan unduh peraturan berdasarkan jenis dan tahun.</span></div>
                 <span class="mf-arrow" aria-hidden="true">↗</span>
               </a>
@@ -521,12 +521,12 @@
               </div>
               <div class="mega-links">
                 <a href="{{ url('/dana/distribusi-dana') }}"><span>Distribusi Dana<small>Alokasi dana lembaga</small></span></a>
-                <a href="{{ url('/dana/lpj') }}"><span>LPJ<small>Laporan pertanggungjawaban</small></span></a>
+                <a href="{{ url('/dana/lpj') }}"><span>LPJ<small>Laporan pertanggungjawaban keuangan</small></span></a>
                 <a href="{{ url('/dana/lha') }}"><span>LHA<small>Laporan hasil audit</small></span></a>
               </div>
               <a class="mega-feature" href="{{ route('documents.dana') }}">
                 <div class="mf-art" aria-hidden="true"><img src="{{ asset('uploads/assets/sarter_compressed.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                <img src="{{ asset('images/menu-dana.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
+                <img src="{{ asset('uploads/assets/ftsp_compressed.webp') }}" alt="" loading="lazy" onerror="this.remove()">
                 <div class="mf-cap"><strong>Transparansi Keuangan</strong><span>Akses laporan pertanggungjawaban dan hasil audit lembaga.</span></div>
                 <span class="mf-arrow" aria-hidden="true">↗</span>
               </a>
@@ -534,76 +534,52 @@
           </div>
         </li>
         <li class="nav-item">
-          <a href="{{ route('documents.index') }}">Dokumen <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
+          <a href="{{ route('humas.sosialisasi') }}">Sosialisasi <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
           <div class="mega">
             <div class="mega-inner">
               <div class="mega-info">
-                <span class="eyebrow">Arsip Dokumen</span>
-                <h2>Dokumen</h2>
-                <p>Template dan format dokumen resmi DPM UII untuk keperluan internal.</p>
+                <span class="eyebrow">Humas DPM UII</span>
+                <h2>Sosialisasi</h2>
+                <p>Panduan memahami peraturan KM UII serta aset resmi untuk kebutuhan dokumen internal DPM UII.</p>
               </div>
               <div class="mega-links">
-                <a href="{{ url('/dokumen/kategori/template-surat-biasa') }}"><span>Surat Biasa<small>Format surat dinas & internal</small></span></a>
-                <a href="{{ url('/dokumen/kategori/template-surat-keterangan') }}"><span>Surat Keterangan<small>Format SKP, SKCK, keterangan lain</small></span></a>
-                <a href="{{ url('/dokumen/kategori/template-surat-keputusan') }}"><span>Surat Keputusan<small>Format SK DPM & alat kelengkapan</small></span></a>
-                <a href="{{ url('/dokumen/kategori/template-proposal') }}"><span>Proposal<small>Format proposal kegiatan & anggaran</small></span></a>
-                <a href="{{ url('/dokumen/kategori/template-lpj') }}"><span>LPJ<small>Format laporan pertanggungjawaban</small></span></a>
+                <a href="{{ route('humas.download') }}"><span>Template Dokumen dan Font<small>Unduh font resmi &amp; template surat</small></span></a>
+                <a href="{{ route('humas.sosialisasi') }}"><span>Penjelasan Umum Peraturan KM UII<small>PDKM, GBHKM, PKM &amp; PDPM</small></span></a>
               </div>
-              <a class="mega-feature" href="{{ route('documents.index') }}">
+              <a class="mega-feature" href="{{ route('humas.sosialisasi') }}">
                 <div class="mf-art" aria-hidden="true"><img src="{{ asset('uploads/assets/perpus_compressed.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                <img src="{{ asset('images/menu-dokumen.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
-                <div class="mf-cap"><strong>Template Dokumen</strong><span>Unduh format resmi untuk keperluan administrasi dewan.</span></div>
+                <img src="{{ asset('uploads/assets/perpus_fbe.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
+                <div class="mf-cap"><strong>Pusat Informasi Humas</strong><span>Pahami peraturan dan gunakan aset resmi DPM UII.</span></div>
                 <span class="mf-arrow" aria-hidden="true">↗</span>
               </a>
             </div>
           </div>
         </li>
         <li class="nav-item">
-          <a href="{{ route('documents.decisions') }}">Keputusan <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
+          <a href="{{ route('documents.decisions') }}">Publikasi <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
           <div class="mega">
             <div class="mega-inner">
               <div class="mega-info">
-                <span class="eyebrow">Arsip Resmi</span>
-                <h2>Keputusan</h2>
-                <p>Surat keputusan, ketetapan, keterangan akademik, dan laporan kinerja DPM UII.</p>
+                <span class="eyebrow">Publikasi Resmi</span>
+                <h2>Publikasi</h2>
+                <p>Keputusan, ketetapan, laporan kinerja, dan dokumen resmi DPM UII yang dikelompokkan per periode kepengurusan.</p>
+                <div class="mega-docs">
+                  <a href="{{ route('documents.decisions') }}">Surat Keputusan DPM UII<small>Arsip keputusan resmi per periode</small></a>
+                </div>
               </div>
               <div class="mega-links">
+                <a href="{{ route('documents.decisions') }}"><span>Semua Keputusan<small>Surat keputusan & ketetapan</small></span></a>
                 <a href="{{ url('/dokumen/kategori/surat-keputusan') }}"><span>Surat Keputusan<small>Semua surat keputusan resmi</small></span></a>
+                <a href="{{ url('/dokumen/kategori/surat-ketetapan') }}"><span>Surat Ketetapan<small>Ketetapan sidang pleno</small></span></a>
                 <a href="{{ url('/dokumen/kategori/badan-kelengkapan-dewan') }}"><span>Badan Kelengkapan Dewan<small>Baleg, Bawas, BAK, BPA, KPU, Panwas</small></span></a>
                 <a href="{{ url('/dokumen/kategori/dpm-fakultas') }}"><span>DPM Fakultas<small>FBE, FH, FIA, FK, FMIPA, FTI, FTSP</small></span></a>
                 <a href="{{ url('/dokumen/kategori/lembaga-lk') }}"><span>Lembaga & LK<small>Pers Himmah, Tim Produksi</small></span></a>
-                <a href="{{ url('/dokumen/kategori/surat-ketetapan') }}"><span>Surat Ketetapan<small>Ketetapan sidang pleno</small></span></a>
-                <a href="{{ url('/dokumen/kategori/keterangan-akademik') }}"><span>Keterangan Akademik<small>Surat keterangan akademik</small></span></a>
-                <a href="{{ route('documents.reports') }}"><span>Laporan Kinerja<small>Foraslak & laporan akhir</small></span></a>
-                <a href="{{ url('/dokumen') }}"><span>Semua Dokumen<small>Lihat seluruh arsip</small></span></a>
+                <a href="{{ route('documents.reports') }}"><span>Laporan Kinerja</span></a>
               </div>
               <a class="mega-feature" href="{{ route('documents.decisions') }}">
                 <div class="mf-art" aria-hidden="true"><img src="{{ asset('uploads/assets/drone fmipa_compressed.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                <img src="{{ asset('images/menu-keputusan.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
-                <div class="mf-cap"><strong>Arsip Dokumen</strong><span>Telusuri dokumen resmi berdasarkan kategori.</span></div>
-                <span class="mf-arrow" aria-hidden="true">↗</span>
-              </a>
-            </div>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a href="{{ url('/#berita') }}">Publikasi <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
-          <div class="mega">
-            <div class="mega-inner">
-              <div class="mega-info">
-                <span class="eyebrow">Informasi & Partisipasi</span>
-                <h2>Publikasi</h2>
-                <p>Berita terbaru, pengumuman, dan saluran aspirasi mahasiswa.</p>
-              </div>
-              <div class="mega-links">
-                <a href="{{ url('/#berita') }}"><span>Berita Terbaru<small>Kegiatan & pengumuman DPM</small></span></a>
-                <a href="{{ url('/pengumuman') }}"><span>Pengumuman Resmi<small>Surat edaran & info penting</small></span></a>
-                <a href="{{ url('/#aspirasi') }}"><span>Aspirasi Mahasiswa<small>Salurkan keluhan & usulan</small></span></a>
-              </div>
-              <a class="mega-feature" href="{{ url('/#berita') }}">
-                <div class="mf-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-                <img src="{{ asset('images/menu-keputusan.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
-                <div class="mf-cap"><strong>Berita & Informasi</strong><span>Kegiatan terbaru, pengumuman, dan aspirasi mahasiswa.</span></div>
+                <img src="{{ asset('uploads/assets/faculty_law.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
+                <div class="mf-cap"><strong>Arsip Publikasi</strong><span>Telusuri keputusan resmi DPM UII berdasarkan periode.</span></div>
                 <span class="mf-arrow" aria-hidden="true">↗</span>
               </a>
             </div>
@@ -630,7 +606,7 @@
         <div class="footer-logo">
           <img src="{{ asset('images/logo-dpm.svg') }}" alt="DPM UII" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='https://dpm.uii.ac.id/wp-content/uploads/2023/12/LOGO.svg'}else{this.style.display='none'}">
         </div>
-        <p>Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia. Parlemen Mahasiswa Keluarga Mahasiswa UII.</p>
+        <p>Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia</p>
         <div class="social">
           <a href="https://wa.me/6281511092004" target="_blank" rel="noopener" aria-label="WhatsApp">
             <svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
@@ -647,7 +623,7 @@
           <li><a href="{{ route('legal-products.type', 'pdkm') }}">Peraturan Dasar KM UII</a></li>
           <li><a href="{{ route('legal-products.type', 'gbhkm') }}">Garis-Garis Besar Haluan KM UII</a></li>
           <li><a href="{{ route('legal-products.type', 'pkm') }}">Peraturan KM UII</a></li>
-          <li><a href="{{ route('legal-products.type', 'pdpm') }}">PDPM-U</a></li>
+          <li><a href="{{ route('legal-products.type', 'pdpm') }}">PDPM UII</a></li>
         </ul>
       </div>
 

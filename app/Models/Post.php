@@ -15,8 +15,23 @@ class Post extends Model
 
     public const STATUS_PUBLISHED = 'published';
 
+    /**
+     * Jenis sosialisasi: peraturan, kebijakan, program, dan lainnya.
+     *
+     * @var array<string, string>
+     */
+    public const SOCIALIZATION_TYPES = [
+        'peraturan' => 'Sosialisasi Peraturan',
+        'kebijakan' => 'Sosialisasi Kebijakan',
+        'program' => 'Sosialisasi Program',
+        'lainnya' => 'Sosialisasi Lainnya',
+    ];
+
+    public const SOCIALIZATION_CATEGORY_SLUG = 'sosialisasi';
+
     protected $fillable = [
         'post_category_id',
+        'type',
         'title',
         'slug',
         'excerpt',
@@ -58,6 +73,16 @@ class Post extends Model
             ->where('status', self::STATUS_PUBLISHED)
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now());
+    }
+
+    public function isSocialization(): bool
+    {
+        return $this->category?->slug === self::SOCIALIZATION_CATEGORY_SLUG;
+    }
+
+    public function getTypeLabelAttribute(): ?string
+    {
+        return $this->type ? (self::SOCIALIZATION_TYPES[$this->type] ?? $this->type) : null;
     }
 
     public function isPublished(): bool

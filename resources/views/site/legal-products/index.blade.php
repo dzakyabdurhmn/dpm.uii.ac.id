@@ -42,9 +42,83 @@
   :focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
   select option { background: var(--navy-card); color: var(--white); }
 
+  /* ============ PKM PAGE (Year Cards Design) ============ */
   .pg-head { position: relative; border-bottom: 1px solid var(--b-default); padding: 52px 0 56px; overflow: hidden;
     background: linear-gradient(135deg, #002A5A 0%, #001E43 55%, #001633 100%); }
   .pg-head::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 28px); }
+  .doc-hero { position: relative; display: grid; grid-template-columns: 1.35fr .65fr; gap: 56px; align-items: end; max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+  .crumb { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px; font-size: 12.5px; color: var(--t-cap); }
+  .crumb a { transition: color .2s; } .crumb a:hover { color: var(--white); }
+  .crumb span[aria-hidden] { opacity: .5; }
+  .crumb span[aria-current] { color: var(--white); font-weight: 600; }
+  .eyebrow2 { display: block; margin-bottom: 12px; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--t-cap); }
+  .pg-head h1.big { font-size: clamp(40px, 7vw, 72px); letter-spacing: -2px; line-height: 1.02; margin-bottom: 10px; color: var(--white); font-weight: 800; }
+  .pg-sub { font-family: 'Wix Madefor Display', sans-serif; font-size: clamp(16px, 2vw, 20px); font-weight: 600; color: var(--t-body); margin-bottom: 14px; }
+  .pg-desc { max-width: 600px; font-size: 15px; color: var(--t-sub); }
+  .hero-btns { margin-top: 24px; }
+  .btn.lg { padding: 16px 32px; font-size: 15px; }
+  .btn.dl svg { width: 18px; height: 18px; }
+  .btn.dl:hover svg { transform: translateX(3px); }
+
+  .sheet { position: relative; background: rgba(255,255,255,0.02); border: 1px solid var(--b-default); border-radius: 12px; padding: 24px; }
+  .seal { display: inline-flex; width: 48px; height: 48px; background: linear-gradient(135deg, var(--gold) 0%, #d4a017 100%); border-radius: 8px; margin-bottom: 12px; }
+  .seal svg { width: 28px; height: 28px; stroke: #001E43; stroke-width: 2.5; fill: none; margin: 10px auto; display: block; }
+  .sheet small { display: block; font-size: 11px; color: var(--t-cap); margin-bottom: 16px; }
+  .sh-mid { font-size: 13px; line-height: 1.6; color: var(--t-sub); margin-bottom: 12px; }
+  .sh-mid b { font-family: 'Wix Madefor Display', sans-serif; font-size: 28px; font-weight: 800; color: var(--white); display: block; margin-bottom: 4px; }
+  .sh-line { height: 1px; background: var(--b-default); margin: 16px 0; }
+  .sh-bot { display: flex; align-items: baseline; justify-content: space-between; }
+  .sh-bot small { font-size: 11px; color: var(--t-cap); }
+  .sh-bot strong { font-family: 'Wix Madefor Display', sans-serif; font-size: 24px; font-weight: 800; color: var(--white); }
+
+  .edbar-wrap { position: sticky; top: 72px; z-index: 40; background: rgba(0,30,67,0.95); border-bottom: 1px solid var(--b-default); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 16px 0; }
+  .edbar-wrap .container { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+  .edhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .edhead span { font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--t-cap); }
+  .edhead i { width: 24px; height: 24px; background: var(--navy-card); border: 1px solid var(--b-default); border-radius: 6px; }
+  .edcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .edcard { background: var(--navy-card); border: 1px solid var(--b-default); border-radius: 10px; padding: 16px; cursor: pointer; transition: all .2s; position: relative; }
+  .edcard:hover { border-color: var(--b-btn); background: var(--navy-hover); transform: translateY(-2px); box-shadow: var(--sh-md); }
+  .edcard[aria-selected="true"] { border-color: var(--gold); background: rgba(242,179,26,0.1); }
+  .edcard .ec-year { font-family: 'Wix Madefor Display', sans-serif; font-size: 28px; font-weight: 800; color: var(--white); line-height: 1; }
+  .edcard .ec-count { font-size: 11px; color: var(--t-cap); margin-top: 4px; }
+  .edcard .ec-status { position: absolute; top: 12px; right: 12px; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+  .edcard .ec-status.aktif { background: rgba(34,197,94,0.2); color: #4ade80; border: 1px solid rgba(34,197,94,0.4); }
+  .edcard .ec-status.arsip { background: rgba(255,255,255,0.05); color: var(--t-cap); border: 1px solid var(--b-default); }
+  .ednote { margin-top: 12px; font-size: 12px; color: var(--t-cap); text-align: center; }
+
+  .facts-wrap { padding: 32px 0; border-bottom: 1px solid var(--b-default); }
+  .facts-wrap .container { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+  .facts-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .facts-row > div { background: var(--navy-card); border: 1px solid var(--b-default); border-radius: 10px; padding: 20px; text-align: center; }
+  .facts-row small { display: block; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--t-cap); margin-bottom: 8px; }
+  .facts-row b { font-family: 'Wix Madefor Display', sans-serif; font-size: 28px; font-weight: 800; color: var(--white); }
+
+  .band-wide { padding: 48px 0; }
+  .band-wide.alt { background: rgba(0,22,51,0.3); border-top: 1px solid var(--b-default); border-bottom: 1px solid var(--b-default); }
+  .band-wide .container { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+  .sec-h { margin-bottom: 28px; }
+  .sec-h .eyebrow2 { margin-bottom: 10px; }
+  .sec-h h2 { font-family: 'Wix Madefor Display', sans-serif; font-size: clamp(24px, 3.5vw, 32px); font-weight: 800; color: var(--white); margin-bottom: 8px; }
+  .sec-h p { color: var(--t-sub); font-size: 14px; }
+
+  .reader { background: var(--navy-card); border: 1px solid var(--b-default); border-radius: 12px; overflow: hidden; }
+  .reader-bar { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--b-default); background: rgba(0,22,51,0.5); }
+  .reader-bar strong { font-family: 'Wix Madefor Display', sans-serif; font-size: 18px; font-weight: 700; color: var(--white); }
+  .btn.sm.dl { padding: 10px 18px; font-size: 12px; }
+  .btn.sm.dl svg { width: 14px; height: 14px; }
+  .reader-body { min-height: 280px; padding: 24px; }
+  .reader-ph { text-align: center; padding: 60px 20px; color: var(--t-cap); }
+  .reader-ph p { font-size: 14px; }
+
+  .links { display: flex; flex-direction: column; gap: 16px; }
+  .links a { display: flex; align-items: flex-start; gap: 16px; padding: 20px; background: var(--navy-card); border: 1px solid var(--b-default); border-radius: 10px; transition: all .2s; text-decoration: none; }
+  .links a:hover { border-color: var(--gold); background: rgba(242,179,26,0.05); transform: translateX(4px); }
+  .links strong { display: block; font-family: 'Wix Madefor Display', sans-serif; font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+  .links span { font-size: 13.5px; color: var(--t-sub); line-height: 1.6; }
+  .links em { display: block; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--gold); font-style: normal; }
+
+  /* ============ TYPE PAGE STYLES (Toolbar Design) ============ */
   .pg-head-inner { position: relative; display: grid; grid-template-columns: 1.35fr .65fr; gap: 56px; align-items: end; }
   .crumb { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px; font-size: 12.5px; color: var(--t-cap); }
   .crumb a { transition: color .2s; } .crumb a:hover { color: var(--white); }
@@ -134,14 +208,13 @@
 
   @media (max-width: 1080px) {
     .pg-head-inner { grid-template-columns: 1fr; gap: 36px; }
+    .doc-hero { grid-template-columns: 1fr; gap: 36px; }
     .pg-stats { display: grid; grid-template-columns: repeat(3, 1fr); }
     .pg-stat { flex-direction: column; align-items: flex-start; gap: 4px; }
     .pg-stat strong { text-align: left; }
     .pg-stat + .pg-stat { border-top: 0; border-left: 1px solid var(--b-default); }
-  }
-  @media (max-width: 720px) {
-    .pg-head { padding: 36px 0 40px; }
-    .pg-stat { padding: 14px 14px; } .pg-stat strong { font-size: 16px; white-space: nowrap; }
+    .edcards { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    .facts-row { grid-template-columns: repeat(2, 1fr); }
     .pkm-bar { position: static; }
     .tb-field { max-width: none; }
     .tb-count { margin-left: 0; width: 100%; }
@@ -152,8 +225,20 @@
     .doc-actions .btn { flex: 1; }
     .yr { font-size: 24px; }
     .note { padding: 22px 20px; }
+    .reader-bar { flex-direction: column; gap: 12px; align-items: flex-start; }
+    .links a { flex-direction: column; }
     .pdlg { width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; border: 0; }
     .pdlg-head .btn span { display: none; }
+  }
+  @media (max-width: 720px) {
+    .pg-head { padding: 36px 0 40px; }
+    .doc-hero { padding: 0 16px; }
+    .pg-stat { padding: 14px 14px; } .pg-stat strong { font-size: 16px; white-space: nowrap; }
+    .facts-row { grid-template-columns: 1fr; }
+    .edcards { grid-template-columns: 1fr; }
+    .band-wide { padding: 32px 0; }
+    .reader-body { padding: 16px; }
+    .sec-h h2 { font-size: 20px; }
   }
   @endif
 
@@ -850,7 +935,6 @@
     $name = $typeMeta['name'] ?? Str::upper($currentType);
     $desc = $typeMeta['description'] ?? '';
     $isSingleType = in_array($currentType, ['pdkm', 'gbhkm']);
-    $isPkm = $currentType === 'pkm';
     
     $typeProducts = $products->where('type', $currentType)->sortByDesc(fn($p) => [$p->year ?? 0, $p->number ?? 0])->values();
     $totalCount = $typeProducts->count();
@@ -909,51 +993,6 @@
         $yearRange = '-';
         $latestLabel = $mainDoc ? $mainDoc->title : '-';
         $availableYears = ['main', 'amendments'];
-    } elseif ($isPkm) {
-        // PKM: Group by year, create year cards like editions
-        $yearsWithData = $typeProducts->whereNotNull('year')->pluck('year')->unique()->sortDesc()->values();
-        $yearRange = $yearsWithData->isNotEmpty() ? "{$yearsWithData->first()}–{$yearsWithData->last()}" : '-';
-        
-        $latest = $typeProducts->first();
-        $latestLabel = $latest ? "No. {$latest->number}/{$latest->year}" : '-';
-        
-        $groupedByYear = [];
-        $editions = [];
-        foreach ($yearsWithData as $year) {
-            $yearProducts = $typeProducts->where('year', $year)->sortByDesc('number')->values();
-            $count = $yearProducts->count();
-            
-            $editions[] = [
-                'year' => $year,
-                'label' => "Tahun $year",
-                'short' => (string)$year,
-                'count' => $count,
-                'status' => $year === $yearsWithData->first() ? 'Aktif' : 'Arsip',
-                'products' => $yearProducts->map(function($p) {
-                    return [
-                        'id' => $p->id,
-                        'year' => $p->year,
-                        'number' => $p->number,
-                        'title' => $p->title,
-                        'regulation_number' => $p->regulation_number,
-                        'description' => $p->description,
-                        'extension' => $p->extension,
-                        'size' => $p->size,
-                        'human_size' => $p->human_size,
-                        'downloads' => $p->downloads,
-                        'download_url' => $p->download_url,
-                        'has_file' => $p->hasFile(),
-                        'amends' => $p->amends ? [
-                            'regulation_number' => $p->amends->regulation_number,
-                            'heading' => $p->amends->heading,
-                        ] : null,
-                        'amend' => (bool)$p->amends,
-                    ];
-                })->values()->toArray(),
-            ];
-        }
-        
-        $availableYears = array_column($editions, 'year');
     } else {
         $yearsWithData = $typeProducts->whereNotNull('year')->pluck('year')->unique()->sort()->values();
         $yearRange = $yearsWithData->isNotEmpty() ? "{$yearsWithData->first()}–{$yearsWithData->last()}" : '-';
@@ -994,9 +1033,45 @@
     }
   @endphp
 
-  @if ($isPkm)
+  @if ($currentType === 'pkm')
     {{-- ============ PKM PAGE (Year Cards Design) ============ --}}
     @php
+      // Satu kartu per tahun terbit. PKM bernomor dan disusun per tahun.
+      $pkmYears = $typeProducts->whereNotNull('year')->pluck('year')->unique()->sortDesc()->values();
+      $newestPkmYear = $pkmYears->first();
+
+      $editions = [];
+      foreach ($pkmYears as $editionYear) {
+          $editionProducts = $typeProducts->where('year', $editionYear)->sortByDesc('number')->values();
+
+          $editions[] = [
+              'year' => $editionYear,
+              'label' => 'Tahun '.$editionYear,
+              'short' => (string) $editionYear,
+              'count' => $editionProducts->count(),
+              'status' => $editionYear === $newestPkmYear ? 'Aktif' : 'Arsip',
+              'products' => $editionProducts->map(fn ($product) => [
+                  'id' => $product->id,
+                  'year' => $product->year,
+                  'number' => $product->number,
+                  'title' => $product->title,
+                  'regulation_number' => $product->regulation_number,
+                  'description' => $product->description,
+                  'extension' => $product->extension,
+                  'size' => $product->size,
+                  'human_size' => $product->human_size,
+                  'downloads' => $product->downloads,
+                  'download_url' => $product->download_url,
+                  'has_file' => $product->hasFile(),
+                  'amends' => $product->amends ? [
+                      'regulation_number' => $product->amends->regulation_number,
+                      'heading' => $product->amends->heading,
+                  ] : null,
+                  'amend' => (bool) $product->amends,
+              ])->values()->toArray(),
+          ];
+      }
+
       $currentEdition = $editions[0] ?? null;
       $editionsJson = json_encode($editions);
     @endphp
@@ -1080,7 +1155,7 @@
         <div class="links">
           <a href="{{ route('legal-products.type', 'pdkm') }}"><strong>Peraturan Dasar (PDKM)</strong><span>Konstitusi tertinggi KM UII.</span><em>Buka arsip →</em></a>
           <a href="{{ route('legal-products.type', 'gbhkm') }}"><strong>Garis-Garis Besar Haluan (GBHKM)</strong><span>Arah kebijakan KM UII per periode.</span><em>Buka arsip →</em></a>
-          <a href="{{ route('legal-products.type', 'pdpm') }}"><strong>Peraturan Dewan (PDPM-U)</strong><span>Peraturan internal DPM UII.</span><em>Buka arsip →</em></a>
+          <a href="{{ route('legal-products.type', 'pdpm') }}"><strong>Peraturan Dewan (PDPM UII)</strong><span>Peraturan internal DPM UII.</span><em>Buka arsip →</em></a>
         </div>
       </div>
     </section>
@@ -1097,113 +1172,8 @@
     </dialog>
 
     <button class="totop" id="totop" type="button" aria-label="Kembali ke atas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-
   @else
     {{-- ============ OTHER TYPE PAGES (PDKM, GBHKM, PDPM) ============ --}}
-    @php
-      $typeMeta = $types[$currentType] ?? null;
-      $abbr = $typeMeta['label'] ?? Str::upper($currentType);
-      $name = $typeMeta['name'] ?? Str::upper($currentType);
-      $desc = $typeMeta['description'] ?? '';
-      $isSingleType = in_array($currentType, ['pdkm', 'gbhkm']);
-      
-      $typeProducts = $products->where('type', $currentType)->sortByDesc(fn($p) => [$p->year ?? 0, $p->number ?? 0])->values();
-      $totalCount = $typeProducts->count();
-      
-      // For singles (PDKM/GBHKM): separate main document from amendments
-      if ($isSingleType) {
-          $mainDoc = $typeProducts->firstWhere('amends_id', null);
-          $amendments = $typeProducts->where('amends_id', '!=', null)->sortBy('sort_order')->values();
-          
-          // Build grouped data for JS (amendments as "Perubahan ke-X")
-          $groupedByYear = [];
-          if ($mainDoc) {
-              $groupedByYear['main'] = [[
-                  'id' => $mainDoc->id,
-                  'year' => null,
-                  'number' => null,
-                  'title' => $mainDoc->title,
-                  'regulation_number' => $mainDoc->regulation_number,
-                  'description' => $mainDoc->description,
-                  'extension' => $mainDoc->extension,
-                  'size' => $mainDoc->size,
-                  'human_size' => $mainDoc->human_size,
-                  'downloads' => $mainDoc->downloads,
-                  'download_url' => $mainDoc->download_url,
-                  'has_file' => $mainDoc->hasFile(),
-                  'amends' => null,
-                  'amend' => false,
-                  'is_main' => true,
-              ]];
-          }
-          foreach ($amendments as $index => $amendment) {
-              $groupedByYear['amendments'][] = [
-                  'id' => $amendment->id,
-                  'year' => null,
-                  'number' => null,
-                  'title' => $amendment->title,
-                  'regulation_number' => 'Perubahan ke-'.($index + 1).' '.$abbr,
-                  'description' => $amendment->description,
-                  'extension' => $amendment->extension,
-                  'size' => $amendment->size,
-                  'human_size' => $amendment->human_size,
-                  'downloads' => $amendment->downloads,
-                  'download_url' => $amendment->download_url,
-                  'has_file' => $amendment->hasFile(),
-                  'amends' => $amendment->amends ? [
-                      'regulation_number' => $amendment->amends->regulation_number,
-                      'heading' => $amendment->amends->heading,
-                  ] : null,
-                  'amend' => true,
-                  'is_main' => false,
-                  'amendment_number' => $index + 1,
-              ];
-          }
-          
-          $yearsWithData = collect([]);
-          $yearRange = '-';
-          $latestLabel = $mainDoc ? $mainDoc->title : '-';
-          $availableYears = ['main', 'amendments'];
-      } else {
-          $yearsWithData = $typeProducts->whereNotNull('year')->pluck('year')->unique()->sort()->values();
-          $yearRange = $yearsWithData->isNotEmpty() ? "{$yearsWithData->first()}–{$yearsWithData->last()}" : '-';
-          
-          $latest = $typeProducts->first();
-          $latestLabel = $latest ? "No. {$latest->number}/{$latest->year}" : '-';
-          
-          $groupedByYear = [];
-          foreach ($typeProducts as $product) {
-              $year = $product->year ?? 'Tanpa tahun';
-              if (!isset($groupedByYear[$year])) {
-                  $groupedByYear[$year] = [];
-              }
-              $groupedByYear[$year][] = [
-                  'id' => $product->id,
-                  'year' => $product->year,
-                  'number' => $product->number,
-                  'title' => $product->title,
-                  'regulation_number' => $product->regulation_number,
-                  'description' => $product->description,
-                  'extension' => $product->extension,
-                  'size' => $product->size,
-                  'human_size' => $product->human_size,
-                  'downloads' => $product->downloads,
-                  'download_url' => $product->download_url,
-                  'has_file' => $product->hasFile(),
-                  'amends' => $product->amends ? [
-                      'regulation_number' => $product->amends->regulation_number,
-                      'heading' => $product->amends->heading,
-                  ] : null,
-                  'amend' => (bool)$product->amends,
-              ];
-          }
-          
-          $availableYears = array_keys($groupedByYear);
-          sort($availableYears, SORT_NUMERIC);
-          $availableYears = array_reverse($availableYears);
-      }
-    @endphp
-
     <!-- ================= HEAD ================= -->
     <section class="pg-head">
       <div class="container pg-head-inner">
@@ -1558,7 +1528,154 @@
 @endsection
 
 @push('scripts')
-@if ($currentType)
+@if ($currentType === 'pkm')
+<script>
+  // Data dari server: satu entri per tahun terbit (kartu tahun).
+  const EDITIONS = @json($editions);
+  const TYPE_LABEL = @json($abbr);
+  const TYPE_NAME = @json($name);
+
+  const $ = id => document.getElementById(id);
+  const esc = s => { const d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+
+  let currentEdition = EDITIONS[0] || null;
+  let shownDocs = [];
+
+  function renderCards() {
+    $('edsw').innerHTML = EDITIONS.map((edition) => {
+      const active = currentEdition && edition.year === currentEdition.year;
+
+      return '<button class="edcard" type="button" role="tab" data-year="' + esc(edition.year) + '" aria-selected="' + (active ? 'true' : 'false') + '">' +
+        '<span class="ec-year">' + esc(edition.year) + '</span>' +
+        '<span class="ec-count">' + edition.count + ' peraturan</span>' +
+        '<span class="ec-status ' + (edition.status === 'Aktif' ? 'aktif' : 'arsip') + '">' + esc(edition.status) + '</span>' +
+        '</button>';
+    }).join('');
+  }
+
+  function renderDocs() {
+    if (!currentEdition) {
+      $('docList').innerHTML = '<div class="reader-ph"><p>Belum ada peraturan.</p></div>';
+      return;
+    }
+
+    const docs = currentEdition.products || [];
+    shownDocs = [];
+
+    if (!docs.length) {
+      $('docList').innerHTML = '<div class="reader-ph"><p>Belum ada peraturan tercatat untuk tahun ' + esc(currentEdition.year) + '.</p></div>';
+      $('ednote').hidden = false;
+      $('ednote').textContent = 'Belum ada berkas yang dapat diunduh untuk tahun ' + currentEdition.year + '.';
+      return;
+    }
+
+    $('ednote').hidden = true;
+
+    let html = '';
+    docs.forEach((d) => {
+      const k = shownDocs.push(d) - 1;
+      html += '<article class="doc">' +
+        '<div class="doc-no" aria-hidden="true"><small>No.</small><b>' + (d.number || '—') + '</b></div>' +
+        '<div class="doc-main"><div class="doc-label"><span>' + esc(d.regulation_number || d.title) + '</span>' + (d.amend ? '<span class="badge">Perubahan</span>' : '') + '</div>' +
+        '<h3>' + esc(d.title) + '</h3></div>' +
+        '<div class="doc-actions">' +
+        '<button class="btn sm" type="button" data-k="' + k + '" aria-label="Pratinjau ' + esc(d.regulation_number || d.title) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Pratinjau</button>' +
+        (d.has_file
+          ? '<a class="btn sm" href="' + esc(d.download_url) + '" rel="noopener" aria-label="Unduh ' + esc(d.regulation_number || d.title) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Unduh</a>'
+          : '<span class="btn sm" style="border-style:dashed;border-color:var(--b-default);color:var(--t-cap);">Belum ada berkas</span>') +
+        '</div></article>';
+    });
+
+    $('docList').innerHTML = html;
+  }
+
+  function selectEdition(year) {
+    currentEdition = EDITIONS.find((edition) => edition.year === year) || EDITIONS[0] || null;
+    renderCards();
+    renderDocs();
+
+    if (currentEdition) {
+      $('yrLabel').textContent = currentEdition.year;
+      $('rtYear').textContent = currentEdition.year;
+      $('fCurrent').textContent = currentEdition.year;
+      $('fTotal').textContent = currentEdition.count;
+      $('fLatest').textContent = currentEdition.products[0]
+        ? (currentEdition.products[0].regulation_number || currentEdition.products[0].title)
+        : '-';
+
+      try { history.replaceState(null, '', '#' + currentEdition.year); } catch (err) {}
+    }
+  }
+
+  // Unduh Semua: unduh setiap berkas pada tahun terpilih.
+  $('dlAll').addEventListener('click', (event) => {
+    if (!currentEdition) return;
+
+    const files = (currentEdition.products || []).filter((d) => d.has_file);
+    if (!files.length) {
+      event.preventDefault();
+      return;
+    }
+
+    if (files.length === 1) {
+      $('dlAll').href = files[0].download_url;
+      return;
+    }
+
+    event.preventDefault();
+    files.forEach((d, index) => {
+      window.setTimeout(() => {
+        const link = document.createElement('a');
+        link.href = d.download_url;
+        link.rel = 'noopener';
+        link.download = '';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }, index * 350);
+    });
+  });
+
+  $('edsw').addEventListener('click', (event) => {
+    const card = event.target.closest('.edcard');
+    if (!card) return;
+    selectEdition(+card.dataset.year);
+  });
+
+  $('docList').addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-k]');
+    if (button) openPreview(shownDocs[+button.dataset.k]);
+  });
+
+  // pratinjau
+  const dlg = $('pdlg');
+  function openPreview(d) {
+    $('pdLabel').textContent = d.regulation_number || TYPE_LABEL;
+    $('pdTitle').textContent = d.title;
+    $('pdOpen').href = d.download_url;
+    $('pdDl').href = d.download_url;
+    $('pdFrame').src = d.download_url;
+    dlg.showModal();
+  }
+  function closePreview() { dlg.close(); }
+  dlg.addEventListener('close', () => { $('pdFrame').src = 'about:blank'; });
+  $('pdClose').addEventListener('click', closePreview);
+  dlg.addEventListener('click', (event) => { if (event.target === dlg) closePreview(); });
+
+  // kembali ke atas
+  const totop = $('totop');
+  window.addEventListener('scroll', () => totop.classList.toggle('show', window.scrollY > 700), { passive: true });
+  totop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  renderCards();
+  renderDocs();
+
+  const initialYear = +location.hash.slice(1);
+  if (EDITIONS.some((edition) => edition.year === initialYear)) {
+    selectEdition(initialYear);
+  }
+</script>
+@elseif ($currentType)
 <script>
   // Data dari server
   const DOCS_BY_YEAR = @json($groupedByYear);

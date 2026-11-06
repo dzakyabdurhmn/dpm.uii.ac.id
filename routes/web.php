@@ -15,11 +15,14 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UnitController as AdminUnitController;
 use App\Http\Controllers\Site\AboutController;
+use App\Http\Controllers\Site\BioLinkController;
 use App\Http\Controllers\Site\DocumentController;
 use App\Http\Controllers\Site\HomeController;
+use App\Http\Controllers\Site\HumasController;
 use App\Http\Controllers\Site\LegalProductController;
 use App\Http\Controllers\Site\NewsController;
 use App\Http\Controllers\Site\UnitController;
+use App\Models\LegalProduct;
 use App\Models\SiteContent;
 use Illuminate\Support\Facades\Route;
 
@@ -33,7 +36,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/produk-hukum', [LegalProductController::class, 'index'])->name('legal-products.index');
 Route::get('/produk-hukum/{type}', [LegalProductController::class, 'type'])->name('legal-products.type')
-    ->whereIn('type', array_keys(\App\Models\LegalProduct::TYPES));
+    ->whereIn('type', array_keys(LegalProduct::TYPES));
 Route::get('/produk-hukum/{legalProduct:slug}/unduh', [LegalProductController::class, 'download'])->name('legal-products.download');
 
 Route::get('/dokumen', [DocumentController::class, 'index'])->name('documents.index');
@@ -47,7 +50,9 @@ Route::get('/dana', [DocumentController::class, 'dana'])->name('documents.dana')
 Route::get('/dana/{category:slug}', [DocumentController::class, 'danaCategory'])->name('documents.dana.category');
 
 Route::get('/berita', [NewsController::class, 'index'])->name('news.index');
+Route::get('/berita-kegiatan', [NewsController::class, 'activities'])->name('news.activities');
 Route::get('/pengumuman', [NewsController::class, 'announcements'])->name('news.announcements');
+Route::get('/sosialisasi', [NewsController::class, 'socialization'])->name('news.socialization');
 Route::get('/berita/kategori/{postCategory:slug}', [NewsController::class, 'category'])->name('news.category');
 Route::get('/berita/{post:slug}', [NewsController::class, 'show'])->name('news.show');
 
@@ -57,6 +62,12 @@ Route::get('/tentang/{section}', [AboutController::class, 'show'])
 
 Route::get('/alat-kelengkapan', [UnitController::class, 'index'])->name('units.index');
 Route::get('/unit/{unit:slug}', [UnitController::class, 'show'])->name('units.show');
+
+Route::get('/bio-link', [BioLinkController::class, 'index'])->name('bio-link');
+
+Route::get('/humas/download', [HumasController::class, 'download'])->name('humas.download');
+Route::get('/humas/download/{file}', [HumasController::class, 'downloadFile'])->name('publikasi.download.file');
+Route::get('/humas/sosialisasi', [HumasController::class, 'sosialisasi'])->name('humas.sosialisasi');
 
 /*
 |--------------------------------------------------------------------------

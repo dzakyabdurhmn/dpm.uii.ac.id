@@ -20,6 +20,7 @@ class PostRequest extends FormRequest
     {
         return [
             'post_category_id' => ['nullable', 'integer', 'exists:post_categories,id'],
+            'type' => ['nullable', 'string', Rule::in(array_keys(Post::SOCIALIZATION_TYPES))],
             'title' => ['required', 'string', 'max:150'],
             'slug' => ['nullable', 'string', 'max:150', 'alpha_dash'],
             'excerpt' => ['nullable', 'string', 'max:500'],
@@ -36,6 +37,7 @@ class PostRequest extends FormRequest
     {
         $this->merge([
             'post_category_id' => filled($this->input('post_category_id')) ? $this->input('post_category_id') : null,
+            'type' => filled($this->input('type')) ? $this->input('type') : null,
             'slug' => filled($this->input('slug')) ? $this->input('slug') : null,
             'published_at' => filled($this->input('published_at')) ? $this->input('published_at') : null,
         ]);

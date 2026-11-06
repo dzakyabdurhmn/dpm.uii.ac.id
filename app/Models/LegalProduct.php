@@ -40,7 +40,7 @@ class LegalProduct extends Model
             'description' => 'Peraturan teknis yang menjabarkan PDKM dan GBHKM, disusun per nomor dan tahun.',
         ],
         'pdpm' => [
-            'label' => 'PDPM-U',
+            'label' => 'PDPM UII',
             'name' => 'Peraturan Dewan Permusyawaratan Mahasiswa',
             'numbered' => true,
             'description' => 'Peraturan internal DPM: tata tertib, mekanisme kerja, persidangan, dan hal teknis operasional.',

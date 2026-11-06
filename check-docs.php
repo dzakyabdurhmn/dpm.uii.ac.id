@@ -1,13 +1,14 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
-$app = require_once __DIR__ . '/bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$app = require_once __DIR__.'/bootstrap/app.php';
+$kernel = $app->make(Kernel::class);
 $kernel->bootstrap();
 
 use App\Models\Document;
 use App\Models\DocumentCategory;
+use Illuminate\Contracts\Console\Kernel;
 
 $cats = DocumentCategory::where('type', 'sub')->orWhereNull('parent_id')->get();
 foreach ($cats as $cat) {
