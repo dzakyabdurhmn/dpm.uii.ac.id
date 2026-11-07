@@ -22,7 +22,9 @@ class DistribusiDanaController extends Controller
     public function index(): View
     {
         $periode = Period::where('is_active', true)->first();
-        $triwulan = $periode?->danaTriwulan()->orderByDesc('triwulan')->first();
+        $triwulan = DanaTriwulan::where('periode_id', $periode?->id)
+            ->orderByDesc('triwulan')
+            ->first();
 
         $komponen = KomponenDana::where('is_tampil', true)
             ->orderBy('urutan')
@@ -48,13 +50,18 @@ class DistribusiDanaController extends Controller
             ->get();
 
         $totalDana = $triwulan?->total_dana ?? 0;
-        $distribusiTotal = $komponen->firstWhere('peran', 'distribusi')?->pivot->jumlah ?? 0;
-        $taktisTotal = $komponen->firstWhere('peran', 'taktis')?->pivot->jumlah ?? 0;
+
+        $distribusiDk = DanaKomponen::where('dana_triwulan_id', $triwulan?->id)
+            ->where('komponen_id', KomponenDana::where('peran', 'distribusi')->value('id'))
+            ->value('jumlah') ?? 0;
+        $taktisDk = DanaKomponen::where('dana_triwulan_id', $triwulan?->id)
+            ->where('komponen_id', KomponenDana::where('peran', 'taktis')->value('id'))
+            ->value('jumlah') ?? 0;
 
         return view('admin.distribusi-dana.index', compact(
             'periode', 'triwulan', 'komponen', 'alokasiDistribusi',
             'alokasiTaktis', 'mahasiswa', 'danaInfo', 'danaSeksi',
-            'totalDana', 'distribusiTotal', 'taktisTotal'
+            'totalDana', 'distribusiDk', 'taktisDk'
         ));
     }
 

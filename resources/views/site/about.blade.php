@@ -182,22 +182,6 @@
                     </article>
 
                     <aside class="about-aside">
-                        @if (\App\Models\SiteContent::configFor($section)['show_units'] ?? false)
-                            <div class="about-aside-card">
-                                <div class="about-aside-head">
-                                    <h2>Alat Kelengkapan</h2>
-                                </div>
-                                <div class="about-aside-list">
-                                    @foreach ($units as $unit)
-                                        <a href="{{ $unit->url }}" class="about-aside-link">
-                                            <span>{{ $unit->short_name }}</span>
-                                            <span aria-hidden="true">→</span>
-                                        </a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
-
                         <div class="about-aside-card about-cta">
                             <h2>Produk Hukum</h2>
                             <p>PDKM, GBHKM, PKM, dan PDPM Keluarga Mahasiswa Universitas Islam Indonesia.</p>

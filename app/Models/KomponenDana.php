@@ -18,6 +18,6 @@ class KomponenDana extends Model
 
     public function danaKomponen(): HasMany
     {
-        return $this->hasMany(DanaKomponen::class);
+        return $this->hasMany(DanaKomponen::class, 'komponen_id');
     }
 }

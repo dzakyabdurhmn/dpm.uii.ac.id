@@ -134,7 +134,7 @@
                     <tbody class="divide-y divide-slate-100">
                         @php $atMap = []; @endphp
                         @foreach ($alokasiTaktis as $at)
-                            $atMap[$at->fakultas_id ?? 'universitas'] = $at;
+                            @php $atMap[$at->fakultas_id ?? 'universitas'] = $at; @endphp
                         @endforeach
                         @foreach (\App\Models\Fakultas::query()->orderBy('nama')->get() as $f)
                             @php $t = $atMap[$f->id] ?? null; @endphp
@@ -193,7 +193,7 @@
                     <tbody class="divide-y divide-slate-100">
                         @php $mhsMap = []; @endphp
                         @foreach ($mahasiswa as $m)
-                            $mhsMap[$m->fakultas_id] = $m->jumlah_mahasiswa;
+                            @php $mhsMap[$m->fakultas_id] = $m->jumlah_mahasiswa; @endphp
                         @endforeach
                         @foreach (\App\Models\Fakultas::query()->orderBy('nama')->get() as $f)
                             <tr>

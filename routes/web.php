@@ -115,8 +115,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->except(['show'])
             ->names('pimpinan-dewan');
 
-        Route::get('distribusi-dana', [AdminDistribusiDanaController::class, 'index'])->name('admin.distribusi-dana');
-        Route::put('distribusi-dana', [AdminDistribusiDanaController::class, 'update'])->name('admin.distribusi-dana.update');
+        Route::get('pimpinan-dewan/{pimpinan}/tugas', [PimpinanDewanController::class, 'tugas'])
+            ->name('pimpinan-dewan.tugas');
+        Route::post('pimpinan-dewan/{pimpinan}/tugas', [PimpinanDewanController::class, 'tugasStore'])
+            ->name('pimpinan-dewan.tugas.store');
+        Route::put('pimpinan-dewan/{pimpinan}/tugas/{tugas}', [PimpinanDewanController::class, 'tugasUpdate'])
+            ->name('pimpinan-dewan.tugas.update');
+        Route::delete('pimpinan-dewan/{pimpinan}/tugas/{tugas}', [PimpinanDewanController::class, 'tugasDestroy'])
+            ->name('pimpinan-dewan.tugas.destroy');
+
+        Route::get('distribusi-dana', [AdminDistribusiDanaController::class, 'index'])->name('distribusi-dana');
+        Route::put('distribusi-dana', [AdminDistribusiDanaController::class, 'update'])->name('distribusi-dana.update');
 
         Route::resource('aspirasi', ComplaintController::class)->only(['index', 'edit', 'update', 'destroy'])
             ->names('aspirasi');

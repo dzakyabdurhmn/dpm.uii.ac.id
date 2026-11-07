@@ -30,17 +30,17 @@ class DanaKeuanganSeeder extends Seeder
 
         $admin = User::first();
 
-        // ---------- Fakultas ----------
+        // ---------- Fakultas (9 fakultas UII) ----------
         $fakultasData = [
-            ['kode' => 'FH', 'nama' => 'Fakultas Hukum', 'urutan' => 1],
-            ['kode' => 'FPSIB', 'nama' => 'Fakultas Psikologi & Ilmu Sosial Budaya', 'urutan' => 2],
-            ['kode' => 'FTI', 'nama' => 'Fakultas Teknologi Industri', 'urutan' => 3],
-            ['kode' => 'FE', 'nama' => 'Fakultas Ekonomi', 'urutan' => 4],
-            ['kode' => 'FIAI', 'nama' => 'Fakultas Ilmu Agama Islam', 'urutan' => 5],
-            ['kode' => 'FTSP', 'nama' => 'Fakultas Teknik Sipil & Perencanaan', 'urutan' => 6],
-            ['kode' => 'FK', 'nama' => 'Fakultas Kedokteran', 'urutan' => 7],
-            ['kode' => 'FMIPA', 'nama' => 'Fakultas Matematika & Ilmu Pengetahuan Alam', 'urutan' => 8],
-            ['kode' => 'FB', 'nama' => 'Fakultas Biologi', 'urutan' => 9],
+            ['kode' => 'FBE', 'nama' => 'Fakultas Bisnis dan Ekonomika', 'urutan' => 1],
+            ['kode' => 'FH', 'nama' => 'Fakultas Hukum', 'urutan' => 2],
+            ['kode' => 'FIAI', 'nama' => 'Fakultas Ilmu Agama Islam', 'urutan' => 3],
+            ['kode' => 'FISB', 'nama' => 'Fakultas Ilmu Sosial Budaya', 'urutan' => 4],
+            ['kode' => 'FK', 'nama' => 'Fakultas Kedokteran', 'urutan' => 5],
+            ['kode' => 'FMIPA', 'nama' => 'Fakultas Matematika dan Ilmu Pengetahuan Alam', 'urutan' => 6],
+            ['kode' => 'FPSB', 'nama' => 'Fakultas Psikologi', 'urutan' => 7],
+            ['kode' => 'FTDI', 'nama' => 'Fakultas Teknik Desain Inovasi', 'urutan' => 8],
+            ['kode' => 'FTI', 'nama' => 'Fakultas Teknologi Industri', 'urutan' => 9],
         ];
         $fakultas = [];
         foreach ($fakultasData as $fd) {
@@ -56,12 +56,12 @@ class DanaKeuanganSeeder extends Seeder
             ['nama' => 'Himmah UII', 'tingkat' => 'universitas', 'jenis' => 'lembaga_khusus', 'fakultas_id' => null, 'parent_id' => null],
             ['nama' => 'Marching Band UII', 'tingkat' => 'universitas', 'jenis' => 'lembaga_khusus', 'fakultas_id' => null, 'parent_id' => null],
             ['nama' => 'KOPMA UII', 'tingkat' => 'universitas', 'jenis' => 'kopma', 'fakultas_id' => null, 'parent_id' => null],
-            ['nama' => 'LEM FH', 'tingkat' => 'fakultas', 'jenis' => 'lem', 'fakultas_id' => $fakultas[0]->id, 'parent_id' => null],
-            ['nama' => 'LPM FH', 'tingkat' => 'fakultas', 'jenis' => 'lpm', 'fakultas_id' => $fakultas[0]->id, 'parent_id' => null],
-            ['nama' => 'DPM FH', 'tingkat' => 'fakultas', 'jenis' => 'dpm', 'fakultas_id' => $fakultas[0]->id, 'parent_id' => null],
-            ['nama' => 'LEM FTI', 'tingkat' => 'fakultas', 'jenis' => 'lem', 'fakultas_id' => $fakultas[2]->id, 'parent_id' => null],
-            ['nama' => 'LPM FTI', 'tingkat' => 'fakultas', 'jenis' => 'lpm', 'fakultas_id' => $fakultas[2]->id, 'parent_id' => null],
-            ['nama' => 'DPM FTI', 'tingkat' => 'fakultas', 'jenis' => 'dpm', 'fakultas_id' => $fakultas[2]->id, 'parent_id' => null],
+            ['nama' => 'LEM FH', 'tingkat' => 'fakultas', 'jenis' => 'lem', 'fakultas_id' => $fakultas[1]->id, 'parent_id' => null],
+            ['nama' => 'LPM FH', 'tingkat' => 'fakultas', 'jenis' => 'lpm', 'fakultas_id' => $fakultas[1]->id, 'parent_id' => null],
+            ['nama' => 'DPM FH', 'tingkat' => 'fakultas', 'jenis' => 'dpm', 'fakultas_id' => $fakultas[1]->id, 'parent_id' => null],
+            ['nama' => 'LEM FTI', 'tingkat' => 'fakultas', 'jenis' => 'lem', 'fakultas_id' => $fakultas[8]->id, 'parent_id' => null],
+            ['nama' => 'LPM FTI', 'tingkat' => 'fakultas', 'jenis' => 'lpm', 'fakultas_id' => $fakultas[8]->id, 'parent_id' => null],
+            ['nama' => 'DPM FTI', 'tingkat' => 'fakultas', 'jenis' => 'dpm', 'fakultas_id' => $fakultas[8]->id, 'parent_id' => null],
         ];
         $lembaga = [];
         foreach ($lembagaData as $ld) {
@@ -147,8 +147,8 @@ class DanaKeuanganSeeder extends Seeder
 
         // ---------- Mahasiswa Fakultas ----------
         $mahasiswa = [
-            'FBE' => 3441, 'FH' => 3408, 'FTI' => 2843, 'FE' => 2100, 'FIAI' => 1800,
-            'FTSP' => 1600, 'FK' => 1200, 'FMIPA' => 1400, 'FB' => 629,
+            'FBE' => 3441, 'FH' => 3408, 'FTI' => 2843, 'FIAI' => 1800, 'FISB' => 2213,
+            'FK' => 805, 'FMIPA' => 1464, 'FPSB' => 1334, 'FTDI' => 2055,
         ];
         foreach ($mahasiswa as $kode => $jm) {
             $fk = Fakultas::where('kode', $kode)->first();
