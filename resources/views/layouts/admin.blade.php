@@ -9,6 +9,7 @@
             ['label' => 'Berita & Pengumuman', 'url' => route('admin.posts.index'), 'match' => 'admin.posts.*'],
             ['label' => 'Produk Hukum', 'url' => route('admin.legal-products.index'), 'match' => 'admin.legal-products.*'],
             ['label' => 'Dokumen', 'url' => route('admin.documents.index'), 'match' => 'admin.documents.*'],
+            ['label' => 'Konten Halaman', 'url' => route('admin.page-contents.index'), 'match' => 'admin.page-contents.*'],
             ['label' => 'Media', 'url' => route('admin.media.index'), 'match' => 'admin.media.*'],
         ]],
         ['group' => 'Struktur', 'items' => [

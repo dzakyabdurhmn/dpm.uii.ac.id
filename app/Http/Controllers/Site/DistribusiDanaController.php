@@ -9,7 +9,8 @@ use App\Models\DanaInfo;
 use App\Models\DanaKomponen;
 use App\Models\DanaSeksi;
 use App\Models\DanaTriwulan;
-use App\Models\DokumenKeuangan;
+use App\Models\Document;
+use App\Models\DocumentCategory;
 use App\Models\Fakultas;
 use App\Models\KomponenDana;
 use App\Models\Lembaga;
@@ -99,18 +100,29 @@ class DistribusiDanaController extends Controller
             ->orderBy('urutan')
             ->get();
 
-        // Dokumen keuangan
-        $dokumenLpj = DokumenKeuangan::where('jenis', 'lpj')
-            ->where('periode_id', $periode->id)
-            ->where('status', 'terbit')
-            ->with('lembaga')
-            ->get();
+        // Dokumen keuangan (LPJ & LHA) via Document model
+        $lpjCategory = DocumentCategory::where('slug', 'lpj')->first();
+        $lhaCategory = DocumentCategory::where('slug', 'lha')->first();
 
-        $dokumenLha = DokumenKeuangan::where('jenis', 'lha')
-            ->where('periode_id', $periode->id)
-            ->where('status', 'terbit')
-            ->with('lembaga')
-            ->get();
+        $dokumenLpj = $lpjCategory
+            ? Document::query()
+                ->published()
+                ->where('document_category_id', $lpjCategory->id)
+                ->where('period_id', $periode->id)
+                ->with('category')
+                ->latest('published_at')
+                ->get()
+            : collect();
+
+        $dokumenLha = $lhaCategory
+            ? Document::query()
+                ->published()
+                ->where('document_category_id', $lhaCategory->id)
+                ->where('period_id', $periode->id)
+                ->with('category')
+                ->latest('published_at')
+                ->get()
+            : collect();
 
         // Hitung persentase
         $bilahPersen = $totalDana > 0 ? round(($distribusiTotal / $totalDana) * 100, 1) : 0;

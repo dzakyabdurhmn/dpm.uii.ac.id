@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\PageContent;
 use Illuminate\View\View;
 
 class AboutController extends Controller
@@ -26,11 +27,13 @@ class AboutController extends Controller
         }
 
         if ($section === 'sambutan') {
+            $content = PageContent::query()->where('key', 'sambutan')->first();
+
             return view('site.about', [
                 'section' => 'sambutan',
                 'title' => 'Sambutan',
                 'subtitle' => 'Sambutan Ketua DPM UII',
-                'content' => null,
+                'content' => $content,
                 'units' => collect(),
                 'officials' => collect(),
             ]);

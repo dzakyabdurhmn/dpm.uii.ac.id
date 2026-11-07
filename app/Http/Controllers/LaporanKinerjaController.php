@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Models\DocumentCategory;
 use App\Models\Period;
 use Illuminate\Http\Request;
 use Illuminate\View\View;

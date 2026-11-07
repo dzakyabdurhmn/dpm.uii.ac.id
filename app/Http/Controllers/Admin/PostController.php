@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PostRequest;
 use App\Models\Post;
-use App\Models\PostCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -38,7 +37,6 @@ class PostController extends Controller
     {
         return view('admin.posts.form', [
             'post' => new Post(['status' => Post::STATUS_DRAFT]),
-            'categories' => PostCategory::query()->orderBy('name')->get(),
         ]);
     }
 
@@ -55,7 +53,6 @@ class PostController extends Controller
     {
         return view('admin.posts.form', [
             'post' => $post,
-            'categories' => PostCategory::query()->orderBy('name')->get(),
         ]);
     }
 

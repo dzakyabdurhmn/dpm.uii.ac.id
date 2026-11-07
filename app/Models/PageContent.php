@@ -3,56 +3,43 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Fixed content sections of the public site.
- *
- * Setiap seksi punya route dan view sendiri — tidak ada halaman bebas yang bisa
- * ditambah atau dihapus seperti CMS WordPress. Admin hanya mengubah isinya.
+ * Konten halaman statis (hanya Sambutan Ketua yang punya isi editor).
+ * Seksinya tetap: tidak bisa ditambah/dihapus lewat admin.
  */
-class SiteContent extends Model
+class PageContent extends Model
 {
     protected $fillable = [
         'key',
-        'period_id',
         'title',
+        'subtitle',
         'body',
     ];
 
     /**
-     * @var array<string, array{title: string, subtitle: string, show_units: bool, show_officials: bool}>
+     * @var array<string, array{title: string, subtitle: string}>
      */
     public const SECTIONS = [
         'sambutan' => [
             'title' => 'Sambutan',
             'subtitle' => 'Sambutan Ketua DPM UII',
-            'show_units' => false,
-            'show_officials' => false,
         ],
         'sejarah' => [
             'title' => 'Sejarah KM UII',
             'subtitle' => 'Tentang DPM UII',
-            'show_units' => false,
-            'show_officials' => false,
         ],
         'visi-misi' => [
             'title' => 'Visi Misi',
-            'subtitle' => 'Informasi tentang DPM UII',
-            'show_units' => false,
-            'show_officials' => false,
+            'subtitle' => 'Tentang DPM UII',
         ],
         'struktur' => [
             'title' => 'Struktur',
-            'subtitle' => 'Informasi tentang DPM UII',
-            'show_units' => true,
-            'show_officials' => false,
+            'subtitle' => 'Tentang DPM UII',
         ],
         'kedudukan-tugas-wewenang' => [
             'title' => 'Kedudukan, Tugas dan Wewenang',
-            'subtitle' => 'Informasi tentang DPM UII',
-            'show_units' => false,
-            'show_officials' => false,
+            'subtitle' => 'Tentang DPM UII',
         ],
     ];
 
@@ -67,11 +54,6 @@ class SiteContent extends Model
     public static function configFor(string $key): ?array
     {
         return self::SECTIONS[$key] ?? null;
-    }
-
-    public function period(): BelongsTo
-    {
-        return $this->belongsTo(Period::class);
     }
 
     public function getRouteAttribute(): string

@@ -32,20 +32,21 @@
     {{-- Group data berdasarkan tahun --}}
     @php
         $years = [$grouped->keys()->first() ?? date('Y')];
-        // Ambil kunci unik dari grouped dan gabungkan dengan rentang yang mungkin
-        $allYears = $grouped->keys()->toArray();
-        if (empty($allYears)) {
+        // Ambil kunci unik dari grouped
+        $allYears = $grouped->keys();
+        if ($allYears->isEmpty()) {
             // Fallback: ambil year dari documents
-            $allYears = $documents->pluck('year')->unique()->toArray();
+            $allYears = $documents->pluck('year')->unique();
         }
     @endphp
 
     {{-- Tampilkan periode 2025/2026 dan 2024/2025 yang ada --}}
     @foreach ($allYears as $yearIndex => $year)
-        {{-- Hitung total laporan di tahun ini --}}
-        $yearDocs = $grouped[$year] ?? collect();
-        $totalThisYear = $yearDocs->count();
-        $isCurrent = $year >= 2025; -- logika sederhana: 2025 ke atas dianggap "berjalan"
+        @php
+            $yearDocs = $grouped[$year] ?? collect();
+            $totalThisYear = $yearDocs->count();
+            $isCurrent = $year >= 2025; // logika sederhana: 2025 ke atas dianggap "berjalan"
+        @endphp
 
         {{-- Section header --}}
         <section class="lg">

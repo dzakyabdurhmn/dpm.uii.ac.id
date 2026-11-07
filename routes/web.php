@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\LegalProductController as AdminLegalProductController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\OfficialController;
+use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\PeriodController;
 use App\Http\Controllers\Admin\PimpinanDewanController;
 use App\Http\Controllers\Admin\PostController;
@@ -54,11 +55,10 @@ Route::get('/berita', [NewsController::class, 'index'])->name('news.index');
 Route::get('/berita-kegiatan', [NewsController::class, 'activities'])->name('news.activities');
 Route::get('/pengumuman', [NewsController::class, 'announcements'])->name('news.announcements');
 Route::get('/sosialisasi', [NewsController::class, 'socialization'])->name('news.socialization');
-Route::get('/berita/kategori/{postCategory:slug}', [NewsController::class, 'category'])->name('news.category');
 Route::get('/berita/{post:slug}', [NewsController::class, 'show'])->name('news.show');
 
 Route::get('/tentang/{section}', [AboutController::class, 'show'])
-    ->whereIn('section', ['sambutan'])
+    ->whereIn('section', ['sambutan', 'sejarah', 'visi-misi', 'struktur', 'kedudukan-tugas-wewenang'])
     ->name('about.show');
 
 Route::get('/laporan-kinerja', [LaporanKinerjaController::class, 'index'])->name('laporan-kinerja.index');
@@ -129,6 +129,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::resource('aspirasi', ComplaintController::class)->only(['index', 'edit', 'update', 'destroy'])
             ->names('aspirasi');
+
+        Route::resource('page-contents', PageContentController::class)
+            ->only(['index', 'edit', 'update'])
+            ->names('page-contents')
+            ->parameters(['page-contents' => 'section']);
 
         Route::post('periode/{period}/aktifkan', [PeriodController::class, 'activate'])->name('periods.activate');
         Route::resource('periode', PeriodController::class)

@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\Concerns\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model
 {
@@ -27,10 +26,7 @@ class Post extends Model
         'lainnya' => 'Sosialisasi Lainnya',
     ];
 
-    public const SOCIALIZATION_CATEGORY_SLUG = 'sosialisasi';
-
     protected $fillable = [
-        'post_category_id',
         'type',
         'title',
         'slug',
@@ -62,11 +58,6 @@ class Post extends Model
         });
     }
 
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(PostCategory::class, 'post_category_id');
-    }
-
     public function scopePublished(Builder $query): Builder
     {
         return $query
@@ -77,7 +68,7 @@ class Post extends Model
 
     public function isSocialization(): bool
     {
-        return false;
+        return filled($this->type);
     }
 
     public function getTypeLabelAttribute(): ?string

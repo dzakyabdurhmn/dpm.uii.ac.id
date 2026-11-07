@@ -54,7 +54,6 @@
                 <h1>{{ $post->title }}</h1>
                 <div class="news-detail-meta">
                     @if ($post->published_at)<span>{{ $post->published_at->translatedFormat('d F Y') }}</span>@endif
-                    @if ($post->category)<span>{{ $post->category->name }}</span>@endif
                 </div>
             </div>
         </section>

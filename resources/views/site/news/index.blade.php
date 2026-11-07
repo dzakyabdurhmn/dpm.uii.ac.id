@@ -73,7 +73,6 @@
                                 <div class="news-card-body">
                                     <div class="news-card-meta">
                                         @if ($post->published_at)<span>{{ $post->published_at->translatedFormat('d F Y') }}</span>@endif
-                                        @if ($post->category)<span>{{ $post->category->name }}</span>@endif
                                         @if ($post->type && $post->isSocialization())
                                             <span>{{ $post->type_label }}</span>
                                         @endif

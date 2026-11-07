@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Complaint;
 use App\Models\DocumentCategory;
 use App\Models\OrganizationalUnit;
+use App\Models\PageContent;
 use App\Models\Period;
 use App\Models\PimpinanDewan;
 use App\Models\Setting;
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->seedPeriod();
         $this->seedDocumentCategories();
         $this->seedUnits();
+        $this->seedPageContents();
         $this->seedPimpinanDewan();
         $this->seedComplaints();
         $this->call(LegalProductSeeder::class);
@@ -138,6 +140,16 @@ class DatabaseSeeder extends Seeder
             ->whereIn('slug', ['direktorat-sekretaris-jenderal', 'badan-kerjasama-jaringan-dan-advokasi'])
             ->doesntHave('officials')
             ->delete();
+    }
+
+    private function seedPageContents(): void
+    {
+        foreach (PageContent::SECTIONS as $key => $config) {
+            PageContent::query()->updateOrCreate(
+                ['key' => $key],
+                ['title' => $config['title'], 'subtitle' => $config['subtitle']]
+            );
+        }
     }
 
     private function seedPimpinanDewan(): void

@@ -441,7 +441,7 @@
                 @endif
               </div>
               <div>
-                <div class="meta">{{ $post->category?->name ?? 'Berita' }} · {{ $post->published_at?->translatedFormat('d M Y') }}</div>
+                <div class="meta">{{ $post->type ? $post->type_label : 'Berita' }} · {{ $post->published_at?->translatedFormat('d M Y') }}</div>
                 <h3>{{ Str::limit($post->title, 60) }}</h3>
                 <p>{{ Str::limit($post->excerpt ?? $post->body, 120) }}</p>
               </div>
