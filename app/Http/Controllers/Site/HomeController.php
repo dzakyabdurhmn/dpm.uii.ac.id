@@ -8,7 +8,6 @@ use App\Models\DocumentCategory;
 use App\Models\LegalProduct;
 use App\Models\OrganizationalUnit;
 use App\Models\Post;
-use App\Models\SiteContent;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -29,15 +28,11 @@ class HomeController extends Controller
                 ->get(),
             'latestNews' => Post::query()
                 ->published()
-                ->with('category')
-                ->whereHas('category', fn ($query) => $query->where('slug', 'kegiatan'))
                 ->latest('published_at')
                 ->limit(4)
                 ->get(),
             'latestAnnouncements' => Post::query()
                 ->published()
-                ->with('category')
-                ->whereHas('category', fn ($query) => $query->where('slug', 'pengumuman'))
                 ->latest('published_at')
                 ->limit(3)
                 ->get(),
@@ -46,12 +41,7 @@ class HomeController extends Controller
                 ->whereIn('type', ['badan', 'lembaga'])
                 ->orderBy('sort_order')
                 ->get(),
-            'contentSections' => SiteContent::query()
-                ->whereIn('key', array_keys(SiteContent::SECTIONS))
-                ->whereNotNull('body')
-                ->where('body', '!=', '')
-                ->get()
-                ->keyBy('key'),
+            'contentSections' => collect(),
             'financialCategories' => DocumentCategory::query()
                 ->where('group', 'Dana')
                 ->whereHas('documents', fn ($query) => $query->published())

@@ -1,16 +1,16 @@
 <?php
 
 use App\Http\Controllers\Admin\Auth\LoginController;
-use App\Http\Controllers\Admin\ContentController;
+use App\Http\Controllers\Admin\ComplaintController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DistribusiDanaController as AdminDistribusiDanaController;
 use App\Http\Controllers\Admin\DocumentCategoryController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\LegalProductController as AdminLegalProductController;
 use App\Http\Controllers\Admin\MediaController;
-use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\OfficialController;
 use App\Http\Controllers\Admin\PeriodController;
-use App\Http\Controllers\Admin\PostCategoryController;
+use App\Http\Controllers\Admin\PimpinanDewanController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UnitController as AdminUnitController;
@@ -26,7 +26,6 @@ use App\Http\Controllers\Site\NewsController;
 use App\Http\Controllers\Site\ProfilDewanController;
 use App\Http\Controllers\Site\UnitController;
 use App\Models\LegalProduct;
-use App\Models\SiteContent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,7 +58,7 @@ Route::get('/berita/kategori/{postCategory:slug}', [NewsController::class, 'cate
 Route::get('/berita/{post:slug}', [NewsController::class, 'show'])->name('news.show');
 
 Route::get('/tentang/{section}', [AboutController::class, 'show'])
-    ->whereIn('section', SiteContent::keys())
+    ->whereIn('section', ['sambutan'])
     ->name('about.show');
 
 Route::get('/laporan-kinerja', [LaporanKinerjaController::class, 'index'])->name('laporan-kinerja.index');
@@ -101,11 +100,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('documents', AdminDocumentController::class)->except(['show']);
         Route::resource('legal-products', AdminLegalProductController::class)->except(['show']);
 
-        Route::get('konten', [ContentController::class, 'index'])->name('contents.index');
-        Route::get('konten/{section}/edit', [ContentController::class, 'edit'])->name('contents.edit');
-        Route::put('konten/{section}', [ContentController::class, 'update'])->name('contents.update');
-
-        // Alat kelengkapan bersifat tetap: hanya ubah, tanpa tambah/hapus.
+        // Alat kelengkapan bersifat tetap: hanya ubah nama tidak diperbolehkan, hanya anggota.
         Route::resource('units', AdminUnitController::class)->only(['index', 'edit', 'update']);
         Route::post('units/{unit}/fungsionaris', [OfficialController::class, 'store'])->name('units.officials.store');
         Route::put('units/{unit}/fungsionaris/{official}', [OfficialController::class, 'update'])->name('units.officials.update');
@@ -116,15 +111,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->parameters(['kategori-dokumen' => 'documentCategory'])
             ->names('document-categories');
 
-        Route::resource('kategori-berita', PostCategoryController::class)
+        Route::resource('pimpinan-dewan', PimpinanDewanController::class)
             ->except(['show'])
-            ->parameters(['kategori-berita' => 'postCategory'])
-            ->names('post-categories');
+            ->names('pimpinan-dewan');
 
-        Route::resource('menu', MenuController::class)
-            ->except(['show'])
-            ->parameters(['menu' => 'menuItem'])
-            ->names('menu');
+        Route::get('distribusi-dana', [AdminDistribusiDanaController::class, 'index'])->name('admin.distribusi-dana');
+        Route::put('distribusi-dana', [AdminDistribusiDanaController::class, 'update'])->name('admin.distribusi-dana.update');
+
+        Route::resource('aspirasi', ComplaintController::class)->only(['index', 'edit', 'update', 'destroy'])
+            ->names('aspirasi');
 
         Route::post('periode/{period}/aktifkan', [PeriodController::class, 'activate'])->name('periods.activate');
         Route::resource('periode', PeriodController::class)

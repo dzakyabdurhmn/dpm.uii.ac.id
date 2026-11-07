@@ -4,12 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\Complaint;
 use App\Models\DocumentCategory;
-use App\Models\Menu;
 use App\Models\OrganizationalUnit;
 use App\Models\Period;
-use App\Models\PostCategory;
+use App\Models\PimpinanDewan;
 use App\Models\Setting;
-use App\Models\SiteContent;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,12 +20,9 @@ class DatabaseSeeder extends Seeder
         $this->seedSettings();
         $this->seedPeriod();
         $this->seedDocumentCategories();
-        $this->seedPostCategories();
-        $this->seedContents();
         $this->seedUnits();
-        $this->seedMenus();
+        $this->seedPimpinanDewan();
         $this->seedComplaints();
-        // $this->seedBioLink(); // BioLink models not available
         $this->call(LegalProductSeeder::class);
         $this->call(DocumentSeeder::class);
         $this->call(PostSeeder::class);
@@ -112,49 +107,6 @@ class DatabaseSeeder extends Seeder
         }
     }
 
-    private function seedPostCategories(): void
-    {
-        $categories = [
-            [
-                'name' => 'Pengumuman',
-                'description' => 'Seruan aksi, informasi resmi, dan pemberitahuan DPM UII untuk seluruh Keluarga Mahasiswa UII.',
-            ],
-            [
-                'name' => 'Berita Kegiatan',
-                'description' => 'Kegiatan, agenda legislasi, dan lipsutan terbaru Dewan Permusyawaratan Mahasiswa UII.',
-            ],
-            [
-                'name' => 'Sosialisasi',
-                'description' => 'Sosialisasi peraturan, kebijakan, program, dan kegiatan DPM UII bagi civitas kemahasiswaan.',
-            ],
-        ];
-
-        foreach ($categories as $category) {
-            PostCategory::query()->firstOrCreate(
-                ['slug' => str($category['name'])->slug()->value()],
-                $category,
-            );
-        }
-
-        // Kategori lama "Kegiatan" digantikan oleh "Berita Kegiatan".
-        PostCategory::query()->where('slug', 'kegiatan')->delete();
-    }
-
-    /**
-     * Enam seksi halaman statis. Alurnya tetap — bukan CMS halaman bebas.
-     */
-    private function seedContents(): void
-    {
-        // Baris seksi dibuat tanpa isi: admin mengisi sendiri lewat
-        // menu "Konten Halaman". Tidak ada teks contoh.
-        foreach (SiteContent::SECTIONS as $key => $config) {
-            SiteContent::query()->updateOrCreate(
-                ['key' => $key],
-                ['title' => $config['title']],
-            );
-        }
-    }
-
     private function seedUnits(): void
     {
         // Hanya kerangka alat kelengkapan yang disiapkan. Penjelasan tiap unit
@@ -188,151 +140,32 @@ class DatabaseSeeder extends Seeder
             ->delete();
     }
 
-    /**
-     * Navigation structure of the site. Items are rebuilt on every seed so the
-     * menu always matches the current information architecture.
-     */
-    private function seedMenus(): void
+    private function seedPimpinanDewan(): void
     {
-        $menu = Menu::query()->firstOrCreate(
-            ['location' => 'header'],
-            ['name' => 'Menu Utama'],
-        );
+        $periode = Period::where('is_active', true)->first();
 
-        $menu->items()->delete();
+        if (! $periode) {
+            return;
+        }
 
-        $tree = [
-            [
-                'label' => 'Tentang',
-                'url' => '#fungsi',
-                'description' => 'Lembaga Legislatif Keluarga Mahasiswa UII yang Menjalankan Fungsi Legislasi, Anggaran, dan Pengawasan.',
-                'mega_eyebrow' => 'Profil Lembaga',
-                'mega_image' => 'images/menu-tentang.jpg',
-                'mega_caption_title' => 'Profil Dewan',
-                'mega_caption_desc' => 'Kenali anggota dan susunan Dewan Permusyawaratan Mahasiswa UII.',
-                'children' => [
-                    ['label' => 'Sambutan', 'url' => '/tentang/sambutan'],
-                    ['label' => 'Sejarah KM', 'url' => '/tentang/sejarah'],
-                    ['label' => 'Visi Misi', 'url' => '/tentang/visi-misi'],
-                    ['label' => 'Struktur', 'url' => '/tentang/struktur'],
-                    ['label' => 'Kedudukan, Tugas dan Wewenang', 'url' => '/tentang/kedudukan-tugas-wewenang'],
-                    ['label' => 'Profil Dewan', 'url' => '/tentang/profil-dewan'],
-                ],
-            ],
-            [
-                'label' => 'Alat Kelengkapan',
-                'url' => '#unit',
-                'description' => 'Enam badan dan unit kerja yang menggerakkan tugas Dewan Permusyawaratan Mahasiswa UII.',
-                'mega_eyebrow' => 'Badan dan Unit Kerja',
-                'mega_image' => 'images/menu-unit.jpg',
-                'mega_caption_title' => 'Struktur Organisasi',
-                'mega_caption_desc' => 'Lihat susunan dan hubungan kerja seluruh alat kelengkapan.',
-                'children' => [
-                    ['label' => 'Mentari', 'url' => '/unit/mentari', 'description' => 'Media & Kesekretariatan'],
-                    ['label' => 'Baleg', 'url' => '/unit/badan-legislasi', 'description' => 'Badan Legislasi'],
-                    ['label' => 'Bawas', 'url' => '/unit/badan-pengawasan', 'description' => 'Badan Pengawasan'],
-                    ['label' => 'Bksaj', 'url' => '/unit/badan-kerjasama-advokasi-dan-jaringan', 'description' => 'Badan Kerjasama, Advokasi & Jaringan'],
-                    ['label' => 'BAK', 'url' => '/unit/badan-audit-kemahasiswaan', 'description' => 'Badan Audit Kemahasiswaan'],
-                    ['label' => 'BPA', 'url' => '/unit/badan-pengelola-aset', 'description' => 'Badan Pengelola Aset'],
-                ],
-            ],
-            [
-                'label' => 'Produk Hukum',
-                'url' => '/produk-hukum',
-                'description' => 'Peraturan resmi Keluarga Mahasiswa UII yang dapat diakses oleh seluruh civitas kemahasiswaan.',
-                'mega_eyebrow' => 'Arsip Resmi',
-                'mega_image' => 'images/menu-hukum.jpg',
-                'mega_caption_title' => 'Arsip Produk Hukum',
-                'mega_caption_desc' => 'Telusuri dan unduh peraturan berdasarkan jenis dan tahun.',
-                'mega_docs' => '<a href="/produk-hukum?jenis=pkm">PKM UII No. 3 Tahun 2024: Tentang Distribusi dan Alokasi Dana KM UII<small>Peraturan Keluarga Mahasiswa · 2024</small></a><a href="/produk-hukum?jenis=pkm">PKM UII No. 2 Tahun 2024: Tentang Pedoman Kegiatan Kepanitiaan KM UII<small>Peraturan Keluarga Mahasiswa · 2024</small></a>',
-                'children' => [
-                    ['label' => 'PDKM', 'url' => '/produk-hukum?jenis=pdkm', 'description' => 'Peraturan Dasar Keluarga Mahasiswa'],
-                    ['label' => 'GBHKM', 'url' => '/produk-hukum?jenis=gbhkm', 'description' => 'Garis-Garis Besar Haluan Keluarga Mahasiswa'],
-                    ['label' => 'PKM', 'url' => '/produk-hukum?jenis=pkm', 'description' => 'Peraturan Keluarga Mahasiswa'],
-                    ['label' => 'PDPM', 'url' => '/produk-hukum?jenis=pdpm', 'description' => 'Peraturan Dewan Permusyawaratan Mahasiswa'],
-                    ['label' => 'Semua Produk Hukum', 'url' => '/produk-hukum', 'description' => 'Lihat seluruh regulasi →'],
-                ],
-            ],
-            [
-                'label' => 'Dana',
-                'url' => '/dana',
-                'description' => 'Informasi distribusi dan pertanggungjawaban dana lembaga Keluarga Mahasiswa UII.',
-                'mega_eyebrow' => 'Transparansi',
-                'mega_image' => 'images/menu-dana.jpg',
-                'mega_caption_title' => 'Transparansi Dana',
-                'mega_caption_desc' => 'Akses laporan pertanggungjawaban dan hasil audit lembaga.',
-                'mega_docs' => '<a href="/produk-hukum?jenis=pkm">PKM UII No. 3 Tahun 2024: Tentang Distribusi dan Alokasi Dana KM UII<small>Dasar pengaturan distribusi dana</small></a>',
-                'children' => [
-                    ['label' => 'Distribusi Dana', 'url' => '/dana/distribusi-dana', 'description' => 'Alokasi dana lembaga'],
-                    ['label' => 'LPJ', 'url' => '/dana/lpj', 'description' => 'Laporan pertanggungjawaban'],
-                    ['label' => 'LHA', 'url' => '/dana/lha', 'description' => 'Laporan hasil audit'],
-                ],
-            ],
-            [
-                'label' => 'Laporan Kinerja',
-                'url' => '/laporan-kinerja',
-            ],
-            [
-                'label' => 'Publikasi',
-                'url' => '#publikasi',
-                'description' => 'Publikasi resmi DPM UII: keputusan, ketetapan, dan regulasi.',
-                'mega_eyebrow' => 'Publikasi Resmi',
-                'mega_image' => 'images/menu-keputusan.jpg',
-                'mega_caption_title' => 'Arsip Publikasi',
-                'mega_caption_desc' => 'Telusuri keputusan dan ketetapan DPM UII per periode.',
-                'children' => [
-                    ['label' => 'Keputusan', 'url' => '/keputusan', 'description' => 'Surat keputusan, ketetapan, dan keputusan bersama per periode'],
-                    ['label' => 'Semua Publikasi', 'url' => '/keputusan', 'description' => 'Lihat seluruh arsip keputusan →'],
-                ],
-            ],
-            [
-                'label' => 'Berita Kegiatan',
-                'url' => '/berita-kegiatan',
-                'description' => 'Kegiatan dan agenda DPM UII serta parsip mahasiswa.',
-            ],
-            [
-                'label' => 'Pengumuman',
-                'url' => '/pengumuman',
-                'description' => 'Seruan aksi, informasi resmi, dan pemberitahuan untuk KM UII.',
-            ],
-            [
-                'label' => 'Sosialisasi',
-                'url' => '/sosialisasi',
-                'description' => 'Sosialisasi peraturan, kebijakan, program, dan kegiatan DPM UII.',
-            ],
-            [
-                'label' => 'Aspirasi',
-                'url' => '/#aspirasi',
-            ],
+        $pimpinan = [
+            ['jabatan' => 'Ketua', 'nama' => 'Ketua DPM UII', 'fakultas' => 'Fakultas Hukum', 'nim' => '21000001', 'sort_order' => 1],
+            ['jabatan' => 'Sekretaris Jenderal', 'nama' => 'Sekretaris Jenderal DPM UII', 'fakultas' => 'Fakultas Ilmu Komunikasi', 'nim' => '21000002', 'sort_order' => 2],
+            ['jabatan' => 'Komisi 1', 'nama' => 'Ketua Komisi I', 'fakultas' => 'Fakultas Hukum', 'nim' => '21000003', 'sort_order' => 3],
+            ['jabatan' => 'Komisi 2', 'nama' => 'Ketua Komisi II', 'fakultas' => 'Fakultas Ekonomi', 'nim' => '21000004', 'sort_order' => 4],
+            ['jabatan' => 'Komisi 3', 'nama' => 'Ketua Komisi III', 'fakultas' => 'Fakultas Ilmu Sosial dan Politik', 'nim' => '21000005', 'sort_order' => 5],
+            ['jabatan' => 'Komisi 4', 'nama' => 'Ketua Komisi IV', 'fakultas' => 'Fakultas Teknik', 'nim' => '21000006', 'sort_order' => 6],
+            ['jabatan' => 'Anggota Komisi 1', 'nama' => 'Anggota Komisi I', 'fakultas' => 'Fakultas Hukum', 'nim' => '21000007', 'sort_order' => 7],
+            ['jabatan' => 'Anggota Komisi 2', 'nama' => 'Anggota Komisi II', 'fakultas' => 'Fakultas Ekonomi', 'nim' => '21000008', 'sort_order' => 8],
+            ['jabatan' => 'Anggota Komisi 3', 'nama' => 'Anggota Komisi III', 'fakultas' => 'Fakultas Ilmu Sosial dan Politik', 'nim' => '21000009', 'sort_order' => 9],
+            ['jabatan' => 'Anggota Komisi 4', 'nama' => 'Anggota Komisi IV', 'fakultas' => 'Fakultas Teknik', 'nim' => '21000010', 'sort_order' => 10],
         ];
 
-        $this->createMenuItems($menu, $tree);
-    }
-
-    /**
-     * @param  array<int, array<string, mixed>>  $items
-     */
-    private function createMenuItems(Menu $menu, array $items, ?int $parentId = null): void
-    {
-        foreach (array_values($items) as $index => $item) {
-            $created = $menu->items()->create([
-                'menu_id' => $menu->id,
-                'parent_id' => $parentId,
-                'label' => $item['label'],
-                'url' => $item['url'] ?? null,
-                'description' => $item['description'] ?? null,
-                'mega_eyebrow' => $item['mega_eyebrow'] ?? null,
-                'mega_image' => $item['mega_image'] ?? null,
-                'mega_caption_title' => $item['mega_caption_title'] ?? null,
-                'mega_caption_desc' => $item['mega_caption_desc'] ?? null,
-                'mega_docs' => $item['mega_docs'] ?? null,
-                'sort_order' => $index + 1,
-                'is_active' => true,
-            ]);
-
-            if (! empty($item['children'])) {
-                $this->createMenuItems($menu, $item['children'], $created->id);
-            }
+        foreach ($pimpinan as $p) {
+            PimpinanDewan::updateOrCreate(
+                ['periode_id' => $periode->id, 'jabatan' => $p['jabatan']],
+                array_merge($p, ['periode_id' => $periode->id, 'is_active' => true])
+            );
         }
     }
 

@@ -77,7 +77,7 @@ class Post extends Model
 
     public function isSocialization(): bool
     {
-        return $this->category?->slug === self::SOCIALIZATION_CATEGORY_SLUG;
+        return false;
     }
 
     public function getTypeLabelAttribute(): ?string

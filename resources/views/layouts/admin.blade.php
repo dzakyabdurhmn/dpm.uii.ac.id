@@ -9,15 +9,15 @@
             ['label' => 'Berita & Pengumuman', 'url' => route('admin.posts.index'), 'match' => 'admin.posts.*'],
             ['label' => 'Produk Hukum', 'url' => route('admin.legal-products.index'), 'match' => 'admin.legal-products.*'],
             ['label' => 'Dokumen', 'url' => route('admin.documents.index'), 'match' => 'admin.documents.*'],
-            ['label' => 'Konten Halaman', 'url' => route('admin.contents.index'), 'match' => 'admin.contents.*'],
             ['label' => 'Media', 'url' => route('admin.media.index'), 'match' => 'admin.media.*'],
         ]],
         ['group' => 'Struktur', 'items' => [
+            ['label' => 'Pimpinan Dewan', 'url' => route('admin.pimpinan-dewan.index'), 'match' => 'admin.pimpinan-dewan.*'],
+            ['label' => 'Distribusi Dana', 'url' => route('admin.distribusi-dana'), 'match' => 'admin.distribusi-dana.*'],
+            ['label' => 'Aspirasi', 'url' => route('admin.aspirasi.index'), 'match' => 'admin.aspirasi.*'],
             ['label' => 'Alat Kelengkapan', 'url' => route('admin.units.index'), 'match' => 'admin.units.*'],
             ['label' => 'Periode', 'url' => route('admin.periods.index'), 'match' => 'admin.periods.*'],
             ['label' => 'Kategori Dokumen', 'url' => route('admin.document-categories.index'), 'match' => 'admin.document-categories.*'],
-            ['label' => 'Kategori Berita', 'url' => route('admin.post-categories.index'), 'match' => 'admin.post-categories.*'],
-            ['label' => 'Menu Navigasi', 'url' => route('admin.menu.index'), 'match' => 'admin.menu.*'],
         ]],
         ['group' => 'Sistem', 'items' => [
             ['label' => 'Pengaturan', 'url' => route('admin.settings.edit'), 'match' => 'admin.settings.*'],

@@ -4,29 +4,12 @@ namespace Database\Seeders;
 
 use App\Models\Period;
 use App\Models\Post;
-use App\Models\PostCategory;
 use Illuminate\Database\Seeder;
 
 class PostSeeder extends Seeder
 {
     public function run(): void
     {
-        // Ensure categories exist
-        $pengumuman = PostCategory::firstOrCreate(
-            ['slug' => 'pengumuman'],
-            ['name' => 'Pengumuman']
-        );
-
-        $beritaKegiatan = PostCategory::firstOrCreate(
-            ['slug' => 'berita-kegiatan'],
-            ['name' => 'Berita Kegiatan']
-        );
-
-        $sosialisasi = PostCategory::firstOrCreate(
-            ['slug' => 'sosialisasi'],
-            ['name' => 'Sosialisasi']
-        );
-
         $period = Period::where('is_active', true)->first();
 
         $posts = [
@@ -36,7 +19,7 @@ class PostSeeder extends Seeder
                 'slug' => 'dpm-uii-gelar-sidang-paripurna-ke-1-periode-2025-2026',
                 'excerpt' => 'Dewan Permusyawaratan Mahasiswa UII menyelenggarakan Sidang Paripurna pertama periode 2025/2026 untuk membahas program kerja dan anggaran tahunan.',
                 'body' => '<p>Pada hari Senin, 15 September 2025, DPM UII menggelar Sidang Paripurna pertama periode 2025/2026 di Ruang Sidang DPM UII. Sidang dibuka oleh Ketua DPM UII dan dihadiri seluruh anggota dewan.</p><p>Agenda utama sidang meliputi pembahasan program kerja tahunan, anggaran pendapatan dan belanja (APB), serta penetapan struktur pengurus alat kelengkapan dewan.</p><p>"Sidang ini menjadi momen penting untuk menyepakati arah kebijakan dewan selama satu periode ke depan," ujar Ketua DPM UII.</p>',
-                'post_category_id' => $pengumuman->id,
+                'post_category_id' => null,
                 'published_at' => now()->subDays(2),
             ],
             [
@@ -44,7 +27,7 @@ class PostSeeder extends Seeder
                 'slug' => 'pkm-uis-no-3-tahun-2024-resmi-berlaku-tentang-distribusi-dana-km-uis',
                 'excerpt' => 'Peraturan Keluarga Mahasiswa Nomor 3 Tahun 2024 mengenai pengelolaan dan distribusi dana KM UII telah disahkan dan berlaku efektif.',
                 'body' => '<p>PKM UII Nomor 3 Tahun 2024 tentang Distribusi dan Alokasi Dana KM UII telah disahkan oleh Pimpinan DPM UII pada tanggal 10 Agustus 2024.</p><p>Peraturan ini mengatur mekanisme transparan dalam pengelolaan dana Kemahasiswaan, termasuk alokasi untuk Lembaga Eksekutif, Alat Kelengkapan Dewan, dan Lembaga Khusus.</p>',
-                'post_category_id' => $pengumuman->id,
+                'post_category_id' => null,
                 'published_at' => now()->subDays(5),
             ],
             [
@@ -52,7 +35,7 @@ class PostSeeder extends Seeder
                 'slug' => 'audit-keuangan-lembaga-km-uis-triwulan-ii-2024',
                 'excerpt' => 'Badan Audit Kemahasiswaan (BAK) menyelesaikan audit keuangan lembaga-lembaga KM UII untuk triwulan II tahun 2024.',
                 'body' => '<p>Hasil audit menunjukkan bahwa mayoritas lembaga telah mengelola dana sesuai peraturan. Beberapa temuan perbaikan telah disampaikan ke masing-masing lembaga.</p>',
-                'post_category_id' => $pengumuman->id,
+                'post_category_id' => null,
                 'published_at' => now()->subDays(30),
             ],
             [
@@ -60,7 +43,7 @@ class PostSeeder extends Seeder
                 'slug' => 'pengumuman-penerima-beasiswa-prestasi-km-uis-2024',
                 'excerpt' => 'DPM UII melalui BPA mengumumkan daftar penerima beasiswa prestasi bagi mahasiswa berprestasi akademik dan non-akademik.',
                 'body' => '<p>Sebanyak 25 mahasiswa menerima beasiswa prestasi tahun 2024. Seleksi dilakukan berdasarkan IPK, prestasi lomba, dan aktifitas organisasi.</p>',
-                'post_category_id' => $pengumuman->id,
+                'post_category_id' => null,
                 'published_at' => now()->subDays(60),
             ],
 
@@ -70,7 +53,7 @@ class PostSeeder extends Seeder
                 'slug' => 'rapat-koordinasi-alat-kelengkapan-dewan-periode-2025-2026',
                 'excerpt' => 'Ketua DPM UII memimpin rapat koordinasi seluruh alat kelengkapan dewan untuk menyelaraskan program kerja periode 2025/2026.',
                 'body' => '<p>Rapat koordinasi dihadiri oleh ketua-ketua Baleg, Bawas, BAK, BPA, Bksaj, dan Mentari. Setiap alat kelengkapan menyampaikan rencana program kerja masing-masing.</p>',
-                'post_category_id' => $beritaKegiatan->id,
+                'post_category_id' => null,
                 'published_at' => now()->subDays(10),
             ],
             [
@@ -78,7 +61,7 @@ class PostSeeder extends Seeder
                 'slug' => 'forum-aspirasi-mahasiswa-tingkat-fakultas-gelombang-i',
                 'excerpt' => 'DPM UII melalui BKSAJ menggelar Forum Aspirasi Mahasiswa tingkat fakultas untuk menampung keluhan dan usulan mahasiswa.',
                 'body' => '<p>Forum Aspirasi diadakan secara hybrid (online dan offline) di 8 fakultas di UII. Mahasiswa dapat menyampaikan aspirasi langsung ke wakil DPM Fakultas masing-masing.</p><p>Hasil forum akan dijadikan bahan pertimbangan dalam penyusunan program advokasi DPM UII.</p>',
-                'post_category_id' => $beritaKegiatan->id,
+                'post_category_id' => null,
                 'published_at' => now()->subDays(15),
             ],
             [
@@ -86,7 +69,7 @@ class PostSeeder extends Seeder
                 'slug' => 'pelatihan-legislasi-untuk-anggota-dpm-uis-baru',
                 'excerpt' => 'Badan Legislasi (Baleg) mengadakan pelatihan dasar legislasi bagi anggota DPM UII periode 2025/2026.',
                 'body' => '<p>Pelatihan berlangsung selama 2 hari dan mencakup materi: tata cara sidang, teknis drafting peraturan, dan kajian hukum dasar.</p><p>"Kami ingin memastikan seluruh anggota memahami proses legislasi dengan baik," kata Ketua Baleg.</p>',
-                'post_category_id' => $beritaKegiatan->id,
+                'post_category_id' => null,
                 'published_at' => now()->subDays(20),
             ],
             [
@@ -94,7 +77,7 @@ class PostSeeder extends Seeder
                 'slug' => 'pembukaan-lomba-karya-tulis-ilmiah-lkti-km-uis-2025',
                 'excerpt' => 'Mentari DPM UII membuka pendaftaran Lomba Karya Tulis Ilmiah tingkat KM UII tahun 2025.',
                 'body' => '<p>Lomba ini terbuka untuk seluruh mahasiswa UII dengan tema "Inovasi Mahasiswa untuk Kampus Berkelanjutan". Hadiah total mencapai 20 juta rupiah.</p><p>Pendaftaran dibuka hingga 31 Oktober 2025 melalui website resmi DPM UII.</p>',
-                'post_category_id' => $beritaKegiatan->id,
+                'post_category_id' => null,
                 'published_at' => now()->subDays(40),
             ],
             [
@@ -102,7 +85,7 @@ class PostSeeder extends Seeder
                 'slug' => 'kunjungan-kerja-dpm-uis-ke-dpm-se-jawa-tengah',
                 'excerpt' => 'Delegasi DPM UII melakukan kunjungan kerja ke DPM Universitas lain di Jawa Tengah untuk silaturahmi dan sharing pengalaman.',
                 'body' => '<p>Kunjungan dilakukan ke 4 universitas: UNDIP, UNNES, UNS, dan UGM. Bahasan meliputi penguatan legislasi mahasiswa, advokasi kebijakan, dan kerjasama antar DPM.</p>',
-                'post_category_id' => $beritaKegiatan->id,
+                'post_category_id' => null,
                 'published_at' => now()->subDays(50),
             ],
 
@@ -112,7 +95,7 @@ class PostSeeder extends Seeder
                 'slug' => 'sosialisasi-pkm-uis-no-3-tahun-2024-distribusi-dana-km-uis',
                 'excerpt' => 'Badan Legislasi menggelar sosialisasi PKM Nomor 3 Tahun 2024 mengenai pengelolaan dan distribusi dana KM UII kepada seluruh lembaga.',
                 'body' => '<p>Sosialisasi diadakan secara hybrid di Ruang Sidang DPM UII dan via Zoom. Peserta meliputi bendahara dan ketua keuangan seluruh lembaga KM UII.</p><p>Materi meliputi: alur pengajuan dana, mekanisme pencairan, pertanggungjawaban (LPJ), dan sanksi pelanggaran.</p>',
-                'post_category_id' => $sosialisasi->id,
+                'post_category_id' => null,
                 'type' => 'peraturan',
                 'published_at' => now()->subDays(3),
             ],
@@ -121,7 +104,7 @@ class PostSeeder extends Seeder
                 'slug' => 'sosialisasi-perubahan-pkm-pedoman-administrasi-km-uis',
                 'excerpt' => 'Baleg mengadakan sosialisasi perubahan PKM tentang pedoman administrasi bagi seluruh pengurus alat kelengkapan dewan.',
                 'body' => '<p>Sosialisasi difokuskan pada pasal-pasal yang berubah terkait tata kelola administrasi dewan dan alat kelengkapan.</p>',
-                'post_category_id' => $sosialisasi->id,
+                'post_category_id' => null,
                 'type' => 'peraturan',
                 'published_at' => now()->subDays(12),
             ],
@@ -132,7 +115,7 @@ class PostSeeder extends Seeder
                 'slug' => 'sosialisasi-kebijakan-baru-adovkasi-keringanan-ukt-mahasiswa',
                 'excerpt' => 'BKSAJ menggelar sosialisasi kebijakan advokasi keringanan UKT bagi mahasiswa terdampak ekonomi.',
                 'body' => '<p>Kebijakan ini merupakan hasil advokasi DPM UII kepada Rektorat UII. Sosialisasi menjelaskan syarat, prosedur pengajuan, dan jadwal verifikasi.</p>',
-                'post_category_id' => $sosialisasi->id,
+                'post_category_id' => null,
                 'type' => 'kebijakan',
                 'published_at' => now()->subDays(8),
             ],
@@ -143,7 +126,7 @@ class PostSeeder extends Seeder
                 'slug' => 'sosialisasi-program-magang-mahasiswa-dpm-uis-batch-2',
                 'excerpt' => 'Mentari membuka pendaftaran program magang di sekretariat DPM UII untuk mahasiswa tingkat 1-3.',
                 'body' => '<p>Program magang bertujuan memberikan pengalaman kerja nyata di lingkungan parlemen mahasiswa. Durasi 3 bulan dengan sertifikat resmi.</p>',
-                'post_category_id' => $sosialisasi->id,
+                'post_category_id' => null,
                 'type' => 'program',
                 'published_at' => now()->subDays(18),
             ],
@@ -152,7 +135,7 @@ class PostSeeder extends Seeder
                 'slug' => 'sosialisasi-program-beasiswa-prestasi-km-uis-2025',
                 'excerpt' => 'BPA menggelar sosialisasi program beasiswa prestasi tahun 2025 bagi mahasiswa berprestasi.',
                 'body' => '<p>Sosialisasi menjelaskan kriteria seleksi, jenis beasiswa, nilai hadiah, dan tata cara pendaftaran melalui sistem online.</p>',
-                'post_category_id' => $sosialisasi->id,
+                'post_category_id' => null,
                 'type' => 'program',
                 'published_at' => now()->subDays(25),
             ],
@@ -163,7 +146,7 @@ class PostSeeder extends Seeder
                 'slug' => 'sosialisasi-kegiatan-konsolidasi-aksi-mahasiswa-uis',
                 'excerpt' => 'DPM UII menggelar sosialisasi terkait konsolidasi aksi mahasiswa menyambut HARDIKNAS.',
                 'body' => '<p>Sosialisasi dibuka untuk seluruh ormawa dan mahasiswa UII. Membahas rundown acara, aturan partisipasi, dan koordinasi keamanan.</p>',
-                'post_category_id' => $sosialisasi->id,
+                'post_category_id' => null,
                 'type' => 'lainnya',
                 'published_at' => now()->subDays(6),
             ],
