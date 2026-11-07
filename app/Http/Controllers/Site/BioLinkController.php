@@ -46,9 +46,9 @@ class BioLinkController extends Controller
                                 'icon' => $this->icon('book'),
                             ],
                             (object) [
-                                'title' => 'Surat Keputusan',
-                                'description' => 'Arsip keputusan resmi DPM UII',
-                                'url' => route('documents.decisions'),
+                                'title' => 'Dokumen & Publikasi',
+                                'description' => 'Arsip keputusan dan dokumen resmi DPM UII',
+                                'url' => route('documents.index'),
                                 'open_in_new_tab' => false,
                                 'icon_type' => 'custom',
                                 'icon' => $this->icon('document'),

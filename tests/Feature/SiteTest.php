@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Document;
 use App\Models\DocumentCategory;
+use App\Models\Period;
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -70,6 +71,7 @@ class SiteTest extends TestCase
 
         $document = Document::query()->create([
             'document_category_id' => $category->id,
+            'period_id' => Period::active()?->id,
             'title' => 'Laporan Keuangan Triwulan I',
             'external_url' => 'https://drive.google.com/file/d/example/view',
             'year' => 2026,
@@ -91,7 +93,7 @@ class SiteTest extends TestCase
             ->assertOk()
             ->assertSee('@dpmuii')
             ->assertSee('Produk Hukum')
-            ->assertSee('Surat Keputusan');
+            ->assertSee('Dokumen dan Publikasi');
     }
 
     public function test_humas_download_page_lists_and_serves_internal_files(): void
@@ -119,25 +121,42 @@ class SiteTest extends TestCase
             ->assertSee('PDPM');
     }
 
-    public function test_documents_support_quarter_filtering(): void
+    public function test_documents_page_filters_by_publication_type_and_search(): void
     {
-        $category = DocumentCategory::query()->firstOrFail();
+        $keputusan = DocumentCategory::query()->where('slug', 'surat-keputusan')->firstOrFail();
+        $laporan = DocumentCategory::query()->where('slug', 'laporan-kinerja')->firstOrFail();
 
         Document::query()->create([
-            'document_category_id' => $category->id,
-            'title' => 'Laporan Triwulan II',
-            'external_url' => 'https://example.com/tw2.pdf',
+            'document_category_id' => $keputusan->id,
+            'title' => 'Keputusan Uji Publikasi',
+            'external_url' => 'https://example.com/keputusan.pdf',
             'year' => 2026,
-            'quarter' => 2,
             'published_at' => now()->subDay(),
         ]);
 
-        $this->get(route('documents.index', ['triwulan' => 2]))
-            ->assertOk()
-            ->assertSee('Laporan Triwulan II');
+        Document::query()->create([
+            'document_category_id' => $laporan->id,
+            'title' => 'Laporan Uji Publikasi',
+            'external_url' => 'https://example.com/laporan.pdf',
+            'year' => 2026,
+            'published_at' => now()->subDay(),
+        ]);
 
-        $this->get(route('documents.index', ['triwulan' => 3]))
+        $this->get(route('documents.index', ['periode' => 'all', 'jenis' => 'keputusan']))
             ->assertOk()
-            ->assertDontSee('Laporan Triwulan II');
+            ->assertSee('Keputusan Uji Publikasi')
+            ->assertDontSee('Laporan Uji Publikasi');
+
+        $this->get(route('documents.index', ['periode' => 'all', 'q' => 'Laporan Uji']))
+            ->assertOk()
+            ->assertSee('Laporan Uji Publikasi')
+            ->assertDontSee('Keputusan Uji Publikasi');
+    }
+
+    public function test_removed_publication_pages_no_longer_exist(): void
+    {
+        $this->get('/keputusan')->assertNotFound();
+        $this->get('/laporan-kinerja')->assertNotFound();
+        $this->get('/dokumen/kategori/surat-keputusan')->assertNotFound();
     }
 }

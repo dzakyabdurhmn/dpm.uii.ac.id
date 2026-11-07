@@ -33,6 +33,7 @@
     --sh-sm: 0 4px 12px rgba(0,0,0,0.25);
     --sh-md: 0 8px 24px rgba(0,0,0,0.40);
     --sh-lg: 0 16px 48px rgba(0,0,0,0.55);
+    --gold: #f2b31a;
     --container: 1200px;
   }
 
@@ -71,20 +72,82 @@
   .sh-bot small { font-size: 11px; color: var(--t-cap); }
   .sh-bot strong { font-family: 'Wix Madefor Display', sans-serif; font-size: 24px; font-weight: 800; color: var(--white); }
 
-  .edbar-wrap { position: sticky; top: 72px; z-index: 40; background: rgba(0,30,67,0.95); border-bottom: 1px solid var(--b-default); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 16px 0; }
+  .edbar-wrap {
+    position: sticky;
+    top: 72px;
+    z-index: 40;
+    background: rgba(0, 30, 67, 0.95);
+    border-bottom: 1px solid var(--b-default);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 16px 0;
+  }
   .edbar-wrap .container { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
-  .edhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  .edhead span { font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--t-cap); }
-  .edhead i { width: 24px; height: 24px; background: var(--navy-card); border: 1px solid var(--b-default); border-radius: 6px; }
-  .edcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-  .edcard { background: var(--navy-card); border: 1px solid var(--b-default); border-radius: 10px; padding: 16px; cursor: pointer; transition: all .2s; position: relative; }
-  .edcard:hover { border-color: var(--b-btn); background: var(--navy-hover); transform: translateY(-2px); box-shadow: var(--sh-md); }
-  .edcard[aria-selected="true"] { border-color: var(--gold); background: rgba(242,179,26,0.1); }
-  .edcard .ec-year { font-family: 'Wix Madefor Display', sans-serif; font-size: 28px; font-weight: 800; color: var(--white); line-height: 1; }
-  .edcard .ec-count { font-size: 11px; color: var(--t-cap); margin-top: 4px; }
-  .edcard .ec-status { position: absolute; top: 12px; right: 12px; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
-  .edcard .ec-status.aktif { background: rgba(34,197,94,0.2); color: #4ade80; border: 1px solid rgba(34,197,94,0.4); }
-  .edcard .ec-status.arsip { background: rgba(255,255,255,0.05); color: var(--t-cap); border: 1px solid var(--b-default); }
+  .edhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .edhead-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--t-cap);
+  }
+  .edhead-hint {
+    font-size: 12px;
+    color: var(--t-cap);
+  }
+  .edcards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .edcard {
+    background: #001A3A;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    text-align: left;
+    transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .edcard:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: #002451;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+  .edcard[aria-selected="true"] {
+    background: #ffffff !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+  }
+  .edcard .ec-year {
+    display: block;
+    font-family: 'Wix Madefor Display', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+    letter-spacing: -0.5px;
+  }
+  .edcard[aria-selected="true"] .ec-year {
+    color: #001E43 !important;
+  }
+  .edcard .ec-count {
+    display: block;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.65);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .edcard[aria-selected="true"] .ec-count {
+    color: rgba(0, 30, 67, 0.75) !important;
+    font-weight: 600;
+  }
   .ednote { margin-top: 12px; font-size: 12px; color: var(--t-cap); text-align: center; }
 
   .facts-wrap { padding: 32px 0; border-bottom: 1px solid var(--b-default); }
@@ -171,6 +234,27 @@
   .doc-no b { font-family: 'Wix Madefor Display', sans-serif; font-size: 22px; font-weight: 800; color: var(--white); line-height: 1; }
   .doc-label { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 4px; font-size: 12px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: var(--t-cap); }
   .badge { padding: 2px 9px; border: 1px solid var(--b-btn); border-radius: 100px; font-size: 10.5px; letter-spacing: 1px; color: var(--white); }
+  .badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+  .badge-status.aktif {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #4ade80;
+  }
+  .badge-status.tidak_aktif {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #f87171;
+  }
   .doc h3 { font-size: 17px; line-height: 1.45; letter-spacing: -.1px; }
   .doc mark { background: rgba(255,255,255,.18); color: var(--white); border-radius: 2px; padding: 0 2px; }
   .doc-actions { display: flex; gap: 8px; }
@@ -1019,6 +1103,7 @@
                 'downloads' => $product->downloads,
                 'download_url' => $product->download_url,
                 'has_file' => $product->hasFile(),
+                'status' => $product->status ?? 'aktif',
                 'amends' => $product->amends ? [
                     'regulation_number' => $product->amends->regulation_number,
                     'heading' => $product->amends->heading,
@@ -1049,7 +1134,7 @@
               'label' => 'Tahun '.$editionYear,
               'short' => (string) $editionYear,
               'count' => $editionProducts->count(),
-              'status' => $editionYear === $newestPkmYear ? 'Aktif' : 'Arsip',
+              'status' => $editionYear === $newestPkmYear ? 'Terbaru' : 'Berlaku',
               'products' => $editionProducts->map(fn ($product) => [
                   'id' => $product->id,
                   'year' => $product->year,
@@ -1105,8 +1190,11 @@
 
     <div class="edbar-wrap">
       <div class="container">
-        <div class="edhead"><span id="edLbl">Tahun PKM</span><i></i></div>
-        <div class="edcards" role="tablist" aria-labelledby="edLbl" id="edsw"></div>
+        <div class="edhead">
+          <span class="edhead-title">Tahun Regulasi PKM</span>
+          <span class="edhead-hint">Pilih tahun untuk memfilter daftar peraturan</span>
+        </div>
+        <div class="edcards" role="tablist" aria-label="Tahun Regulasi PKM" id="edsw"></div>
         <p class="ednote" id="ednote" hidden></p>
       </div>
     </div>
@@ -1115,9 +1203,9 @@
       <div class="container">
         <div class="facts-row">
           <div><small>Total Peraturan</small><b id="fTotal">{{ $totalCount }}</b></div>
-          <div><small>Tahun Terarsip</small><b id="fYears">{{ $yearsWithData->count() }}</b></div>
-          <div><small>Tahun Aktif</small><b id="fCurrent">{{ $currentEdition['year'] ?? '–' }}</b></div>
-          <div><small>Terbaru</small><b id="fLatest">{{ $latestLabel }}</b></div>
+          <div><small>Tahun Tersedia</small><b id="fYears">{{ $yearsWithData->count() }}</b></div>
+          <div><small>Tahun Terpilih</small><b id="fCurrent">{{ $currentEdition['year'] ?? '–' }}</b></div>
+          <div><small>Regulasi Terbaru</small><b id="fLatest">{{ $latestLabel }}</b></div>
         </div>
       </div>
     </div>
@@ -1153,9 +1241,9 @@
           <p>Peraturan lain yang berkaitan dengan PKM.</p>
         </div>
         <div class="links">
-          <a href="{{ route('legal-products.type', 'pdkm') }}"><strong>Peraturan Dasar (PDKM)</strong><span>Konstitusi tertinggi KM UII.</span><em>Buka arsip →</em></a>
-          <a href="{{ route('legal-products.type', 'gbhkm') }}"><strong>Garis-Garis Besar Haluan (GBHKM)</strong><span>Arah kebijakan KM UII per periode.</span><em>Buka arsip →</em></a>
-          <a href="{{ route('legal-products.type', 'pdpm') }}"><strong>Peraturan Dewan (PDPM UII)</strong><span>Peraturan internal DPM UII.</span><em>Buka arsip →</em></a>
+          <a href="{{ route('legal-products.type', 'pdkm') }}"><strong>Peraturan Dasar (PDKM)</strong><span>Konstitusi tertinggi KM UII.</span><em>Lihat peraturan →</em></a>
+          <a href="{{ route('legal-products.type', 'gbhkm') }}"><strong>Garis-Garis Besar Haluan (GBHKM)</strong><span>Arah kebijakan KM UII per periode.</span><em>Lihat ketetapan →</em></a>
+          <a href="{{ route('legal-products.type', 'pdpm') }}"><strong>Peraturan Dewan (PDPM UII)</strong><span>Peraturan DPM UII.</span><em>Lihat peraturan →</em></a>
         </div>
       </div>
     </section>
@@ -1547,8 +1635,7 @@
 
       return '<button class="edcard" type="button" role="tab" data-year="' + esc(edition.year) + '" aria-selected="' + (active ? 'true' : 'false') + '">' +
         '<span class="ec-year">' + esc(edition.year) + '</span>' +
-        '<span class="ec-count">' + edition.count + ' peraturan</span>' +
-        '<span class="ec-status ' + (edition.status === 'Aktif' ? 'aktif' : 'arsip') + '">' + esc(edition.status) + '</span>' +
+        '<span class="ec-count">' + edition.count + ' Peraturan</span>' +
         '</button>';
     }).join('');
   }
@@ -1810,9 +1897,14 @@
       html += '<h2 class="yr">' + y + '<span>' + docs.length + ' dokumen</span></h2><div class="docs">';
       docs.forEach(d => {
         const k = shownDocs.push(d) - 1;
+        const isInactive = d.status === 'tidak_aktif';
+        const statusBadge = isInactive
+          ? '<span class="badge-status tidak_aktif">✕ Tidak Berlaku</span>'
+          : '<span class="badge-status aktif">✓ Berlaku</span>';
+
         html += '<article class="doc">' +
           '<div class="doc-no" aria-hidden="true"><small>No.</small><b>' + (d.number || '—') + '</b></div>' +
-          '<div class="doc-main"><div class="doc-label"><span>' + hl(d.regulation_number || d.title) + '</span>' + (d.amend ? '<span class="badge">Perubahan</span>' : '') + '</div>' +
+          '<div class="doc-main"><div class="doc-label"><span>' + hl(d.regulation_number || d.title) + '</span>' + (d.amend ? '<span class="badge">Perubahan</span>' : '') + statusBadge + '</div>' +
           '<h3>' + hl(d.title) + '</h3></div>' +
           '<div class="doc-actions">' +
             '<button class="btn sm" type="button" data-k="' + k + '" aria-label="Pratinjau ' + esc(d.regulation_number || d.title) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Pratinjau</button>' +

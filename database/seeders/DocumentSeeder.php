@@ -6,6 +6,7 @@ use App\Models\Document;
 use App\Models\DocumentCategory;
 use App\Models\Period;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -22,11 +23,8 @@ class DocumentSeeder extends Seeder
             return;
         }
 
-        // Clear existing documents first (keep categories)
-        Document::query()->delete();
-        $this->command->info('Cleared existing documents.');
-
-        // Ensure categories exist
+        // Sinkronkan dokumen tanpa menghapus data: file yang sama diperbarui,
+        // file baru ditambahkan. Unduhan dokumen lama tetap aman.
         $this->ensureCategories();
 
         // Get periods for reference
@@ -45,7 +43,7 @@ class DocumentSeeder extends Seeder
         // 3. Keterangan Akademik (Academic Certificates)
         $this->importKeteranganAkademik($basePath, $periods);
 
-        $this->command->info('Documents imported successfully!');
+        $this->command->info('Documents synced successfully!');
         $this->command->info('Total: '.Document::count().' records');
     }
 
@@ -152,6 +150,7 @@ class DocumentSeeder extends Seeder
         $files = File::files($dir);
         $processed = 0;
         $skipped = 0;
+        $duplicatePaths = [];
 
         foreach ($files as $file) {
             $filename = $file->getFilename();
@@ -168,6 +167,7 @@ class DocumentSeeder extends Seeder
 
             // Skip duplicate files (keep best version)
             if ($this->isDuplicate($files, $filename)) {
+                $duplicatePaths[] = 'uploads/produk-hukum/SURAT KEPUTUSAN/'.$filename;
                 $skipped++;
 
                 continue;
@@ -196,30 +196,31 @@ class DocumentSeeder extends Seeder
             $year = $data['year'] ?? $this->extractYearFromFilename($filename) ?? 2024;
 
             try {
-                Document::create([
+                $this->storeDocument([
                     'document_category_id' => $category->id,
                     'period_id' => $this->findPeriodId($periods, $year),
                     'title' => $data['title'],
-                    'slug' => $this->generateUniqueSlug($data['title']),
                     'description' => $data['description'] ?? 'Surat Keputusan DPM UII',
                     'file_path' => 'uploads/produk-hukum/SURAT KEPUTUSAN/'.$filename,
                     'mime_type' => 'application/pdf',
                     'size' => $file->getSize(),
                     'year' => $year,
                     'quarter' => null,
-                    'published_at' => now(),
+                    'published_at' => $this->publishedAt($year),
                     'is_featured' => false,
                     'sort_order' => $processed + 1,
                 ]);
 
                 $catLabel = $subCategory ? $subCategory->name : 'Surat Keputusan (Utama)';
-                $this->command->info("Created Document: {$catLabel} | {$year} | {$data['title']}");
+                $this->command->info("{$catLabel} | {$year} | {$data['title']}");
                 $processed++;
             } catch (\Exception $e) {
-                $this->command->error("Failed to create document for {$filename}: ".$e->getMessage());
+                $this->command->error("Failed to sync document for {$filename}: ".$e->getMessage());
                 $skipped++;
             }
         }
+
+        $this->pruneDuplicateDocuments($duplicatePaths, 'uploads/produk-hukum/SURAT KEPUTUSAN/');
 
         $this->command->info("Surat Keputusan: {$processed} imported, {$skipped} duplicates skipped");
     }
@@ -243,6 +244,7 @@ class DocumentSeeder extends Seeder
         $files = File::files($dir);
         $processed = 0;
         $skipped = 0;
+        $duplicatePaths = [];
 
         foreach ($files as $file) {
             $filename = $file->getFilename();
@@ -252,6 +254,7 @@ class DocumentSeeder extends Seeder
 
             // Skip duplicate files
             if ($this->isDuplicate($files, $filename)) {
+                $duplicatePaths[] = 'uploads/produk-hukum/SURAT KETETAPAN/'.$filename;
                 $skipped++;
 
                 continue;
@@ -266,25 +269,26 @@ class DocumentSeeder extends Seeder
 
             $year = $data['year'] ?? $this->extractYearFromFilename($filename) ?? 2024;
 
-            Document::create([
+            $this->storeDocument([
                 'document_category_id' => $category->id,
                 'period_id' => $this->findPeriodId($periods, $year),
                 'title' => $data['title'],
-                'slug' => $this->generateUniqueSlug($data['title']),
                 'description' => $data['description'] ?? 'Surat Ketetapan DPM UII',
                 'file_path' => 'uploads/produk-hukum/SURAT KETETAPAN/'.$filename,
                 'mime_type' => 'application/pdf',
                 'size' => $file->getSize(),
                 'year' => $year,
                 'quarter' => null,
-                'published_at' => now(),
+                'published_at' => $this->publishedAt($year),
                 'is_featured' => false,
                 'sort_order' => $processed + 1,
             ]);
 
-            $this->command->info("Created Document: Surat Ketetapan | {$year} | {$data['title']}");
+            $this->command->info("Surat Ketetapan | {$year} | {$data['title']}");
             $processed++;
         }
+
+        $this->pruneDuplicateDocuments($duplicatePaths, 'uploads/produk-hukum/SURAT KETETAPAN/');
 
         $this->command->info("Surat Ketetapan: {$processed} imported, {$skipped} duplicates skipped");
     }
@@ -308,6 +312,7 @@ class DocumentSeeder extends Seeder
         $files = File::files($dir);
         $processed = 0;
         $skipped = 0;
+        $duplicatePaths = [];
 
         foreach ($files as $file) {
             $filename = $file->getFilename();
@@ -317,6 +322,7 @@ class DocumentSeeder extends Seeder
 
             // Skip duplicate files
             if ($this->isDuplicate($files, $filename)) {
+                $duplicatePaths[] = 'uploads/produk-hukum/KETERANGAN AKADEMIK/'.$filename;
                 $skipped++;
 
                 continue;
@@ -331,25 +337,26 @@ class DocumentSeeder extends Seeder
 
             $year = $data['year'] ?? $this->extractYearFromFilename($filename) ?? 2024;
 
-            Document::create([
+            $this->storeDocument([
                 'document_category_id' => $category->id,
                 'period_id' => $this->findPeriodId($periods, $year),
                 'title' => $data['title'],
-                'slug' => $this->generateUniqueSlug($data['title']),
                 'description' => $data['description'] ?? 'Keterangan Akademik DPM UII',
                 'file_path' => 'uploads/produk-hukum/KETERANGAN AKADEMIK/'.$filename,
                 'mime_type' => 'application/pdf',
                 'size' => $file->getSize(),
                 'year' => $year,
                 'quarter' => null,
-                'published_at' => now(),
+                'published_at' => $this->publishedAt($year),
                 'is_featured' => false,
                 'sort_order' => $processed + 1,
             ]);
 
-            $this->command->info("Created Document: Keterangan Akademik | {$year} | {$data['title']}");
+            $this->command->info("Keterangan Akademik | {$year} | {$data['title']}");
             $processed++;
         }
+
+        $this->pruneDuplicateDocuments($duplicatePaths, 'uploads/produk-hukum/KETERANGAN AKADEMIK/');
 
         $this->command->info("Keterangan Akademik: {$processed} imported, {$skipped} duplicates skipped");
     }
@@ -368,22 +375,24 @@ class DocumentSeeder extends Seeder
         // Clean up the title
         $title = $name;
 
-        // Remove "SURAT KEPUTUSAN" prefix
-        $title = preg_replace('/^SURAT\s+KEPUTUSAN\s+/i', '', $title);
-        // Remove "SK" prefix
-        $title = preg_replace('/^SK\s*[-_]?\s*/i', '', $title);
-        // Remove trailing year
-        if ($year) {
-            $title = preg_replace('/\s+'.preg_quote((string) $year, '/').'\s*$/i', '', $title);
-        }
-        // Remove version suffixes
-        $title = preg_replace('/[-_](final|v?\d+)$/i', '', $title);
+        // Remove "SURAT KEPUTUSAN" atau "SK" prefix (termasuk pemisah -/_).
+        $title = preg_replace('/^SURAT\s+KEPUTUSAN[\s\-_]+/i', '', $title);
+        $title = preg_replace('/^SK[\s\-_]+/i', '', $title);
+        $title = preg_replace('/\s+PERIODE(?:\s+\d{4}(?:\s*[-–]\s*\d{4})?)?\s*$/i', '', $title);
+        // Remove trailing year atau rentang tahun.
+        $title = preg_replace('/\s+\d{4}(?:\s*[-–]\s*\d{4})?\s*$/i', '', $title);
+        // Remove version suffixes.
+        $title = preg_replace('/[\s\-_]+(final|finall|fix|revisi|rev|merged|merge|copy|v?\d+)\s*$/i', '', $title);
 
-        $title = trim($title, ' -_');
+        $title = trim($title, ' -_=');
         $title = $this->titleCase($title);
 
-        if (empty($title)) {
+        if ($title === '') {
             $title = 'Surat Keputusan DPM UII';
+        } elseif (! Str::startsWith($title, 'Surat Keputusan')) {
+            // Judul dari nama file sering hanya berisi subjek ("BAK KM UII")
+            // sehingga jenis dokumen perlu ditambahkan agar jelas.
+            $title = 'Surat Keputusan '.$title;
         }
 
         return [
@@ -402,15 +411,18 @@ class DocumentSeeder extends Seeder
 
         // "S-TAP-SU-XLI_DPM UII-final"
         $title = $name;
-        $title = preg_replace('/^S-TAP-SU-/i', '', $title);
-        $title = preg_replace('/_DPM\s*UII/i', '', $title);
-        if ($year) {
-            $title = preg_replace('/\s+'.preg_quote((string) $year, '/').'\s*$/i', '', $title);
-        }
-        $title = preg_replace('/[-_](final|v?\d+)$/i', '', $title);
+        $title = preg_replace('/^S-?TAP(?:[\s\-_]+SU)?[\s\-_]+/i', '', $title);
+        $title = preg_replace('/[\s\-_]+DPM\s*UII/i', '', $title);
+        $title = preg_replace('/[\s\-_]+(final|finall|fix|revisi|rev|merged|merge|copy|v?\d+)\s*$/i', '', $title);
 
-        $title = trim($title, ' -_');
-        $title = $this->titleCase($title);
+        $title = trim($title, ' -_=');
+
+        // Nomor romawi saja: beri konteks supaya judul tidak menggantung.
+        if (preg_match('/^[IVXLCDM]+$/i', $title)) {
+            $title = 'Ketetapan DPM UII Nomor '.strtoupper($title);
+        } else {
+            $title = $this->titleCase($title);
+        }
 
         if (empty($title)) {
             $title = 'Surat Ketetapan DPM UII';
@@ -439,15 +451,11 @@ class DocumentSeeder extends Seeder
         // "KA RPKM KODE ETIK LEMBAGA LEGISLATIF"
         // "KETERANGAN AKADEMIK PEDOMAN KEGIATAN"
         $title = $name;
-        $title = preg_replace('/^KETERANGAN\s+AKADEMIK\s+/i', '', $title);
-        $title = preg_replace('/^KA\s+/i', '', $title);
-        $title = preg_replace('/^RPKM\s+/i', '', $title);
-        if ($year) {
-            $title = preg_replace('/\s+'.preg_quote((string) $year, '/').'\s*$/i', '', $title);
-        }
-        $title = preg_replace('/[-_](final|v?\d+)$/i', '', $title);
+        $title = preg_replace('/^KETERANGAN\s+AKADEMIK[\s\-_]+/i', '', $title);
+        $title = preg_replace('/^KA[\s\-_]+/i', '', $title);
+        $title = preg_replace('/[\s\-_]+(final|finall|fix|revisi|rev|merged|merge|copy|v?\d+)\s*$/i', '', $title);
 
-        $title = trim($title, ' -_');
+        $title = trim($title, ' -_=');
         $title = $this->titleCase($title);
 
         if (empty($title)) {
@@ -490,15 +498,25 @@ class DocumentSeeder extends Seeder
 
     private function getBaseFilename(string $filename): string
     {
-        // Remove version suffixes like -1, -2, -3, -4, -final, _final, etc.
-        // Handle multiple suffixes: "final-1", "final-2", etc.
-        $name = $filename;
-        // First remove trailing -1, -2, -3, -4 etc (numbered versions)
-        $name = preg_replace('/[-_](\d+)(?=\.pdf$)/i', '', $name);
-        // Then remove -final, _final, -finall
-        $name = preg_replace('/[-_](final|finall)(?=\.pdf$)/i', '', $name);
+        $name = preg_replace('/\.pdf$/i', '', $filename);
+
+        // Buang penanda versi di akhir nama secara berulang: -final, _revisi,
+        // -merged, -1, (1), dst. Angka 4 digit (tahun) tidak dianggap versi.
+        do {
+            $previous = $name;
+            $name = preg_replace('/[\s\-_]+(?:merged|merge|revisi|rev|fix|finall|final|copy)\b[^.]*$/i', '', $name);
+            $name = preg_replace('/[\s\-_]+\(\d+\)$/i', '', $name);
+            $name = preg_replace('/[\s\-_]+v?\d{1,2}$/i', '', $name);
+        } while ($name !== $previous);
 
         return $name;
+    }
+
+    private function publishedAt(?int $year): Carbon
+    {
+        return $year !== null
+            ? Carbon::create($year, 1, 1)->startOfDay()
+            : now();
     }
 
     private function isDuplicate(array $files, string $filename): bool
@@ -528,75 +546,58 @@ class DocumentSeeder extends Seeder
 
     private function titleCase(string $text): string
     {
-        $text = mb_strtolower($text);
+        $text = str_replace(['_', '-'], ' ', $text);
+        $text = preg_replace('/\s+/', ' ', $text);
+        $text = mb_strtolower(trim($text));
         $text = ucwords($text);
 
+        // Singkatan/akronim yang harus tetap huruf kapital. Pencocokan memakai
+        // batas kata agar tidak merusak kata lain (mis. "Su" di "Khusus").
         $replacements = [
             'Uii' => 'UII',
             'Km' => 'KM',
             'Dpm' => 'DPM',
             'Pdkm' => 'PDKM',
-            'Gbhkm' => 'GBHKM',
+            'Gbkhkm' => 'GBHKM',
             'Pkm' => 'PKM',
             'Pdpm' => 'PDPM',
             'Sk' => 'SK',
             'Tap' => 'TAP',
-            'Su' => 'SU',
             'Fbe' => 'FBE',
             'Fh' => 'FH',
             'Fiai' => 'FIAI',
+            'Fia' => 'FIA',
             'Fk' => 'FK',
             'Fmipa' => 'FMIPA',
             'Fti' => 'FTI',
             'Ftsp' => 'FTSP',
+            'Fpsb' => 'FPSB',
+            'Fpsi' => 'FPSI',
+            'Feb' => 'FEB',
             'Kpu' => 'KPU',
             'Bak' => 'BAK',
             'Bpa' => 'BPA',
-            'Baleg' => 'Baleg',
-            'Bawas' => 'Bawas',
-            'Bksaj' => 'Bksaj',
-            'Mentari' => 'Mentari',
-            'Panwas' => 'Panwas',
+            'Lmbg' => 'LMBG',
+            'Rpkm' => 'RPKM',
+            'Ukmk' => 'UKMK',
+            'Kpsu' => 'KPSU',
             'Mo' => 'MO',
             'Ad' => 'AD',
-            'Kpsu' => 'KPSU',
-            'Rpkm' => 'RPKM',
-            'Lmbg' => 'LMBG',
-            'UkMK' => 'UKMK',
             'Ttg' => 'Tentang',
             'Nmr' => 'Nomor',
             'Thn' => 'Tahun',
-            'Pdpm' => 'PDPM',
-            'Pemilwa' => 'Pemilwa',
-            'Foraslak' => 'Foraslak',
-            'UkMK' => 'UKMK',
-            'Nomor' => 'Nomor',
-            'Administrasi' => 'Administrasi',
-            'Monitoring' => 'Monitoring',
-            'Advokasi' => 'Advokasi',
-            'Pesona' => 'Pesona',
-            'Taaruf' => 'Taaruf',
-            'Kode' => 'Kode',
-            'Etik' => 'Etik',
-            'Lembaga' => 'Lembaga',
-            'Legislatif' => 'Legislatif',
-            'Struktur' => 'Struktur',
-            'Pembentukan' => 'Pembentukan',
-            'Pengelolaan' => 'Pengelolaan',
-            'Aset' => 'Aset',
-            'Kegiatan' => 'Kegiatan',
-            'Pedoman' => 'Pedoman',
-            'Tim' => 'Tim',
-            'Pesta' => 'Pesta',
-            'Final' => 'Final',
         ];
 
-        // Fix specific "NoMOr" issue
-        $text = str_ireplace('NoMOr', 'Nomor', $text);
-
         foreach ($replacements as $search => $replace) {
-            $text = str_ireplace($search, $replace, $text);
+            $text = preg_replace('/\b'.preg_quote($search, '/').'\b/u', $replace, $text);
         }
+
+        // Kata sambung tetap huruf kecil kecuali di awal judul.
+        $text = preg_replace_callback(
+            '/(?<!^)\b(Dan|Atau|Serta|Di|Ke|Dari|Pada|Dalam|Untuk|Yang|Dengan|Terhadap)\b/u',
+            fn (array $matches): string => mb_strtolower($matches[1]),
+            $text
+        );
 
         return $text;
     }
@@ -639,13 +640,56 @@ class DocumentSeeder extends Seeder
         return $nearest?->id;
     }
 
-    private function generateUniqueSlug(string $title): string
+    /**
+     * Simpan atau perbarui dokumen berdasarkan path file. Data unduhan dan
+     * relasi lain pada baris lama tidak ikut terhapus.
+     *
+     * @param  array<string, mixed>  $attributes
+     */
+    private function storeDocument(array $attributes): Document
+    {
+        $document = Document::query()->firstOrNew(['file_path' => $attributes['file_path']]);
+
+        if (! $document->exists || $document->title !== $attributes['title']) {
+            $attributes['slug'] = $this->generateUniqueSlug($attributes['title'], $document->id);
+        }
+
+        $document->fill($attributes)->save();
+
+        return $document;
+    }
+
+    /**
+     * Hapus baris lama yang menunjuk berkas duplikat di folder terkelola.
+     *
+     * @param  array<int, string>  $filePaths
+     */
+    private function pruneDuplicateDocuments(array $filePaths, string $directory): void
+    {
+        if ($filePaths === []) {
+            return;
+        }
+
+        $deleted = Document::query()
+            ->where('file_path', 'like', $directory.'%')
+            ->whereIn('file_path', $filePaths)
+            ->delete();
+
+        if ($deleted > 0) {
+            $this->command->info("Removed {$deleted} duplicate document(s) from {$directory}");
+        }
+    }
+
+    private function generateUniqueSlug(string $title, ?int $ignoreId = null): string
     {
         $slug = Str::slug($title);
         $originalSlug = $slug;
         $counter = 1;
 
-        while (Document::where('slug', $slug)->exists()) {
+        while (Document::query()
+            ->where('slug', $slug)
+            ->when($ignoreId !== null, fn ($query) => $query->whereKeyNot($ignoreId))
+            ->exists()) {
             $slug = $originalSlug.'-'.$counter++;
         }
 

@@ -8,103 +8,122 @@ use App\Models\DocumentCategory;
 use App\Models\Period;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class DocumentController extends Controller
 {
-    public function index(Request $request): View
-    {
-        return $this->listing($request, $this->queryString($request, 'kategori'));
-    }
+    /**
+     * Jenis publikasi yang tampil di halaman Dokumen dan Publikasi.
+     *
+     * @var array<string, string>
+     */
+    private const PUBLICATION_TYPES = [
+        'keputusan' => 'Keputusan',
+        'ketetapan' => 'Ketetapan',
+        'laporan' => 'Laporan Kinerja',
+        'dokumen' => 'Dokumen Resmi',
+    ];
 
     /**
-     * Laporan kinerja: hasil Foraslak DPM UII.
+     * Dokumen dan Publikasi: satu arsip untuk keputusan, ketetapan, laporan
+     * kinerja, dan dokumen resmi DPM UII, dikelompokkan per periode.
      */
-    public function reports(Request $request): View
+    public function index(Request $request): View
     {
-        $year = $this->queryString($request, 'tahun');
-        $quarter = $this->queryString($request, 'triwulan');
-        $period = $this->queryString($request, 'periode');
+        $categories = DocumentCategory::query()->orderBy('sort_order')->get();
+        $categoryType = $categories->mapWithKeys(
+            fn (DocumentCategory $category): array => [$category->id => $this->publicationType($category)],
+        );
+
+        $categoryIdsByType = collect(self::PUBLICATION_TYPES)->map(
+            fn (string $label, string $key): array => $categories
+                ->filter(fn (DocumentCategory $category): bool => $this->publicationType($category) === $key)
+                ->pluck('id')
+                ->all(),
+        );
+
+        $totalCategoryCounts = Document::query()
+            ->published()
+            ->selectRaw('document_category_id, count(*) as aggregate')
+            ->groupBy('document_category_id')
+            ->pluck('aggregate', 'document_category_id');
+
+        $typeCounts = collect(self::PUBLICATION_TYPES)->map(
+            fn (string $label, string $key): int => (int) $totalCategoryCounts
+                ->only($categoryIdsByType[$key])
+                ->sum(),
+        );
+
+        $periods = Period::query()->orderByDesc('starts_on')->orderByDesc('name')->get();
+
+        $periodDocCounts = Document::query()
+            ->published()
+            ->selectRaw('period_id, count(*) as aggregate')
+            ->groupBy('period_id')
+            ->pluck('aggregate', 'period_id');
+
+        $selectedPeriod = $this->selectedPeriod($request, $periods, $periodDocCounts);
+
+        $type = $this->queryString($request, 'jenis');
+        if ($type === null || ! array_key_exists($type, self::PUBLICATION_TYPES)) {
+            $type = 'semua';
+        }
+
         $search = $this->queryString($request, 'q');
 
         $documents = Document::query()
             ->published()
-            ->with('category')
-            ->whereHas('category', fn ($query) => $query->where('slug', 'laporan-kinerja'))
-            ->when($year, fn ($query) => $query->where('year', (int) $year))
-            ->when($quarter, fn ($query) => $query->where('quarter', (int) $quarter))
-            ->when($period, fn ($query) => $query->where('period_id', (int) $period))
-            ->when($search, fn ($query) => $query->where('title', 'like', "%{$search}%"))
+            ->with(['category.parent'])
+            ->when($selectedPeriod, fn ($query) => $query->where('period_id', $selectedPeriod->id))
+            ->when($type !== 'semua', fn ($query) => $query->whereIn('document_category_id', $categoryIdsByType[$type]))
+            ->when($search, fn ($query) => $query->where(function ($query) use ($search): void {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            }))
+            ->orderByDesc('published_at')
             ->orderByDesc('year')
-            ->orderByDesc('quarter')
-            ->latest('published_at')
-            ->paginate(15)
-            ->withQueryString();
+            ->orderBy('title')
+            ->get();
 
-        // Handle AJAX request for live search
-        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
-            return view('site.documents._list', [
-                'documents' => $documents,
-            ])->render();
-        }
+        $periodCategoryCounts = Document::query()
+            ->published()
+            ->when($selectedPeriod, fn ($query) => $query->where('period_id', $selectedPeriod->id))
+            ->selectRaw('document_category_id, count(*) as aggregate')
+            ->groupBy('document_category_id')
+            ->pluck('aggregate', 'document_category_id');
 
-        $periods = Period::query()->orderByDesc('name')->get();
-        $activePeriod = Period::active();
+        $periodTypeCounts = collect(self::PUBLICATION_TYPES)->map(
+            fn (string $label, string $key): int => (int) $periodCategoryCounts
+                ->filter(fn (int|string $count, int|string $categoryId): bool => ($categoryType[$categoryId] ?? 'dokumen') === $key)
+                ->sum(),
+        );
 
-        // Count documents per period
-        $periodCounts = [];
-        foreach ($periods as $p) {
-            $periodCounts[$p->id] = Document::query()
-                ->published()
-                ->whereHas('category', fn ($query) => $query->where('slug', 'laporan-kinerja'))
-                ->where('period_id', $p->id)
-                ->count();
-        }
+        $groups = collect(self::PUBLICATION_TYPES)
+            ->map(fn (string $label, string $key): array => [
+                'key' => $key,
+                'label' => $label,
+                'documents' => $documents
+                    ->filter(fn (Document $document): bool => $this->publicationType($document->category) === $key)
+                    ->values(),
+            ])
+            ->filter(fn (array $group): bool => $group['documents']->isNotEmpty())
+            ->values();
 
-        $selectedPeriod = $period ? $periods->firstWhere('id', (int) $period) : $activePeriod;
-
-        return view('site.documents.kinerja', [
-            'documents' => $documents,
+        return view('site.documents.publications', [
+            'types' => self::PUBLICATION_TYPES,
+            'typeCounts' => $typeCounts,
+            'periodTypeCounts' => $periodTypeCounts,
             'periods' => $periods,
-            'activePeriod' => $activePeriod,
+            'periodDocCounts' => $periodDocCounts,
             'selectedPeriod' => $selectedPeriod,
-            'periodCounts' => $periodCounts,
-            'totalCount' => $documents->total(),
+            'groups' => $groups,
+            'totalCount' => $documents->count(),
             'filters' => [
-                'kategori' => 'laporan-kinerja',
-                'tahun' => $year,
-                'triwulan' => $quarter,
-                'periode' => $period,
+                'periode' => $selectedPeriod?->id ?? 'all',
+                'jenis' => $type,
                 'q' => $search,
             ],
-        ]);
-    }
-
-    /**
-     * Semua keputusan & ketetapan DPM UII (grup Keputusan), filterable by periode.
-     */
-    public function decisions(Request $request): View
-    {
-        $documents = $this->documents($request, null)
-            ->whereHas('category', fn ($query) => $query->where('group', 'Keputusan'))
-            ->paginate(15)
-            ->withQueryString();
-
-        // Handle AJAX request for live search
-        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
-            return view('site.documents._list', [
-                'documents' => $documents,
-            ])->render();
-        }
-
-        return view('site.documents.index', [
-            'documents' => $documents,
-            'categories' => $this->categoryList(),
-            'years' => $this->years(),
-            'periods' => $this->periods(),
-            'filters' => $this->filters($request, null),
-            'heading' => 'Keputusan',
-            'description' => 'Surat keputusan, ketetapan, keputusan badan, DPM Fakultas, dan lembaga DPM UII per periode.',
         ]);
     }
 
@@ -130,14 +149,6 @@ class DocumentController extends Controller
     }
 
     /**
-     * Arsip kategori apa pun: /dokumen/kategori/{slug}.
-     */
-    public function category(Request $request, DocumentCategory $category): View
-    {
-        return $this->listing($request, $category->slug, $category);
-    }
-
-    /**
      * Satu kategori di dalam grup Dana: distribusi, LPJ, atau LHA.
      */
     public function danaCategory(Request $request, DocumentCategory $category): View
@@ -154,6 +165,52 @@ class DocumentController extends Controller
         $document->registerDownload();
 
         return redirect()->away($document->download_url);
+    }
+
+    private function publicationType(?DocumentCategory $category): string
+    {
+        if ($category === null) {
+            return 'dokumen';
+        }
+
+        return match ($category->slug) {
+            'surat-ketetapan' => 'ketetapan',
+            'laporan-kinerja' => 'laporan',
+            'surat-keputusan' => 'keputusan',
+            default => $category->parent?->slug === 'surat-keputusan'
+                ? 'keputusan'
+                : match ($category->group) {
+                    'Keputusan' => 'keputusan',
+                    'Kinerja', 'Laporan' => 'laporan',
+                    default => 'dokumen',
+                },
+        };
+    }
+
+    /**
+     * @param  Collection<int, Period>  $periods
+     * @param  Collection<int|string, int>  $periodDocCounts
+     */
+    private function selectedPeriod(Request $request, Collection $periods, Collection $periodDocCounts): ?Period
+    {
+        $period = $this->queryString($request, 'periode');
+
+        if ($period === 'all') {
+            return null;
+        }
+
+        if ($period !== null && is_numeric($period)) {
+            return $periods->firstWhere('id', (int) $period);
+        }
+
+        $activePeriod = Period::active();
+        if ($activePeriod !== null && (int) ($periodDocCounts[$activePeriod->id] ?? 0) > 0) {
+            return $activePeriod;
+        }
+
+        return $periods->first(
+            fn (Period $candidate): bool => (int) ($periodDocCounts[$candidate->id] ?? 0) > 0,
+        );
     }
 
     private function listing(Request $request, ?string $categorySlug, ?DocumentCategory $category = null): View

@@ -42,7 +42,7 @@
         <div class="slide-text">
           <div class="hero-label">Portal Resmi Â· Keluarga Mahasiswa UII</div>
           <h1>Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia</h1>
-          <p class="lead">Lembaga legislatif Keluarga Mahasiswa UII yang menjalankan fungsi legislasi, pengawasan, dan penyaluran aspirasi mahasiswa.</p>
+          <p class="lead">Lembaga Legislatif Keluarga Mahasiswa UII yang Menjalankan Fungsi Legislasi, Anggaran, dan Pengawasan.</p>
           <div class="hero-actions">
             <a href="/tentang/profil-dewan" class="btn">Profil Lembaga <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
             <a href="/produk-hukum" class="btn">Produk Hukum</a>

@@ -43,7 +43,7 @@ class LegalProduct extends Model
             'label' => 'PDPM UII',
             'name' => 'Peraturan Dewan Permusyawaratan Mahasiswa',
             'numbered' => true,
-            'description' => 'Peraturan internal DPM: tata tertib, mekanisme kerja, persidangan, dan hal teknis operasional.',
+            'description' => 'Peraturan DPM: tata tertib, mekanisme kerja, persidangan, dan hal teknis operasional.',
         ],
     ];
 
@@ -51,6 +51,7 @@ class LegalProduct extends Model
         'type',
         'number',
         'year',
+        'edition',
         'period_id',
         'amends_id',
         'title',
@@ -58,6 +59,7 @@ class LegalProduct extends Model
         'description',
         'file_path',
         'mime_type',
+        'status',
         'size',
         'is_published',
         'published_at',

@@ -43,11 +43,6 @@ class DocumentCategory extends Model
         return $this->hasMany(self::class, 'parent_id')->orderBy('sort_order');
     }
 
-    public function getUrlAttribute(): string
-    {
-        return route('documents.category', $this->slug);
-    }
-
     public function isMainCategory(): bool
     {
         return $this->type === 'main' || $this->parent_id === null;

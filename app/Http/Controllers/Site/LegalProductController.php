@@ -35,17 +35,21 @@ class LegalProductController extends Controller
      */
     private function showPdkm(Request $request): View
     {
-        $product = LegalProduct::query()
+        $products = LegalProduct::query()
             ->active()
             ->with(['amends', 'period'])
-            ->ordered()
             ->where('type', 'pdkm')
-            ->first();
+            ->orderByDesc('year')
+            ->orderBy('sort_order')
+            ->get();
 
-        abort_unless($product, 404);
+        abort_unless($products->isNotEmpty(), 404);
+
+        $product = $products->first();
 
         return view('site.legal-products.pdkm', [
             'product' => $product,
+            'products' => $products,
             'types' => LegalProduct::TYPES,
             'currentType' => 'pdkm',
         ]);

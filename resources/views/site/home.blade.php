@@ -246,7 +246,7 @@
         <div class="slide-text">
           <div class="hero-label">Portal Resmi · Keluarga Mahasiswa UII</div>
           <h1>Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia</h1>
-          <p class="lead">Lembaga legislatif Keluarga Mahasiswa UII yang menjalankan fungsi legislasi, pengawasan, dan penyaluran aspirasi mahasiswa.</p>
+          <p class="lead">Lembaga Legislatif Keluarga Mahasiswa UII yang Menjalankan Fungsi Legislasi, Anggaran, dan Pengawasan.</p>
           <div class="hero-actions">
             <a href="/tentang/profil-dewan" class="btn">Profil Lembaga <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
             <a href="/produk-hukum" class="btn">Produk Hukum</a>
@@ -280,7 +280,7 @@
           <p class="lead">Arsip resmi PDKM, GBHKM, PKM, dan PDPM UII yang dapat diakses oleh seluruh civitas kemahasiswaan Universitas Islam Indonesia.</p>
           <div class="hero-actions">
             <a href="/produk-hukum" class="btn">Akses Produk Hukum <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-            <a href="/keputusan" class="btn">Surat Keputusan</a>
+            <a href="{{ route('documents.index', ['jenis' => 'keputusan']) }}" class="btn">Surat Keputusan</a>
           </div>
         </div>
       </div>
@@ -346,11 +346,11 @@
       <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3H15"/></svg></span>
       <span><strong>Keuangan</strong><small>Distribusi, LPJ, dan LHA</small></span>
     </a>
-    <a class="qa-item" href="/laporan-kinerja">
+    <a class="qa-item" href="{{ route('documents.index', ['jenis' => 'laporan']) }}">
       <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M2 20h20"/></svg></span>
       <span><strong>Laporan Kinerja</strong><small>Capaian kerja lembaga</small></span>
     </a>
-    <a class="qa-item" href="/keputusan">
+    <a class="qa-item" href="{{ route('documents.index', ['jenis' => 'keputusan']) }}">
       <span class="ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="m9 14 2 2 4-4"/></svg></span>
       <span><strong>Surat Keputusan</strong><small>Keputusan resmi dewan</small></span>
     </a>
@@ -543,9 +543,9 @@
       <a href="/dana/distribusi-dana" class="card quick reveal"><div><span class="t">Distribusi Keuangan</span><small>Alokasi dana lembaga KM UII</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a href="/dana/lpj" class="card quick reveal d1"><div><span class="t">LPJ</span><small>Laporan pertanggungjawaban</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a href="/dana/lha" class="card quick reveal d2"><div><span class="t">LHA</span><small>Laporan hasil audit</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <a href="/laporan-kinerja" class="card quick reveal"><div><span class="t">Laporan Kinerja</span><small>Capaian kerja DPM UII</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <a href="/keputusan" class="card quick reveal d1"><div><span class="t">Keputusan</span><small>Surat keputusan resmi</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <a href="/dokumen" class="card quick reveal d2"><div><span class="t">Semua Dokumen</span><small>Arsip dokumen lengkap</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="{{ route('documents.index', ['jenis' => 'laporan']) }}" class="card quick reveal"><div><span class="t">Laporan Kinerja</span><small>Capaian kerja DPM UII</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="{{ route('documents.index', ['jenis' => 'keputusan']) }}" class="card quick reveal d1"><div><span class="t">Keputusan</span><small>Surat keputusan resmi</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="{{ route('documents.index') }}" class="card quick reveal d2"><div><span class="t">Dokumen dan Publikasi</span><small>Arsip dokumen lengkap</small></div><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
   </div>
 </section>

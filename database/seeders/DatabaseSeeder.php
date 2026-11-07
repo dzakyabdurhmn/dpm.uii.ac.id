@@ -205,7 +205,7 @@ class DatabaseSeeder extends Seeder
             [
                 'label' => 'Tentang',
                 'url' => '#fungsi',
-                'description' => 'Lembaga legislatif Keluarga Mahasiswa UII yang menjalankan fungsi legislasi, pengawasan, dan penyaluran aspirasi mahasiswa.',
+                'description' => 'Lembaga Legislatif Keluarga Mahasiswa UII yang Menjalankan Fungsi Legislasi, Anggaran, dan Pengawasan.',
                 'mega_eyebrow' => 'Profil Lembaga',
                 'mega_image' => 'images/menu-tentang.jpg',
                 'mega_caption_title' => 'Profil Dewan',

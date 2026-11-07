@@ -1,5 +1,25 @@
 @extends('layouts.site')
 
+@php
+    $editions = $products->map(function ($p, $idx) {
+        $editionLabel = $p->edition ?: ($p->regulation_number ?: 'Ke-'.($p->number ?: ($idx + 1)));
+        $shortEdition = preg_replace('/\s*\(.*?\)/', '', $editionLabel);
+
+        return [
+            'id' => $p->id,
+            'no' => $p->number ?: ($idx + 1),
+            'label' => $editionLabel,
+            'short' => $shortEdition,
+            'year' => (string) ($p->year ?? ''),
+            'status' => $p->status === 'aktif' ? 'Berlaku' : 'Tidak Berlaku',
+            'url' => $p->download_url,
+            'title' => $p->title,
+        ];
+    })->values();
+
+    $activeProduct = $products->firstWhere('status', 'aktif') ?? $products->first();
+@endphp
+
 @section('title', 'PDKM — Peraturan Dasar Keluarga Mahasiswa UII | DPM UII')
 @section('meta_description', 'Konstitusi tertinggi KM UII yang mengatur asas, tujuan, kelembagaan, dan sistem pemerintahan mahasiswa. Berlaku sebagai satu naskah tunggal yang jarang diubah.')
 
@@ -151,7 +171,7 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
           Baca Dokumen
         </a>
-        <a class="btn lg dl" href="{{ $product->download_url }}" rel="noopener" target="_blank">
+        <a class="btn lg dl" href="{{ $activeProduct->download_url }}" rel="noopener" target="_blank">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>
           Unduh PDKM
         </a>
@@ -165,7 +185,7 @@
         <span>Peraturan Dasar<br>Keluarga Mahasiswa<br>Universitas Islam Indonesia</span>
       </div>
       <div class="sh-line"></div>
-      <div class="sh-bot"><small>Edisi</small><strong id="shEd">{{ $product->regulation_number ?? 'Ke-38 (1)' }}</strong></div>
+      <div class="sh-bot"><small>Edisi</small><strong id="shEd">{{ $activeProduct->edition ?: ($activeProduct->regulation_number ?: 'Ke-38 (1)') }}</strong></div>
     </div>
   </div>
 </section>
@@ -181,9 +201,9 @@
 <div class="facts-wrap">
   <div class="container">
     <div class="facts-row">
-      <div><small>Edisi</small><b id="fEd">{{ $product->regulation_number ?? 'Ke-38 (1)' }}</b></div>
-      <div><small>Tahun</small><b id="fYr">{{ $product->year ?? '2024' }}</b></div>
-      <div><small>Status</small><b id="fSt">Berlaku</b></div>
+      <div><small>Edisi</small><b id="fEd">{{ $activeProduct->edition ?: ($activeProduct->regulation_number ?: 'Ke-38 (1)') }}</b></div>
+      <div><small>Tahun</small><b id="fYr">{{ $activeProduct->year ?? '2024' }}</b></div>
+      <div><small>Status</small><b id="fSt">{{ $activeProduct->status === 'aktif' ? 'Berlaku' : 'Tidak Berlaku' }}</b></div>
       <div><small>Perubahan</small><b>Melalui Pasal 56</b></div>
     </div>
   </div>
@@ -198,9 +218,9 @@
     </div>
     <div class="reader" id="reader">
       <div class="reader-bar">
-        <strong id="rTitle">Peraturan Dasar KM UII {{ $product->regulation_number ?? 'Ke-38 (1)' }} &middot; {{ $product->year ?? '2024' }}</strong>
+        <strong id="rTitle">Peraturan Dasar KM UII {{ $activeProduct->edition ?: ($activeProduct->regulation_number ?: 'Ke-38 (1)') }} &middot; {{ $activeProduct->year ?? '2024' }}</strong>
         <div>
-          <a class="btn sm dl" href="{{ $product->download_url }}" rel="noopener" target="_blank">
+          <a class="btn sm dl" href="{{ $activeProduct->download_url }}" rel="noopener" target="_blank">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Unduh
           </a>
         </div>
@@ -228,7 +248,7 @@
     <div class="links">
       <a href="{{ route('legal-products.type', 'pdpm') }}">
         <strong>Peraturan DPM (PDPM)</strong>
-        <span>Peraturan internal DPM UII yang menjabarkan ketentuan PDKM.</span>
+        <span>Peraturan DPM UII yang menjabarkan ketentuan PDKM.</span>
         <em>Buka arsip &rarr;</em>
       </a>
       <a href="{{ route('legal-products.type', 'pkm') }}">
@@ -267,13 +287,8 @@
 
 @push('scripts')
 <script>
-  // Daftar edisi PDKM
-  const EDITIONS = [
-    { no: 38, label: 'Ke-38 (1)', short: 'Ke-38', year: '2024', status: 'Berlaku', url: "{{ $product->download_url }}" },
-    { no: 37, label: 'Ke-37', short: 'Ke-37', year: '', status: 'Arsip', url: '' },
-    { no: 36, label: 'Ke-36', short: 'Ke-36', year: '', status: 'Arsip', url: '' },
-    { no: 35, label: 'Ke-35', short: 'Ke-35', year: '', status: 'Arsip', url: '' },
-  ];
+  // Daftar edisi PDKM dinamis dari database
+  const EDITIONS = @json($editions);
 
   (function () {
     const $ = id => document.getElementById(id);
@@ -288,7 +303,7 @@
 
     function load() {
       const e = EDITIONS[cur]; 
-      if (!e.url || reader.classList.contains('open')) return;
+      if (!e || !e.url || reader.classList.contains('open')) return;
       const f = document.createElement('iframe'); 
       f.src = e.url; 
       f.title = 'Naskah PDKM ' + e.label;
@@ -298,7 +313,9 @@
 
     function show(i) {
       cur = i; 
-      const e = EDITIONS[i], ok = !!e.url;
+      const e = EDITIONS[i];
+      if (!e) return;
+      const ok = !!e.url;
       sw.querySelectorAll('.edc').forEach((b, n) => { 
         b.setAttribute('aria-selected', n === i); 
         b.tabIndex = n === i ? 0 : -1; 
@@ -329,9 +346,9 @@
       if (!ok) { 
         n.hidden = false; 
         n.textContent = 'Naskah ' + e.label + ' belum diunggah ke situs ini. Hubungi Badan Legislasi atau Sekretariat DPM UII untuk memperolehnya.'; 
-      } else if (i > 0) { 
+      } else if (e.status !== 'Berlaku' && EDITIONS.length > 1) { 
         n.hidden = false; 
-        n.textContent = 'Anda melihat edisi arsip. Edisi yang berlaku adalah ' + EDITIONS[0].label + '.'; 
+        n.textContent = 'Anda melihat edisi terdahulu (' + e.label + ').'; 
       } else { 
         n.hidden = true; 
       }
@@ -343,9 +360,10 @@
       b.type = 'button'; 
       b.className = 'edc'; 
       b.setAttribute('role', 'tab');
-      b.innerHTML = '<span class="e-top"><span class="e-lbl">Edisi</span><span class="e-badge' + (i === 0 ? '' : ' off') + '">' + (i === 0 ? 'Berlaku' : 'Arsip') + '</span></span>'
-        + '<span class="e-no"><small>Ke-</small>' + e.no + '</span>'
-        + '<span class="e-meta">' + (e.year ? 'Tahun ' + e.year : 'Belum diunggah') + '</span>';
+      const isAktif = e.status === 'Berlaku';
+      b.innerHTML = '<span class="e-top"><span class="e-lbl">Edisi</span><span class="e-badge' + (isAktif ? '' : ' off') + '">' + esc(e.status) + '</span></span>'
+        + '<span class="e-no">' + esc(e.label) + '</span>'
+        + '<span class="e-meta">' + (e.year ? 'Tahun ' + esc(e.year) : (e.url ? 'Tersedia' : 'Belum diunggah')) + '</span>';
       b.addEventListener('click', () => show(i));
       b.addEventListener('keydown', ev => {
         if (!['ArrowLeft', 'ArrowRight'].includes(ev.key)) return; 
@@ -357,9 +375,17 @@
       sw.appendChild(b);
     });
 
+    function esc(s) {
+      const d = document.createElement('div');
+      d.textContent = s == null ? '' : s;
+      return d.innerHTML;
+    }
+
     $('loadDoc').addEventListener('click', load);
     document.querySelector('[data-read]').addEventListener('click', () => setTimeout(load, 350));
-    show(0);
+    if (EDITIONS.length) {
+      show(0);
+    }
   })();
 </script>
 @endpush

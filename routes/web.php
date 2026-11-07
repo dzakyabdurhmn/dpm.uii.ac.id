@@ -42,10 +42,6 @@ Route::get('/produk-hukum/{legalProduct:slug}/unduh', [LegalProductController::c
 Route::get('/dokumen', [DocumentController::class, 'index'])->name('documents.index');
 Route::get('/dokumen/{document:slug}/unduh', [DocumentController::class, 'download'])->name('documents.download');
 
-Route::get('/laporan-kinerja', [DocumentController::class, 'reports'])->name('documents.reports');
-Route::get('/keputusan', [DocumentController::class, 'decisions'])->name('documents.decisions');
-
-Route::get('/dokumen/kategori/{category:slug}', [DocumentController::class, 'category'])->name('documents.category');
 Route::get('/dana', [DocumentController::class, 'dana'])->name('documents.dana');
 Route::get('/dana/{category:slug}', [DocumentController::class, 'danaCategory'])->name('documents.dana.category');
 

@@ -30,7 +30,16 @@
                 </select>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-3 gap-3">
+                <div>
+                    <label for="edition" class="block text-xs font-medium text-slate-600">Edisi</label>
+                    <input id="edition" name="edition" type="text"
+                           value="{{ old('edition', $product->edition) }}"
+                           placeholder="Contoh: Ke-38 (1)"
+                           class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                    <p class="mt-1 text-xs text-slate-400">Terutama untuk PDKM/GBHKM.</p>
+                </div>
+
                 <div>
                     <label for="number" class="block text-xs font-medium text-slate-600">Nomor</label>
                     <input id="number" name="number" type="number" min="1" max="999"
@@ -41,10 +50,10 @@
 
                 <div>
                     <label for="year" class="block text-xs font-medium text-slate-600">Tahun</label>
-                    <input id="year" name="year" type="number" min="2000" max="2100"
+                    <input id="year" name="year" type="number" min="1945" max="2100"
                            value="{{ old('year', $product->year) }}"
                            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
-                    <p class="mt-1 text-xs text-slate-400">Wajib untuk PKM/PDPM.</p>
+                    <p class="mt-1 text-xs text-slate-400">Tahun pengesahan.</p>
                 </div>
             </div>
 
@@ -126,6 +135,14 @@
                     <input id="published_at" name="published_at" type="datetime-local"
                            value="{{ old('published_at', $product->published_at?->format('Y-m-d\TH:i')) }}"
                            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                </div>
+
+                <div>
+                    <label for="status" class="block text-xs font-medium text-slate-600">Status Keberlakuan</label>
+                    <select id="status" name="status" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                        <option value="aktif" @selected(old('status', $product->status ?? 'aktif') === 'aktif')>Aktif / Berlaku</option>
+                        <option value="tidak_aktif" @selected(old('status', $product->status ?? 'aktif') === 'tidak_aktif')>Tidak Aktif / Dicabut / Tidak Berlaku</option>
+                    </select>
                 </div>
 
                 <div>

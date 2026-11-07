@@ -201,7 +201,7 @@ class LegalProductSeeder extends Seeder
                 'year' => $data['year'],
                 'period_id' => $this->findPeriodId($periods, $data['year']),
                 'title' => $data['title'],
-                'description' => $data['description'] ?? 'Peraturan Dewan Permusyawaratan Mahasiswa (PDPM) merupakan peraturan internal DPM: tata tertib, mekanisme kerja, persidangan, dan hal teknis operasional.',
+                'description' => $data['description'] ?? 'Peraturan Dewan Permusyawaratan Mahasiswa (PDPM) merupakan peraturan DPM: tata tertib, mekanisme kerja, persidangan, dan hal teknis operasional.',
                 'file_path' => 'uploads/produk-hukum/PDPM UII/'.$filename,
                 'mime_type' => 'application/pdf',
                 'size' => $file->getSize(),
