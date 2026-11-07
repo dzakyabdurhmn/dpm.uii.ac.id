@@ -11,27 +11,13 @@
             @csrf
             @method('PUT')
 
-            <div>
-                <label for="name" class="block text-xs font-medium text-slate-600">Nama lengkap</label>
-                <input id="name" name="name" type="text" required value="{{ old('name', $unit->name) }}"
-                       class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
-                @error('name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-            </div>
-
             <div class="grid gap-3 sm:grid-cols-2">
-                <div>
-                    <label for="abbreviation" class="block text-xs font-medium text-slate-600">Nama pendek</label>
-                    <input id="abbreviation" name="abbreviation" type="text" value="{{ old('abbreviation', $unit->abbreviation) }}"
-                           class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
-                </div>
-                <div>
-                    <label for="type" class="block text-xs font-medium text-slate-600">Tipe</label>
-                    <select id="type" name="type" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
-                        @foreach (\App\Models\OrganizationalUnit::TYPES as $type)
-                            <option value="{{ $type }}" @selected(old('type', $unit->type) === $type)>{{ $type }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <label for="type" class="block text-xs font-medium text-slate-600">Tipe</label>
+                <select id="type" name="type" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                    @foreach (\App\Models\OrganizationalUnit::TYPES as $type)
+                        <option value="{{ $type }}" @selected(old('type', $unit->type) === $type)>{{ $type }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>
@@ -86,37 +72,37 @@
                                 </div>
                             </div>
                         @endforeach
-
-                        @if ($officials->whereNull('period_id')->isNotEmpty())
-                            <div>
-                                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Tanpa periode</p>
-                                <div class="mt-3 space-y-3">
-                                    @foreach ($officials->whereNull('period_id') as $official)
-                                        @include('admin.units.partials.official-row', ['official' => $official])
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
                     </div>
+
+                    @if ($officials->whereNull('period_id')->isNotEmpty())
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Tanpa periode</p>
+                            <div class="mt-3 space-y-3">
+                                @foreach ($officials->whereNull('period_id') as $official)
+                                    @include('admin.units.partials.official-row', ['official' => $official])
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 @endif
             </div>
+        </div>
 
-            <div class="rounded-2xl border border-slate-200 bg-white p-5">
-                <h2 class="text-sm font-semibold text-slate-900">Tambah anggota</h2>
+        <div class="rounded-2xl border border-slate-200 bg-white p-5">
+            <h2 class="text-sm font-semibold text-slate-900">Tambah anggota</h2>
 
-                <form method="POST" action="{{ route('admin.units.officials.store', $unit) }}"
-                      enctype="multipart/form-data" class="mt-4 grid gap-3 sm:grid-cols-2">
-                    @csrf
+            <form method="POST" action="{{ route('admin.units.officials.store', $unit) }}"
+                  enctype="multipart/form-data" class="mt-4 grid gap-3 sm:grid-cols-2">
+                @csrf
 
-                    @include('admin.units.partials.official-fields', ['official' => null])
+                @include('admin.units.partials.official-fields', ['official' => null])
 
-                    <div class="sm:col-span-2">
-                        <button type="submit" class="rounded-lg bg-[#0B3C8D] px-4 py-2 text-sm font-semibold text-white hover:bg-[#08285C]">
-                            Tambah anggota
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <div class="sm:col-span-2">
+                    <button type="submit" class="rounded-lg bg-[#0B3C8D] px-4 py-2 text-sm font-semibold text-white hover:bg-[#08285C]">
+                        Tambah anggota
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 @endsection

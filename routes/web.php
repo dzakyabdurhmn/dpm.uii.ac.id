@@ -14,13 +14,16 @@ use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UnitController as AdminUnitController;
+use App\Http\Controllers\LaporanKinerjaController;
 use App\Http\Controllers\Site\AboutController;
 use App\Http\Controllers\Site\BioLinkController;
+use App\Http\Controllers\Site\DistribusiDanaController;
 use App\Http\Controllers\Site\DocumentController;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\HumasController;
 use App\Http\Controllers\Site\LegalProductController;
 use App\Http\Controllers\Site\NewsController;
+use App\Http\Controllers\Site\ProfilDewanController;
 use App\Http\Controllers\Site\UnitController;
 use App\Models\LegalProduct;
 use App\Models\SiteContent;
@@ -43,6 +46,9 @@ Route::get('/dokumen', [DocumentController::class, 'index'])->name('documents.in
 Route::get('/dokumen/{document:slug}/unduh', [DocumentController::class, 'download'])->name('documents.download');
 
 Route::get('/dana', [DocumentController::class, 'dana'])->name('documents.dana');
+Route::get('/dana/lpj', [DocumentController::class, 'lpj'])->name('documents.lpj');
+Route::get('/dana/lha', [DocumentController::class, 'lha'])->name('documents.lha');
+Route::get('/dana/distribusi-dana', [DistribusiDanaController::class, 'index'])->name('dana.distribusi');
 Route::get('/dana/{category:slug}', [DocumentController::class, 'danaCategory'])->name('documents.dana.category');
 
 Route::get('/berita', [NewsController::class, 'index'])->name('news.index');
@@ -55,6 +61,11 @@ Route::get('/berita/{post:slug}', [NewsController::class, 'show'])->name('news.s
 Route::get('/tentang/{section}', [AboutController::class, 'show'])
     ->whereIn('section', SiteContent::keys())
     ->name('about.show');
+
+Route::get('/laporan-kinerja', [LaporanKinerjaController::class, 'index'])->name('laporan-kinerja.index');
+
+Route::get('/profil-dewan', [ProfilDewanController::class, 'index'])->name('profil-dewan.index');
+Route::get('/profil-dewan/{nim}', [ProfilDewanController::class, 'show'])->name('profil-dewan.detail');
 
 Route::get('/alat-kelengkapan', [UnitController::class, 'index'])->name('units.index');
 Route::get('/unit/{unit:slug}', [UnitController::class, 'show'])->name('units.show');

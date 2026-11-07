@@ -6,7 +6,7 @@
 
 @section('title', $isEdit ? 'Ubah produk hukum' : 'Produk hukum baru')
 @section('heading', $isEdit ? 'Ubah produk hukum' : 'Produk hukum baru')
-@section('subheading', 'Nomor dan tahun hanya dipakai untuk PKM/PDPM')
+@section('subheading', 'PKM/PDPM per nomor & tahun, GBHKM satu naskah per periode kepengurusan')
 
 @section('content')
     <form method="POST"
@@ -30,17 +30,17 @@
                 </select>
             </div>
 
-            <div class="grid grid-cols-3 gap-3">
-                <div>
+            <div class="grid grid-cols-3 gap-3" id="identity-fields">
+                <div id="f-edition">
                     <label for="edition" class="block text-xs font-medium text-slate-600">Edisi</label>
                     <input id="edition" name="edition" type="text"
                            value="{{ old('edition', $product->edition) }}"
                            placeholder="Contoh: Ke-38 (1)"
                            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
-                    <p class="mt-1 text-xs text-slate-400">Terutama untuk PDKM/GBHKM.</p>
+                    <p class="mt-1 text-xs text-slate-400">Terutama untuk PDKM.</p>
                 </div>
 
-                <div>
+                <div id="f-number">
                     <label for="number" class="block text-xs font-medium text-slate-600">Nomor</label>
                     <input id="number" name="number" type="number" min="1" max="999"
                            value="{{ old('number', $product->number) }}"
@@ -48,12 +48,32 @@
                     <p class="mt-1 text-xs text-slate-400">Wajib untuk PKM/PDPM.</p>
                 </div>
 
-                <div>
+                <div id="f-year">
                     <label for="year" class="block text-xs font-medium text-slate-600">Tahun</label>
                     <input id="year" name="year" type="number" min="1945" max="2100"
                            value="{{ old('year', $product->year) }}"
                            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
                     <p class="mt-1 text-xs text-slate-400">Tahun pengesahan.</p>
+                </div>
+            </div>
+
+            <div id="f-gbhkm" class="hidden rounded-xl border border-brand-200 bg-brand-50/50 p-4">
+                <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Penetapan GBHKM</p>
+                <p class="mt-1 text-xs text-slate-500">GBHKM ditetapkan sekali per periode melalui Sidang Umum / Sidang Istimewa. Pilih periode di panel kanan.</p>
+                <div class="mt-3 grid grid-cols-2 gap-3">
+                    <div>
+                        <label for="enacted_on" class="block text-xs font-medium text-slate-600">Tanggal penetapan</label>
+                        <input id="enacted_on" name="enacted_on" type="date"
+                               value="{{ old('enacted_on', $product->enacted_on?->format('Y-m-d')) }}"
+                               class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label for="forum" class="block text-xs font-medium text-slate-600">Forum penetapan</label>
+                        <input id="forum" name="forum" type="text" maxlength="150"
+                               value="{{ old('forum', $product->forum) }}"
+                               placeholder="Contoh: Sidang Umum XLV (45)"
+                               class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm">
+                    </div>
                 </div>
             </div>
 
@@ -104,7 +124,7 @@
 
         <div class="space-y-5">
             <div class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5">
-                <div>
+                <div id="f-amends">
                     <label for="amends_id" class="block text-xs font-medium text-slate-600">
                         Perubahan atas (opsional)
                     </label>
@@ -119,15 +139,18 @@
                 </div>
 
                 <div>
-                    <label for="period_id" class="block text-xs font-medium text-slate-600">Periode kepengurusan</label>
+                    <label for="period_id" class="block text-xs font-medium text-slate-600">
+                        Periode kepengurusan <span id="period-required" class="hidden text-red-500">*</span>
+                    </label>
                     <select id="period_id" name="period_id" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
                         <option value="">Tidak terkait periode</option>
                         @foreach ($periods as $period)
                             <option value="{{ $period->id }}" @selected((string) old('period_id', $product->period_id) === (string) $period->id)>
-                                {{ $period->name }}
+                                {{ $period->name }}{{ $period->is_active ? ' — berjalan' : '' }}
                             </option>
                         @endforeach
                     </select>
+                    <p class="mt-1 text-xs text-slate-400" id="period-hint">Opsional untuk jenis ini.</p>
                 </div>
 
                 <div>
@@ -167,4 +190,34 @@
             </div>
         </div>
     </form>
+
+    <script>
+        (function () {
+            const NUMBERED = @json(array_keys(array_filter($types, fn ($meta) => $meta['numbered'])));
+            const typeSelect = document.getElementById('type');
+            const $ = id => document.getElementById(id);
+
+            function applyType() {
+                const type = typeSelect.value;
+                const numbered = NUMBERED.includes(type);
+                const gbhkm = type === 'gbhkm';
+
+                $('f-number').classList.toggle('hidden', !numbered);
+                $('f-year').classList.toggle('hidden', !numbered);
+                $('f-edition').classList.toggle('hidden', type !== 'pdkm');
+                $('identity-fields').classList.toggle('hidden', !numbered && type !== 'pdkm');
+                $('f-gbhkm').classList.toggle('hidden', !gbhkm);
+                $('f-amends').classList.toggle('hidden', !numbered);
+
+                $('period_id').required = gbhkm;
+                $('period-required').classList.toggle('hidden', !gbhkm);
+                $('period-hint').textContent = gbhkm
+                    ? 'Wajib untuk GBHKM — satu naskah per periode. Periode yang sudah punya GBHKM akan ditolak.'
+                    : 'Opsional untuk jenis ini.';
+            }
+
+            typeSelect.addEventListener('change', applyType);
+            applyType();
+        })();
+    </script>
 @endsection

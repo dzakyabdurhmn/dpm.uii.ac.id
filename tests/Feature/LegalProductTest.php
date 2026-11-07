@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\LegalProduct;
+use App\Models\Period;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -26,7 +27,7 @@ class LegalProductTest extends TestCase
             ->assertOk()
             ->assertSee('PDKM')
             ->assertSee('GBHKM')
-            ->assertSee('Dokumen tunggal');
+            ->assertSee('Konstitusi Pokok Mahasiswa');
     }
 
     public function test_numbered_regulations_are_grouped_by_year(): void
@@ -173,5 +174,133 @@ class LegalProductTest extends TestCase
                 'is_published' => '1',
             ])
             ->assertSessionHasErrors('amends_id');
+    }
+
+    public function test_gbhkm_page_lists_real_periods_and_documents(): void
+    {
+        $period = Period::query()->create([
+            'name' => '2031/2032',
+            'starts_on' => '2031-09-01',
+            'ends_on' => '2032-08-31',
+            'is_active' => true,
+        ]);
+
+        LegalProduct::query()->create([
+            'type' => 'gbhkm',
+            'title' => 'Sidang Umum LX',
+            'forum' => 'Sidang Umum LX (60)',
+            'enacted_on' => '2031-09-15',
+            'period_id' => $period->id,
+            'file_path' => 'uploads/produk-hukum/gbhkm-2031.pdf',
+            'is_published' => true,
+        ]);
+
+        $this->get(route('legal-products.type', 'gbhkm'))
+            ->assertOk()
+            ->assertSee('Satu GBHKM untuk satu periode')
+            ->assertSee('2031/2032')
+            ->assertSee('Sidang Umum LX (60)')
+            ->assertSee('15 September 2031')
+            ->assertSee('Arsip GBHKM per Periode');
+    }
+
+    public function test_gbhkm_requires_a_period(): void
+    {
+        $admin = User::query()->firstOrFail();
+
+        $this->actingAs($admin)
+            ->post(route('admin.legal-products.store'), [
+                'type' => 'gbhkm',
+                'title' => 'GBHKM Tanpa Periode',
+                'is_published' => '1',
+            ])
+            ->assertSessionHasErrors('period_id');
+    }
+
+    public function test_second_gbhkm_for_the_same_period_is_rejected(): void
+    {
+        Storage::fake('uploads');
+        $admin = User::query()->firstOrFail();
+
+        $period = Period::query()->create(['name' => '2032/2033', 'is_active' => false]);
+
+        LegalProduct::query()->create([
+            'type' => 'gbhkm',
+            'title' => 'GBHKM Pertama',
+            'period_id' => $period->id,
+            'file_path' => 'uploads/produk-hukum/gbhkm-pertama.pdf',
+            'is_published' => true,
+        ]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.legal-products.store'), [
+                'type' => 'gbhkm',
+                'title' => 'GBHKM Kedua',
+                'period_id' => $period->id,
+                'file' => UploadedFile::fake()->create('gbhkm-kedua.pdf', 50, 'application/pdf'),
+                'is_published' => '1',
+            ])
+            ->assertSessionHasErrors('period_id');
+
+        $this->assertSame(1, LegalProduct::query()->ofType('gbhkm')->where('period_id', $period->id)->count());
+    }
+
+    public function test_gbhkm_stores_forum_and_enactment_date_without_number(): void
+    {
+        Storage::fake('uploads');
+        $admin = User::query()->firstOrFail();
+
+        $period = Period::query()->create(['name' => '2033/2034', 'is_active' => false]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.legal-products.store'), [
+                'type' => 'gbhkm',
+                'title' => 'Sidang Umum LXI',
+                'period_id' => $period->id,
+                'forum' => 'Sidang Umum LXI (61)',
+                'enacted_on' => '2033-09-20',
+                'number' => 9,
+                'year' => 2033,
+                'file' => UploadedFile::fake()->create('gbhkm.pdf', 80, 'application/pdf'),
+                'is_published' => '1',
+            ])
+            ->assertRedirect()
+            ->assertSessionHasNoErrors();
+
+        $product = LegalProduct::query()->where('title', 'Sidang Umum LXI')->firstOrFail();
+
+        $this->assertSame($period->id, $product->period_id);
+        $this->assertSame('Sidang Umum LXI (61)', $product->forum);
+        $this->assertSame('2033-09-20', $product->enacted_on->format('Y-m-d'));
+        $this->assertNull($product->number);
+        $this->assertNull($product->year);
+    }
+
+    public function test_updating_gbhkm_keeps_its_own_period(): void
+    {
+        $admin = User::query()->firstOrFail();
+
+        $period = Period::query()->create(['name' => '2034/2035', 'is_active' => false]);
+
+        $product = LegalProduct::query()->create([
+            'type' => 'gbhkm',
+            'title' => 'GBHKM Awal',
+            'period_id' => $period->id,
+            'file_path' => 'uploads/produk-hukum/gbhkm-awal.pdf',
+            'is_published' => true,
+        ]);
+
+        $this->actingAs($admin)
+            ->put(route('admin.legal-products.update', $product), [
+                'type' => 'gbhkm',
+                'title' => 'GBHKM Diperbarui',
+                'period_id' => $period->id,
+                'forum' => 'Sidang Istimewa',
+                'is_published' => '1',
+            ])
+            ->assertRedirect()
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame('GBHKM Diperbarui', $product->fresh()->title);
     }
 }

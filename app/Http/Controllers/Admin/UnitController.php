@@ -7,7 +7,6 @@ use App\Models\OrganizationalUnit;
 use App\Models\Period;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class UnitController extends Controller
@@ -54,15 +53,12 @@ class UnitController extends Controller
     private function validated(Request $request): array
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:150'],
-            'abbreviation' => ['nullable', 'string', 'max:32'],
             'type' => ['required', 'in:'.implode(',', OrganizationalUnit::TYPES)],
             'description' => ['nullable', 'string', 'max:2000'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['boolean'],
         ]);
 
-        $data['slug'] = Str::slug($request->input('name'));
         $data['sort_order'] = (int) ($data['sort_order'] ?? 0);
         $data['is_active'] = $request->boolean('is_active');
 

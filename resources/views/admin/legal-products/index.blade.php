@@ -2,7 +2,7 @@
 
 @section('title', 'Produk Hukum')
 @section('heading', 'Produk hukum')
-@section('subheading', 'PDKM & GBHKM dokumen tunggal, PKM & PDPM per nomor dan tahun')
+@section('subheading', 'PDKM dokumen tunggal, GBHKM per periode, PKM & PDPM per nomor dan tahun')
 
 @section('content')
     <div class="flex flex-wrap items-center justify-between gap-3">
@@ -53,7 +53,7 @@
                 <thead class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
                     <tr>
                         <th class="px-5 py-3 font-medium">Jenis</th>
-                        <th class="px-5 py-3 font-medium">Nomor</th>
+                        <th class="px-5 py-3 font-medium">Nomor / Periode</th>
                         <th class="px-5 py-3 font-medium">Pokok peraturan</th>
                         <th class="px-5 py-3 font-medium">Status</th>
                         <th class="px-5 py-3 font-medium">Unduhan</th>
@@ -69,7 +69,7 @@
                                 </span>
                             </td>
                             <td class="px-5 py-3 text-slate-600">
-                                {{ $product->regulation_number ?? '—' }}
+                                {{ $product->regulation_number ?? ($product->period ? 'Periode '.$product->period->name : '—') }}
                             </td>
                             <td class="px-5 py-3">
                                 <a href="{{ route('admin.legal-products.edit', $product) }}"

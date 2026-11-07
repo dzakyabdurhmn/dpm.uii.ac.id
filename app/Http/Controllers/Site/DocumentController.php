@@ -158,6 +158,46 @@ class DocumentController extends Controller
         return $this->listing($request, $category->slug, $category);
     }
 
+    /**
+     * Halaman LPJ (Laporan Pertanggungjawaban).
+     */
+    public function lpj(Request $request): View
+    {
+        $documents = Document::query()
+            ->published()
+            ->with('category')
+            ->whereHas('category', fn ($q) => $q->where('group', 'Dana')->where('slug', 'lpj'))
+            ->orderByDesc('year')
+            ->orderByDesc('quarter')
+            ->latest('published_at')
+            ->get();
+
+        return view('site.documents.lpj', [
+            'documents' => $documents,
+            'type' => 'lpj',
+        ]);
+    }
+
+    /**
+     * Halaman LHA (Laporan Hasil Audit).
+     */
+    public function lha(Request $request): View
+    {
+        $documents = Document::query()
+            ->published()
+            ->with('category')
+            ->whereHas('category', fn ($q) => $q->where('group', 'Dana')->where('slug', 'lha'))
+            ->orderByDesc('year')
+            ->orderByDesc('quarter')
+            ->latest('published_at')
+            ->get();
+
+        return view('site.documents.lha', [
+            'documents' => $documents,
+            'type' => 'lha',
+        ]);
+    }
+
     public function download(Document $document): RedirectResponse
     {
         abort_unless($document->isPublished(), 404);

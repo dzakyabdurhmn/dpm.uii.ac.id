@@ -622,6 +622,17 @@
       margin-bottom: 22px;
       flex: 1;
   }
+  .single-card-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: -10px 0 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white, #fff);
+      transition: opacity .2s;
+  }
+  .single-card-more:hover { opacity: .75; text-decoration: underline; }
   .single-card-foot {
       display: flex;
       align-items: center;
@@ -1430,6 +1441,12 @@
 
                                   <h3>{{ $meta['name'] }}</h3>
                                   <p>{{ $product?->description ?: $meta['description'] }}</p>
+
+                                  @if (in_array($type, ['pdkm', 'gbhkm']))
+                                      <a href="{{ route('legal-products.type', $type) }}" class="single-card-more">
+                                          {{ $type === 'gbhkm' ? 'Lihat arsip per periode' : 'Buka halaman dokumen' }} &rarr;
+                                      </a>
+                                  @endif
 
                                   <div class="single-card-foot">
                                       <span class="single-card-meta">

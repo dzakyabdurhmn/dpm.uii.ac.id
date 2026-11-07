@@ -2,99 +2,127 @@
 
 namespace Database\Seeders;
 
-use App\Models\Official;
-use App\Models\OrganizationalUnit;
-use App\Models\Period;
+use App\Models\ProfilDewan;
 use Illuminate\Database\Seeder;
 
 class ProfilDewanSeeder extends Seeder
 {
     public function run(): void
     {
-        $periods = Period::all()->keyBy('name');
-
-        $pimpinan = OrganizationalUnit::where('type', 'pimpinan')->first();
-        $komisi = OrganizationalUnit::where('type', 'komisi')->orderBy('sort_order')->get();
-
-        // Clear existing
-        Official::truncate();
-
-        // 2025/2026
-        $p2025 = $periods['2025/2026'];
-
-        // Pimpinan
-        Official::create([
-            'organizational_unit_id' => $pimpinan->id,
-            'period_id' => $p2025->id,
-            'name' => 'Troy Amirul Akhmad',
-            'position' => 'Ketua Umum',
-            'fakultas' => '',
-            'prodi' => '',
-            'angkatan' => '',
-            'sort_order' => 1,
-            'is_active' => true,
-        ]);
-        Official::create([
-            'organizational_unit_id' => $pimpinan->id,
-            'period_id' => $p2025->id,
-            'name' => 'Aulia Rahmawati',
-            'position' => 'Sekretaris Jenderal',
+        // Sample data for 2025/2026 period - Ketua Dewan
+        ProfilDewan::create([
+            'nama_lengkap' => 'Rizky Ananda',
+            'nim' => '202024001',
             'fakultas' => 'Fakultas Hukum',
-            'prodi' => 'Ilmu Hukum',
-            'angkatan' => '2023',
-            'sort_order' => 2,
-            'is_active' => true,
-        ]);
-        Official::create([
-            'organizational_unit_id' => $pimpinan->id,
-            'period_id' => $p2025->id,
-            'name' => 'Bagas Pramudya',
-            'position' => 'Bendahara Umum',
-            'fakultas' => 'Fakultas Bisnis dan Ekonomika',
-            'prodi' => 'Akuntansi',
-            'angkatan' => '2023',
-            'sort_order' => 3,
-            'is_active' => true,
+            'program_studi' => 'Ilmu Hukum',
+            'angkatan' => '2020',
+            'email_kampus' => 'rizy@uii.ac.id',
+            'jabatan' => 'Ketua Komisi I',
+            'unit_kerja' => 'Dewan Permusyawaratan Mahasiswa',
+            'periode' => '2025/2026',
+            'masa_jabatan' => '1 Juni 2025 - 31 Mei 2027',
+            'status' => 'Aktif',
+            'bio' => 'Mahasiswa aktif Fakultas Hukum UII, terpilih sebagai Ketua Komisi I DPM UII periode 2025/2026.',
+            'tugas_tanggung_jawab' => 'Memimpin dan mengoordinasikan kerja Komisi I, melakukan Laporan Kinerja pada Sidang Pleno DPM UII, berkoordinasi dengan alat kelengkapan dewan dan pimpinan.',
+            'instagram' => 'https://instagram.com/rizy.ananda',
+            'email' => 'rizy@uii.ac.id',
         ]);
 
-        // Komisi I
-        $k1 = $komisi->firstWhere('abbreviation', 'I');
-        Official::create(['organizational_unit_id' => $k1->id, 'period_id' => $p2025->id, 'name' => 'Rizky Ananda', 'position' => 'Ketua Komisi I', 'fakultas' => 'Fakultas Hukum', 'prodi' => 'Ilmu Hukum', 'angkatan' => '2023', 'sort_order' => 1, 'is_active' => true]);
-        Official::create(['organizational_unit_id' => $k1->id, 'period_id' => $p2025->id, 'name' => 'Nadia Safitri', 'position' => 'Anggota', 'fakultas' => 'Fakultas Hukum', 'prodi' => 'Ilmu Hukum', 'angkatan' => '2024', 'sort_order' => 2, 'is_active' => true]);
-        Official::create(['organizational_unit_id' => $k1->id, 'period_id' => $p2025->id, 'name' => 'Farhan Hidayat', 'position' => 'Anggota', 'fakultas' => 'Fakultas Ilmu Agama Islam', 'prodi' => 'Hukum Ekonomi Syariah', 'angkatan' => '2024', 'sort_order' => 3, 'is_active' => true]);
+        // Sample data for 2025/2026 period - Sekretaris Jendral
+        ProfilDewan::create([
+            'nama_lengkap' => 'Aulia Rahmawati',
+            'nim' => '202024002',
+            'fakultas' => 'Fakultas Hukum',
+            'program_studi' => 'Ilmu Hukum',
+            'angkatan' => '2023',
+            'email_kampus' => 'aulia@uii.ac.id',
+            'jabatan' => 'Sekretaris Jendral',
+            'unit_kerja' => 'Dewan Permusyawaratan Mahasiswa',
+            'periode' => '2025/2026',
+            'masa_jabatan' => '1 Juni 2025 - 31 Mei 2027',
+            'status' => 'Aktif',
+            'bio' => 'Mahasiswa aktif Fakultas Hukum UII, menjabat sebagai Sekretaris Jendral DPM UII periode 2025/2026.',
+            'tugas_tanggung_jawab' => 'Menyusun rapat dan meeting, mencatat keputusan plenog, melakukan pengarsipan dokumen resmi DPM UII.',
+            'instagram' => 'https://instagram.com/aulia.rahmawati',
+            'email' => 'aulia@uii.ac.id',
+        ]);
 
-        // Komisi II
-        $k2 = $komisi->firstWhere('abbreviation', 'II');
-        Official::create(['organizational_unit_id' => $k2->id, 'period_id' => $p2025->id, 'name' => 'Salsabila Putri', 'position' => 'Ketua Komisi II', 'fakultas' => 'Fakultas Psikologi dan Ilmu Sosial Budaya', 'prodi' => 'Ilmu Komunikasi', 'angkatan' => '2023', 'sort_order' => 1, 'is_active' => true]);
-        Official::create(['organizational_unit_id' => $k2->id, 'period_id' => $p2025->id, 'name' => 'Muhammad Iqbal', 'position' => 'Anggota', 'fakultas' => 'Fakultas Teknologi Industri', 'prodi' => 'Informatika', 'angkatan' => '2024', 'sort_order' => 2, 'is_active' => true]);
-        Official::create(['organizational_unit_id' => $k2->id, 'period_id' => $p2025->id, 'name' => 'Dewi Lestari', 'position' => 'Anggota', 'fakultas' => 'Fakultas Bisnis dan Ekonomika', 'prodi' => 'Manajemen', 'angkatan' => '2024', 'sort_order' => 3, 'is_active' => true]);
+        // Sample data for 2025/2026 period - Komisi I Anggota
+        ProfilDewan::create([
+            'nama_lengkap' => 'Farhan Hidayat',
+            'nim' => '202024003',
+            'fakultas' => 'Fakultas Ilmu Agama Islam',
+            'program_studi' => 'Hukum Ekonomi Syariah',
+            'angkatan' => '2024',
+            'email_kampus' => 'farhan@uii.ac.id',
+            'jabatan' => 'Anggota Komisi I',
+            'unit_kerja' => 'Dewan Permusyawaratan Mahasiswa',
+            'periode' => '2025/2026',
+            'masa_jabatan' => '1 Juni 2025 - 31 Mei 2027',
+            'status' => 'Aktif',
+            'bio' => 'Mahasiswa aktif Fakultas Ilmu Agama Islam UII, menjadi anggota Komisi I DPM UII periode 2025/2026.',
+            'tugas_tanggung_jawab' => 'Membantu koordinasi kerja Komisi I, melakukan penelitian dan studi kasus sesuai bidang tugas.',
+            'instagram' => 'https://instagram.com/farhan.hidayat',
+            'email' => 'farhan@uii.ac.id',
+        ]);
 
-        // Komisi III
-        $k3 = $komisi->firstWhere('abbreviation', 'III');
-        Official::create(['organizational_unit_id' => $k3->id, 'period_id' => $p2025->id, 'name' => 'Ahmad Fauzan', 'position' => 'Ketua Komisi III', 'fakultas' => 'Fakultas Teknik Sipil dan Perencanaan', 'prodi' => 'Teknik Sipil', 'angkatan' => '2023', 'sort_order' => 1, 'is_active' => true]);
-        Official::create(['organizational_unit_id' => $k3->id, 'period_id' => $p2025->id, 'name' => 'Kinanti Maharani', 'position' => 'Anggota', 'fakultas' => 'Fakultas Kedokteran', 'prodi' => 'Pendidikan Dokter', 'angkatan' => '2024', 'sort_order' => 2, 'is_active' => true]);
-        Official::create(['organizational_unit_id' => $k3->id, 'period_id' => $p2025->id, 'name' => 'Yoga Prasetyo', 'position' => 'Anggota', 'fakultas' => 'Fakultas MIPA', 'prodi' => 'Statistika', 'angkatan' => '2024', 'sort_order' => 3, 'is_active' => true]);
+        // Sample data for 2024/2025 period - Ketua Umum
+        ProfilDewan::create([
+            'nama_lengkap' => 'Fikri Maulana',
+            'nim' => '202023001',
+            'fakultas' => '',
+            'program_studi' => '',
+            'angkatan' => '',
+            'email_kampus' => 'fikri@uii.ac.id',
+            'jabatan' => 'Ketua Umum',
+            'unit_kerja' => 'Dewan Permusyawaratan Mahasiswa',
+            'periode' => '2024/2025',
+            'masa_jabatan' => '1 Juni 2024 - 31 Mei 2026',
+            'status' => 'Selesai',
+            'bio' => 'Mengelola seluruh kegiatan DPM UII periode 2024/2025.',
+            'tugas_tanggung_jawab' => 'Mendorong berjalannya program-program DPM UII, melakukan koordinasi dengan seluruh unit kerja dan alat kelengkapan.',
+            'instagram' => 'https://instagram.com/fikri.maulana',
+            'email' => 'fikri@uii.ac.id',
+        ]);
 
-        // Komisi IV
-        $k4 = $komisi->firstWhere('abbreviation', 'IV');
-        Official::create(['organizational_unit_id' => $k4->id, 'period_id' => $p2025->id, 'name' => 'Zahra Nabila', 'position' => 'Ketua Komisi IV', 'fakultas' => 'Fakultas Ilmu Agama Islam', 'prodi' => 'Ilmu Agama Islam', 'angkatan' => '2023', 'sort_order' => 1, 'is_active' => true]);
-        Official::create(['organizational_unit_id' => $k4->id, 'period_id' => $p2025->id, 'name' => 'Daffa Alfarizi', 'position' => 'Anggota', 'fakultas' => 'Fakultas Teknologi Industri', 'prodi' => 'Teknik Industri', 'angkatan' => '2024', 'sort_order' => 2, 'is_active' => true]);
-        Official::create(['organizational_unit_id' => $k4->id, 'period_id' => $p2025->id, 'name' => 'Nurul Hidayah', 'position' => 'Anggota', 'fakultas' => 'Fakultas Hukum', 'prodi' => 'Ilmu Hukum', 'angkatan' => '2025', 'sort_order' => 3, 'is_active' => true]);
+        // Sample data for 2024/2025 period - Sekretaris Jendral
+        ProfilDewan::create([
+            'nama_lengkap' => 'Intan Permata',
+            'nim' => '202023002',
+            'fakultas' => '',
+            'program_studi' => '',
+            'angkatan' => '',
+            'email_kampus' => 'intan@uii.ac.id',
+            'jabatan' => 'Sekretaris Jendral',
+            'unit_kerja' => 'Dewan Permusyawaratan Mahasiswa',
+            'periode' => '2024/2025',
+            'masa_jabatan' => '1 Juni 2024 - 31 Mei 2026',
+            'status' => 'Selesai',
+            'bio' => 'Mengatur administrasi dan sekretariat DPM UII periode 2024/2025.',
+            'tugas_tanggung_jawab' => 'Menyusun berita acara, mengurus surat menyurat DPM UII, serta menyelenggarakan rapat plenipoten.',
+            'instagram' => 'https://instagram.com/intan.permata',
+            'email' => 'intan@uii.ac.id',
+        ]);
 
-        // 2024/2025 - sample data
-        $p2024 = $periods['2024/2025'];
-        Official::create(['organizational_unit_id' => $pimpinan->id, 'period_id' => $p2024->id, 'name' => 'Fikri Maulana', 'position' => 'Ketua Umum', 'fakultas' => '', 'prodi' => '', 'angkatan' => '', 'sort_order' => 1, 'is_active' => true]);
-        Official::create(['organizational_unit_id' => $pimpinan->id, 'period_id' => $p2024->id, 'name' => 'Intan Permata', 'position' => 'Sekretaris Jenderal', 'fakultas' => '', 'prodi' => '', 'angkatan' => '', 'sort_order' => 2, 'is_active' => true]);
-        Official::create(['organizational_unit_id' => $pimpinan->id, 'period_id' => $p2024->id, 'name' => 'Raka Wirawan', 'position' => 'Bendahara Umum', 'fakultas' => '', 'prodi' => '', 'angkatan' => '', 'sort_order' => 3, 'is_active' => true]);
-        $k1b = $komisi->firstWhere('abbreviation', 'I');
-        Official::create(['organizational_unit_id' => $k1b->id, 'period_id' => $p2024->id, 'name' => 'Contoh Nama', 'position' => 'Ketua Komisi I', 'fakultas' => '', 'prodi' => '', 'angkatan' => '', 'sort_order' => 1, 'is_active' => true]);
-        $k2b = $komisi->firstWhere('abbreviation', 'II');
-        Official::create(['organizational_unit_id' => $k2b->id, 'period_id' => $p2024->id, 'name' => 'Contoh Nama', 'position' => 'Ketua Komisi II', 'fakultas' => '', 'prodi' => '', 'angkatan' => '', 'sort_order' => 1, 'is_active' => true]);
-        $k3b = $komisi->firstWhere('abbreviation', 'III');
-        Official::create(['organizational_unit_id' => $k3b->id, 'period_id' => $p2024->id, 'name' => 'Contoh Nama', 'position' => 'Ketua Komisi III', 'fakultas' => '', 'prodi' => '', 'angkatan' => '', 'sort_order' => 1, 'is_active' => true]);
-        $k4b = $komisi->firstWhere('abbreviation', 'IV');
-        Official::create(['organizational_unit_id' => $k4b->id, 'period_id' => $p2024->id, 'name' => 'Contoh Nama', 'position' => 'Ketua Komisi IV', 'fakultas' => '', 'prodi' => '', 'angkatan' => '', 'sort_order' => 1, 'is_active' => true]);
+        // Sample data for 2024/2025 period - Komisi II Ketua
+        ProfilDewan::create([
+            'nama_lengkap' => 'Raka Wirawan',
+            'nim' => '202023003',
+            'fakultas' => 'Fakultas Teknologi Industri',
+            'program_studi' => 'Teknik Industri',
+            'angkatan' => '2023',
+            'email_kampus' => 'raka@uii.ac.id',
+            'jabatan' => 'Ketua Komisi II',
+            'unit_kerja' => 'Dewan Permusyawaratan Mahasiswa',
+            'periode' => '2024/2025',
+            'masa_jabatan' => '1 Juni 2024 - 31 Mei 2026',
+            'status' => 'Selesai',
+            'bio' => 'MimpinKomisi II untuk memperbaiki tata tertib dan kerangka kerja komisi.',
+            'tugas_tanggung_jawab' => 'Mengarahkan anggota Komisi II, melakukan evaluasi kerja rutin, serta melaporkan hasil komisi pada sidang plenog.',
+            'instagram' => 'https://instagram.com/raka.wirawan',
+            'email' => 'raka@uii.ac.id',
+        ]);
 
-        $this->command->info('Sample profil dewan officials created.');
+        $this->command->info('Sample ProfilDewan data created successfully.');
     }
 }

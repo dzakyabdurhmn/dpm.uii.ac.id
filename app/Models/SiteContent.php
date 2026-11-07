@@ -54,12 +54,6 @@ class SiteContent extends Model
             'show_units' => false,
             'show_officials' => false,
         ],
-        'profil-dewan' => [
-            'title' => 'Profil Dewan',
-            'subtitle' => 'Tentang DPM UII',
-            'show_units' => false,
-            'show_officials' => true,
-        ],
     ];
 
     /**

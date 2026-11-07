@@ -44,7 +44,7 @@
           <h1>Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia</h1>
           <p class="lead">Lembaga Legislatif Keluarga Mahasiswa UII yang Menjalankan Fungsi Legislasi, Anggaran, dan Pengawasan.</p>
           <div class="hero-actions">
-            <a href="/tentang/profil-dewan" class="btn">Profil Lembaga <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a href="{{ route('profil-dewan.index') }}" class="btn">Profil Lembaga <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
             <a href="/produk-hukum" class="btn">Produk Hukum</a>
           </div>
         </div>
@@ -166,7 +166,7 @@
         <h2>Tiga fungsi untuk menjaga arah Keluarga Mahasiswa</h2>
         <p>Sebagai lembaga legislatif tertinggi dalam sistem student government KM UII, DPM UII menjalankan tiga peran utama.</p>
       </div>
-      <a href="/tentang/profil-dewan" class="link-more">Profil Dewan
+      <a href="{{ route('profil-dewan.index') }}" class="link-more">Profil Dewan
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>

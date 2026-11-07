@@ -15,7 +15,8 @@ class LegalProduct extends Model
 
     /**
      * Each product type behaves differently on purpose:
-     * PDKM/GBHKM are single constitutional documents (no number, no year),
+     * PDKM is a single constitutional document (no number, no year),
+     * GBHKM is enacted once per leadership period,
      * PKM/PDPM are numbered regulations renewed every year.
      *
      * @var array<string, array{label: string, name: string, numbered: bool, description: string}>
@@ -30,7 +31,7 @@ class LegalProduct extends Model
         'gbhkm' => [
             'label' => 'GBHKM',
             'name' => 'Garis-Garis Besar Haluan Keluarga Mahasiswa',
-            'numbered' => true,
+            'numbered' => false,
             'description' => 'GBHKM merupakan manifestasi dari arah gerak dan cita-cita mahasiswa UII yang disusun dan disahkan oleh DPM UII melalui Sidang Umum atau Sidang Istimewa. Dokumen ini berfungsi sebagai pedoman resmi dan landasan penyusunan rencana kerja yang berkesinambungan bagi seluruh lembaga kemahasiswaan di lingkungan KM UII.',
         ],
         'pkm' => [
@@ -63,6 +64,8 @@ class LegalProduct extends Model
         'size',
         'is_published',
         'published_at',
+        'enacted_on',
+        'forum',
         'sort_order',
         'downloads',
     ];
@@ -75,6 +78,7 @@ class LegalProduct extends Model
         return [
             'is_published' => 'boolean',
             'published_at' => 'datetime',
+            'enacted_on' => 'date',
             'number' => 'integer',
             'year' => 'integer',
             'size' => 'integer',

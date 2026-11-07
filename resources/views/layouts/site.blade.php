@@ -407,7 +407,24 @@
     *, *::before, *::after { animation: none !important; transition: none !important; }
     .reveal { opacity: 1; transform: none; }
   }
+
+  /* Sub-sub menu: Publikasi > Sosialisasi */
+  .mega-links .sub-group { border-bottom: 0; }
+  .mega-links .sub-parent { border-bottom: 0 !important; padding-bottom: 6px; font-weight: 600; }
+  .mega-links .sub-links { margin: 0 0 8px 6px; padding-left: 14px; border-left: 1px solid var(--b-btn); display: flex; flex-direction: column; }
+  .mega-links .sub-links a { position: relative; padding: 9px 0 9px 6px; font-size: 13px; font-weight: 500; color: var(--t-sub); border-bottom: 0; }
+  .mega-links .sub-links a::before { content: ''; position: absolute; left: -14px; top: 50%; width: 10px; height: 1px; background: var(--b-btn); }
+  .mega-links .sub-links a:hover { color: var(--white); }
+  @media (max-width: 1080px) {
+    .mega-links .sub-links { margin-left: 4px !important; padding-left: 12px !important; border-left: 1px solid var(--b-btn) !important; }
+    .mega-links .sub-links a { padding: 10px 0 10px 4px !important; font-size: 13px !important; font-weight: 500 !important; color: var(--t-sub) !important; border-bottom: 0 !important; }
+    .mega-links .sub-links a::after { display: none !important; }
+    .mega-links .sub-parent { border-bottom: 0 !important; }
+  }
 </style>
+
+<link rel="stylesheet" href="/build/assets/app-DVB7LGv8.css">
+<link rel="stylesheet" href="/build/assets/app-TkRHIDj2.css">
 
 @stack('styles')
 </head>
@@ -425,6 +442,9 @@
     <nav class="nav" id="nav" aria-label="Navigasi utama">
       <ul class="nav-menu">
         <li class="nav-item">
+          <a href="{{ route('profil-dewan.index') }}">Profil Dewan</a>
+        </li>
+        <li class="nav-item">
           <a href="{{ url('/#fungsi') }}">Tentang <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
           <div class="mega">
             <div class="mega-inner">
@@ -441,16 +461,13 @@
                 <a href="{{ url('/tentang/kedudukan-tugas-wewenang') }}"><span>Kedudukan, Tugas dan Wewenang</span></a>
               </div>
               <a class="mega-feature" href="{{ url('/tentang/struktur') }}">
-                <div class="mf-art" aria-hidden="true"><img src="{{ asset('uploads/assets/ulil lahar_compressed.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                <img src="{{ asset('uploads/assets/perpus_fbe.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
+                <div class="mf-art" aria-hidden="true"><img src="{{ asset('images/unit-embung.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                <img src="{{ asset('images/dana-perpus.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
                 <div class="mf-cap"><strong>Struktur Organisasi</strong><span>Lihat susunan dan hubungan kerja seluruh alat kelengkapan.</span></div>
                 <span class="mf-arrow" aria-hidden="true">↗</span>
               </a>
             </div>
           </div>
-        </li>
-        <li class="nav-item">
-          <a href="{{ url('/tentang/profil-dewan') }}">Profil Dewan</a>
         </li>
         <li class="nav-item">
           <a href="{{ url('/#unit') }}">Alat Kelengkapan <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
@@ -499,8 +516,8 @@
                 <a href="{{ route('legal-products.index') }}"><span>Semua Produk Hukum</span></a>
               </div>
               <a class="mega-feature" href="{{ route('legal-products.index') }}">
-                <div class="mf-art" aria-hidden="true"><img src="{{ asset('uploads/assets/perpus_compressed.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                <img src="{{ asset('uploads/assets/masjid fbe_compressed.webp') }}" alt="" loading="lazy" onerror="this.remove()">
+                <div class="mf-art" aria-hidden="true"><img src="{{ asset('images/hero-2.jpg') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                <img src="{{ asset('images/sosialisasi-masjid.webp') }}" alt="" loading="lazy" onerror="this.remove()">
                 <div class="mf-cap"><strong>Arsip Produk Hukum</strong><span>Telusuri dan unduh peraturan berdasarkan jenis dan tahun.</span></div>
                 <span class="mf-arrow" aria-hidden="true">↗</span>
               </a>
@@ -525,7 +542,7 @@
                 <a href="{{ url('/dana/lha') }}"><span>LHA<small>Laporan hasil audit</small></span></a>
               </div>
               <a class="mega-feature" href="{{ route('documents.dana') }}">
-                <div class="mf-art" aria-hidden="true"><img src="{{ asset('uploads/assets/sarter_compressed.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                <div class="mf-art" aria-hidden="true"><img src="{{ asset('images/hero-3.jpg') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
                 <img src="{{ asset('uploads/assets/ftsp_compressed.webp') }}" alt="" loading="lazy" onerror="this.remove()">
                 <div class="mf-cap"><strong>Transparansi Keuangan</strong><span>Akses laporan pertanggungjawaban dan hasil audit lembaga.</span></div>
                 <span class="mf-arrow" aria-hidden="true">↗</span>
@@ -534,47 +551,35 @@
           </div>
         </li>
         <li class="nav-item">
-          <a href="{{ route('humas.sosialisasi') }}">Sosialisasi <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
-          <div class="mega">
-            <div class="mega-inner">
-              <div class="mega-info">
-                <span class="eyebrow">Humas DPM UII</span>
-                <h2>Sosialisasi</h2>
-                <p>Panduan memahami peraturan KM UII serta aset resmi untuk kebutuhan dokumen internal DPM UII.</p>
-              </div>
-              <div class="mega-links">
-                <a href="{{ route('humas.download') }}"><span>Template Dokumen dan Font<small>Unduh font resmi &amp; template surat</small></span></a>
-                <a href="{{ route('humas.sosialisasi') }}"><span>Penjelasan Umum Peraturan KM UII<small>PDKM, GBHKM, PKM &amp; PDPM</small></span></a>
-              </div>
-              <a class="mega-feature" href="{{ route('humas.sosialisasi') }}">
-                <div class="mf-art" aria-hidden="true"><img src="{{ asset('uploads/assets/perpus_compressed.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                <img src="{{ asset('uploads/assets/perpus_fbe.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
-                <div class="mf-cap"><strong>Pusat Informasi Humas</strong><span>Pahami peraturan dan gunakan aset resmi DPM UII.</span></div>
-                <span class="mf-arrow" aria-hidden="true">↗</span>
-              </a>
-            </div>
-          </div>
+          <a href="{{ url('/laporan-kinerja') }}">LAPORAN KINERJA <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('documents.index') }}">Dokumen dan Publikasi <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
+          <a href="{{ route('documents.index') }}">PUBLIKASI <svg class="chev" viewBox="0 0 320 512" aria-hidden="true"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"/></svg></a>
           <div class="mega">
             <div class="mega-inner">
               <div class="mega-info">
                 <span class="eyebrow">Publikasi Resmi</span>
-                <h2>Dokumen dan Publikasi</h2>
+                <h2>PUBLIKASI</h2>
                 <p>Arsip keputusan, ketetapan, laporan kinerja, berita, dan pengumuman resmi DPM UII dalam satu tempat.</p>
                 <div class="mega-docs">
                   <a href="{{ route('documents.index') }}">Arsip Dokumen DPM UII<small>Keputusan, ketetapan, dan laporan per periode</small></a>
                 </div>
               </div>
               <div class="mega-links">
-                <a href="{{ route('documents.index') }}"><span>Dokumen dan Publikasi<small>Arsip keputusan, ketetapan & laporan kinerja</small></span></a>
-                <a href="{{ route('news.index') }}"><span>Berita<small>Kabar dan kegiatan terbaru DPM UII</small></span></a>
-                <a href="{{ route('news.announcements') }}"><span>Pengumuman<small>Informasi resmi untuk mahasiswa UII</small></span></a>
+                <a href="{{ route('documents.index') }}"><span>Surat Keputusan<small>Keputusan dan ketetapan resmi per periode</small></span></a>
+                <a href="{{ route('news.index') }}"><span>Berita Kegiatan<small>Kabar dan dokumentasi kegiatan DPM UII</small></span></a>
+                <a href="{{ route('news.announcements') }}"><span>Pengumuman<small>Informasi resmi untuk mahasiswa</small></span></a>
+                <div class="sub-group">
+                  <a class="sub-parent">Sosialisasi</a>
+                  <div class="sub-links">
+                    <a href="{{ route('humas.download') }}">Template Dokumen dan Font</a>
+                    <a href="{{ route('humas.sosialisasi') }}">Penjelasan Umum Peraturan KM UII</a>
+                  </div>
+                </div>
               </div>
               <a class="mega-feature" href="{{ route('documents.index') }}">
-                <div class="mf-art" aria-hidden="true"><img src="{{ asset('uploads/assets/drone fmipa_compressed.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                <img src="{{ asset('uploads/assets/faculty_law.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
+                <div class="mf-art" aria-hidden="true"><img src="{{ asset('images/hero-4-dokumen.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                <img src="{{ asset('images/hero-overlay-dokumen.jpg') }}" alt="" loading="lazy" onerror="this.remove()">
                 <div class="mf-cap"><strong>Arsip Dokumen</strong><span>Telusuri dokumen resmi DPM UII berdasarkan periode dan jenis.</span></div>
                 <span class="mf-arrow" aria-hidden="true">↗</span>
               </a>
@@ -626,7 +631,7 @@
             <svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
           </a>
           <a href="mailto:{{ $contactEmail }}" aria-label="Email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 17px; height: 17px;"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <svg viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176v208c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
           </a>
           <a href="https://wa.me/6281511092004" target="_blank" rel="noopener" aria-label="WhatsApp">
             <svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>

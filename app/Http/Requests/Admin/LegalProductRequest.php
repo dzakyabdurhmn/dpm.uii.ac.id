@@ -20,13 +20,14 @@ class LegalProductRequest extends FormRequest
     public function rules(): array
     {
         $numbered = LegalProduct::isNumberedType((string) $this->input('type'));
+        $isGbhkm = $this->input('type') === 'gbhkm';
 
         return [
             'type' => ['required', Rule::in(array_keys(LegalProduct::TYPES))],
             'number' => [Rule::requiredIf($numbered), 'nullable', 'integer', 'min:1', 'max:999'],
             'year' => [Rule::requiredIf($numbered), 'nullable', 'integer', 'min:2000', 'max:2100'],
             'edition' => ['nullable', 'string', 'max:50'],
-            'period_id' => ['nullable', 'integer', 'exists:periods,id'],
+            'period_id' => [Rule::requiredIf($isGbhkm), 'nullable', 'integer', 'exists:periods,id'],
             'amends_id' => ['nullable', 'integer', 'exists:legal_products,id'],
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', 'alpha_dash'],
@@ -35,6 +36,8 @@ class LegalProductRequest extends FormRequest
             'file' => ['nullable', 'file', 'max:20480', 'mimes:pdf,doc,docx'],
             'is_published' => ['boolean'],
             'published_at' => ['nullable', 'date'],
+            'enacted_on' => ['nullable', 'date'],
+            'forum' => ['nullable', 'string', 'max:150'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ];
     }
@@ -61,6 +64,18 @@ class LegalProductRequest extends FormRequest
                     $validator->errors()->add('amends_id', 'Dokumen yang diubah harus berjenis sama.');
                 }
             }
+
+            if ($this->input('type') === 'gbhkm' && filled($this->input('period_id'))) {
+                $taken = LegalProduct::query()
+                    ->ofType('gbhkm')
+                    ->where('period_id', $this->input('period_id'))
+                    ->when($existing, fn ($query) => $query->whereKeyNot($existing->getKey()))
+                    ->exists();
+
+                if ($taken) {
+                    $validator->errors()->add('period_id', 'Sudah ada GBHKM untuk periode ini. Satu periode kepengurusan hanya boleh memiliki satu GBHKM.');
+                }
+            }
         });
     }
 
@@ -76,6 +91,8 @@ class LegalProductRequest extends FormRequest
             'period_id' => filled($this->input('period_id')) ? $this->input('period_id') : null,
             'amends_id' => filled($this->input('amends_id')) ? $this->input('amends_id') : null,
             'published_at' => filled($this->input('published_at')) ? $this->input('published_at') : null,
+            'enacted_on' => filled($this->input('enacted_on')) ? $this->input('enacted_on') : null,
+            'forum' => filled($this->input('forum')) ? $this->input('forum') : null,
             'is_published' => $this->boolean('is_published'),
             'sort_order' => (int) $this->input('sort_order', 0),
         ]);
@@ -91,6 +108,7 @@ class LegalProductRequest extends FormRequest
             'number.required' => 'Nomor peraturan wajib diisi untuk PKM/PDPM.',
             'year.required' => 'Tahun peraturan wajib diisi untuk PKM/PDPM.',
             'title.required' => 'Judul / pokok peraturan wajib diisi.',
+            'period_id.required' => 'Periode kepengurusan wajib dipilih untuk GBHKM.',
             'file.mimes' => 'Berkas produk hukum harus PDF, DOC, atau DOCX.',
         ];
     }

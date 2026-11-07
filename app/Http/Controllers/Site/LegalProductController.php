@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
 use App\Models\LegalProduct;
+use App\Models\Period;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -25,6 +26,11 @@ class LegalProductController extends Controller
         // PDKM uses a dedicated view with custom design
         if ($type === 'pdkm') {
             return $this->showPdkm($request);
+        }
+
+        // GBHKM disusun per periode kepengurusan, bukan per edisi/nomor.
+        if ($type === 'gbhkm') {
+            return $this->showGbhkm();
         }
 
         return $this->listing($request, $type);
@@ -53,6 +59,77 @@ class LegalProductController extends Controller
             'types' => LegalProduct::TYPES,
             'currentType' => 'pdkm',
         ]);
+    }
+
+    /**
+     * GBHKM berlaku satu naskah per periode kepengurusan DPM UII.
+     */
+    private function showGbhkm(): View
+    {
+        $products = LegalProduct::query()
+            ->active()
+            ->ofType('gbhkm')
+            ->with('period')
+            ->orderByDesc('year')
+            ->orderBy('sort_order')
+            ->get();
+
+        $periods = Period::query()
+            ->orderByDesc('starts_on')
+            ->orderByDesc('name')
+            ->get();
+
+        $byPeriod = $products
+            ->filter(fn (LegalProduct $product) => $product->period_id !== null)
+            ->keyBy('period_id');
+
+        $entries = $periods->map(fn (Period $period) => $this->gbhkmEntry($byPeriod->get($period->id), $period));
+
+        // Data lama tanpa relasi periode tetap ditampilkan sebagai arsip.
+        foreach ($products->whereNull('period_id') as $product) {
+            $entries->push($this->gbhkmEntry($product, null));
+        }
+
+        abort_unless($entries->isNotEmpty(), 404);
+
+        $defaultIndex = $entries->search(fn (array $entry) => $entry['hasDoc']);
+
+        return view('site.legal-products.gbhkm', [
+            'entries' => $entries->values(),
+            'defaultIndex' => $defaultIndex === false ? 0 : $defaultIndex,
+            'types' => LegalProduct::TYPES,
+            'currentType' => 'gbhkm',
+        ]);
+    }
+
+    /**
+     * @return array{label: string, running: bool, status: string, enacted: ?string, forum: ?string, title: ?string, url: ?string, download: ?string, size: ?string, extension: ?string, hasDoc: bool}
+     */
+    private function gbhkmEntry(?LegalProduct $product, ?Period $period): array
+    {
+        $enacted = $product?->enacted_on ?? $product?->published_at;
+
+        $status = 'Belum ditetapkan';
+
+        if ($product !== null) {
+            $status = $product->status === 'tidak_aktif'
+                ? 'Tidak Berlaku'
+                : ($period?->is_active ? 'Berjalan' : 'Arsip');
+        }
+
+        return [
+            'label' => $period?->name ?? ($product?->year ? (string) $product->year : 'Tanpa periode'),
+            'running' => (bool) $period?->is_active,
+            'status' => $status,
+            'enacted' => $enacted?->locale('id')->translatedFormat('j F Y') ?? ($product?->year ? (string) $product->year : null),
+            'forum' => $product?->forum,
+            'title' => $product?->title,
+            'url' => $product?->download_url,
+            'download' => $product !== null && $product->hasFile() ? route('legal-products.download', $product) : null,
+            'size' => $product?->human_size,
+            'extension' => $product?->extension,
+            'hasDoc' => $product !== null && $product->hasFile(),
+        ];
     }
 
     private function listing(Request $request, ?string $type = null): View

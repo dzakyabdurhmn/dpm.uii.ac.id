@@ -5,41 +5,46 @@
 
 @push('styles')
 <style>
-  /* ---------- Hero banner ---------- */
+  /* ---------- Hero banner (berbasis foto) ---------- */
   .hero { position: relative; background: var(--navy-footer); }
-  .slider { position: relative; height: clamp(480px, 76vh, 660px); overflow: hidden; }
+  .slider { position: relative; height: clamp(520px, 84vh, 720px); overflow: hidden; background: var(--navy-footer); }
 
   .slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .9s ease, visibility .9s; }
   .slide.active { opacity: 1; visibility: visible; z-index: 1; }
 
   .slide-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #002A5A 0%, #001E43 52%, #001633 100%); }
   .slide-bg::after {
-    content: ''; position: absolute; inset: 0; opacity: .5;
+    content: ''; position: absolute; inset: 0; opacity: .35;
     background-image:
       repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 28px);
   }
-  .slide-art { position: absolute; right: 2%; bottom: 0; width: min(58%, 780px); height: 100%; display: flex; align-items: flex-end; justify-content: flex-end; }
-  .slide-art svg { width: 100%; height: auto; max-height: 100%; }
-  .slide-photo { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity .8s; }
+  .slide:not(.has-photo)::before { z-index: 3; content: 'Foto banner belum dipasang · letakkan di ' attr(data-hint) ' (1920 × 800 px)'; position: absolute; top: 20px; right: 24px; max-width: 70%; text-align: right; font-size: 11.5px; letter-spacing: .4px; color: var(--t-cap); }
+  .slide-photo { position: absolute; inset: 0; background-size: cover; background-position: var(--pos, center 35%); opacity: 0; transition: opacity .8s; }
   .slide.has-photo .slide-photo { opacity: 1; }
-  .slide.has-photo .slide-art, .slide.has-photo .slide-bg::after { display: none; }
-  .slide.active.has-photo .slide-photo { animation: kenburns 16s ease-out forwards; }
+  .slide.has-photo .slide-bg::after { display: none; }
+  .slide.active.has-photo .slide-photo { animation: kenburns 18s ease-out forwards; }
   @keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.07); } }
 
+  /* overlay tipis: foto tetap terlihat jelas, gelap hanya di bawah dan sedikit di kiri */
   .slide-overlay {
     position: absolute; inset: 0;
     background:
-      linear-gradient(90deg, rgba(0,30,67,.97) 0%, rgba(0,30,67,.86) 40%, rgba(0,30,67,.30) 100%),
-      linear-gradient(0deg, rgba(0,22,51,.9) 0%, transparent 34%);
+      linear-gradient(0deg, rgba(0,22,51,.94) 0%, rgba(0,22,51,.72) 24%, rgba(0,22,51,.18) 52%, rgba(0,22,51,0) 70%),
+      linear-gradient(90deg, rgba(0,22,51,.55) 0%, rgba(0,22,51,0) 55%),
+      linear-gradient(180deg, rgba(0,22,51,.35) 0%, rgba(0,22,51,0) 18%);
   }
 
-  .slide-content { position: relative; z-index: 2; height: 100%; display: flex; align-items: center; }
-  .slide-text { max-width: 660px; padding: 0 0 76px; }
+  .slide-content { position: relative; z-index: 2; height: 100%; display: flex; align-items: flex-end; }
+  .slide-text { max-width: 780px; padding: 0 0 118px; }
   .hero-label { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; font-size: 12.5px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--t-sub); }
   .hero-label::before { content: ''; width: 40px; height: 2px; background: var(--white); flex-shrink: 0; }
-  .slide h1 { font-size: clamp(28px, 4.4vw, 52px); letter-spacing: -1px; line-height: 1.14; margin-bottom: 20px; }
-  .slide p.lead { font-size: clamp(15px, 1.5vw, 17px); color: var(--t-sub); max-width: 560px; margin-bottom: 32px; }
+  .slide h1 { font-size: clamp(28px, 4vw, 48px); letter-spacing: -1px; line-height: 1.15; margin-bottom: 14px; text-shadow: 0 2px 18px rgba(0,0,0,.45); }
+  .slide p.lead { font-size: clamp(15px, 1.5vw, 17px); color: var(--t-body); max-width: 620px; margin-bottom: 26px; text-shadow: 0 1px 12px rgba(0,0,0,.5); }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero-actions .btn { background: rgba(0,22,51,.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .hero-actions .btn:hover { background: rgba(0,36,81,.8); }
+  .hero-credit { position: absolute; right: 24px; bottom: 76px; z-index: 3; font-size: 11.5px; color: var(--t-sub); text-shadow: 0 1px 8px rgba(0,0,0,.7); }
+  .slide:not(.has-photo) .hero-credit { display: none; }
 
   .slide.active .slide-text > * { animation: rise .8s ease both; }
   .slide.active .slide-text > *:nth-child(2) { animation-delay: .1s; }
@@ -84,9 +89,9 @@
   }
   @media (max-width: 720px) {
     .slider { height: clamp(520px, 86vh, 640px); }
-    .slide-art { width: 100%; right: 0; opacity: .32; }
-    .slide-overlay { background: linear-gradient(0deg, rgba(0,22,51,.96) 0%, rgba(0,30,67,.78) 55%, rgba(0,30,67,.55) 100%); }
-    .slide-text { padding-bottom: 84px; }
+    .slide-overlay { background: linear-gradient(0deg, rgba(0,22,51,.96) 0%, rgba(0,22,51,.78) 38%, rgba(0,22,51,.2) 68%, rgba(0,22,51,.3) 100%); }
+    .slide-text { padding-bottom: 104px; }
+    .hero-credit { display: none; }
     .counter { display: none; }
     .qa-item { padding: 18px 14px; gap: 10px; }
     .qa-item small { display: none; }
@@ -203,52 +208,23 @@
 
 @section('content')
 <!-- ================= HERO BANNER ================= -->
-<!-- Foto banner: letakkan file di folder images/ (hero-1.jpg, hero-2.jpg, hero-3.jpg) atau ubah data-img di bawah.
-     Jika foto belum ada, otomatis tampil ilustrasi institusional. Ukuran ideal 1920x800 px. -->
+<!-- Foto banner diambil dari public/uploads/assets/. Ubah data-img di bawah untuk mengganti foto. Ukuran ideal 1920x800 px. -->
 <section class="hero" aria-label="Banner utama">
   <div class="slider" id="slider">
 
     <!-- Slide 1 -->
-    <div class="slide active" data-img="images/hero-1.jpg">
+    <div class="slide active" data-img="{{ asset('uploads/assets/drone fmipa_compressed.webp') }}" data-hint="uploads/assets/drone fmipa_compressed.webp">
       <div class="slide-bg"></div>
-      <div class="slide-art" aria-hidden="true">
-        <svg viewBox="0 0 640 520" fill="none" stroke="rgba(255,255,255,0.42)" stroke-width="1.6" stroke-linejoin="round">
-          <defs>
-            <g id="col">
-              <rect x="0" y="0" width="28" height="170"/>
-              <path d="M9 6V164M19 6V164" stroke="rgba(255,255,255,0.2)"/>
-              <rect x="-6" y="-8" width="40" height="8" fill="rgba(255,255,255,0.09)"/>
-              <rect x="-6" y="170" width="40" height="8" fill="rgba(255,255,255,0.09)"/>
-            </g>
-          </defs>
-          <path d="M50 205 L320 62 L590 205 Z" fill="rgba(255,255,255,0.07)"/>
-          <path d="M92 195 L320 76 L548 195"/>
-          <circle cx="320" cy="150" r="30" fill="rgba(255,255,255,0.09)"/>
-          <circle cx="320" cy="150" r="20"/>
-          <path d="M320 134 L324 146 L336 146 L326 154 L330 166 L320 159 L310 166 L314 154 L304 146 L316 146 Z" fill="rgba(255,255,255,0.18)" stroke="none"/>
-          <rect x="50" y="205" width="540" height="22" fill="rgba(255,255,255,0.09)"/>
-          <use href="#col" x="96"  y="235"/>
-          <use href="#col" x="176" y="235"/>
-          <use href="#col" x="256" y="235"/>
-          <use href="#col" x="336" y="235"/>
-          <use href="#col" x="416" y="235"/>
-          <use href="#col" x="496" y="235"/>
-          <path d="M70 413 H570"/>
-          <path d="M50 433 H590"/>
-          <path d="M30 453 H610"/>
-          <path d="M10 473 H630"/>
-          <path d="M10 473 V500 H630 V473" stroke="rgba(255,255,255,0.2)"/>
-        </svg>
-      </div>
       <div class="slide-photo"></div>
+      <span class="hero-credit">Foto: Drone FMIPA UII</span>
       <div class="slide-overlay"></div>
       <div class="container slide-content">
         <div class="slide-text">
           <div class="hero-label">Portal Resmi · Keluarga Mahasiswa UII</div>
           <h1>Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia</h1>
-          <p class="lead">Lembaga Legislatif Keluarga Mahasiswa UII yang Menjalankan Fungsi Legislasi, Anggaran, dan Pengawasan.</p>
+          <p class="lead">Lembaga legislatif Keluarga Mahasiswa UII yang menjalankan fungsi legislasi, pengawasan, dan penyaluran aspirasi mahasiswa.</p>
           <div class="hero-actions">
-            <a href="/tentang/profil-dewan" class="btn">Profil Lembaga <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a href="{{ route('profil-dewan.index') }}" class="btn">Profil Lembaga <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
             <a href="/produk-hukum" class="btn">Produk Hukum</a>
           </div>
         </div>
@@ -256,22 +232,10 @@
     </div>
 
     <!-- Slide 2 -->
-    <div class="slide" data-img="images/hero-2.jpg">
+    <div class="slide" data-img="{{ asset('uploads/assets/perpus_compressed.webp') }}" data-hint="uploads/assets/perpus_compressed.webp">
       <div class="slide-bg"></div>
-      <div class="slide-art" aria-hidden="true">
-        <svg viewBox="0 0 640 520" fill="none" stroke="rgba(255,255,255,0.42)" stroke-width="1.6" stroke-linejoin="round">
-          <rect x="170" y="60" width="300" height="390" rx="6" transform="rotate(-7 320 255)" fill="rgba(255,255,255,0.10)"/>
-          <rect x="170" y="60" width="300" height="390" rx="6" transform="rotate(7 320 255)" fill="rgba(255,255,255,0.10)"/>
-          <rect x="170" y="60" width="300" height="390" rx="6" fill="rgba(255,255,255,0.09)"/>
-          <path d="M215 120 H425" stroke-width="3"/>
-          <path d="M215 150 H400 M215 176 H425 M215 202 H410 M215 228 H425 M215 254 H385 M215 292 H425 M215 318 H405 M215 344 H425" stroke="rgba(255,255,255,0.26)"/>
-          <circle cx="320" cy="400" r="34" fill="rgba(255,255,255,0.09)"/>
-          <circle cx="320" cy="400" r="24"/>
-          <path d="M320 384 L324 396 L336 396 L326 404 L330 416 L320 409 L310 416 L314 404 L304 396 L316 396 Z" fill="rgba(255,255,255,0.18)" stroke="none"/>
-          <path d="M300 430 L292 470 L320 456 L348 470 L340 430" fill="rgba(255,255,255,0.09)"/>
-        </svg>
-      </div>
       <div class="slide-photo"></div>
+      <span class="hero-credit">Foto: Perpustakaan UII</span>
       <div class="slide-overlay"></div>
       <div class="container slide-content">
         <div class="slide-text">
@@ -287,23 +251,10 @@
     </div>
 
     <!-- Slide 3 -->
-    <div class="slide" data-img="images/hero-3.jpg">
+    <div class="slide" data-img="{{ asset('uploads/assets/ulil lahar_compressed.webp') }}" data-hint="uploads/assets/ulil lahar_compressed.webp" style="--pos: center 55%;">
       <div class="slide-bg"></div>
-      <div class="slide-art" aria-hidden="true">
-        <svg viewBox="0 0 640 520" fill="none" stroke="rgba(255,255,255,0.42)" stroke-width="1.6" stroke-linejoin="round">
-          <path d="M250 70 H520 A16 16 0 0 1 536 86 V176 A16 16 0 0 1 520 192 H340 L300 226 V192 H250 A16 16 0 0 1 234 176 V86 A16 16 0 0 1 250 70 Z" fill="rgba(255,255,255,0.09)"/>
-          <path d="M268 108 H500 M268 134 H470 M268 160 H430" stroke="rgba(255,255,255,0.26)"/>
-          <circle cx="150" cy="310" r="32" fill="rgba(255,255,255,0.10)"/>
-          <path d="M92 450 C92 380 208 380 208 450 Z" fill="rgba(255,255,255,0.10)"/>
-          <circle cx="490" cy="310" r="32" fill="rgba(255,255,255,0.10)"/>
-          <path d="M432 450 C432 380 548 380 548 450 Z" fill="rgba(255,255,255,0.10)"/>
-          <circle cx="320" cy="290" r="40" fill="rgba(255,255,255,0.10)"/>
-          <path d="M240 450 C240 366 400 366 400 450 Z" fill="rgba(255,255,255,0.10)"/>
-          <path d="M40 450 H600"/>
-          <path d="M40 450 V490 H600 V450" stroke="rgba(255,255,255,0.2)"/>
-        </svg>
-      </div>
       <div class="slide-photo"></div>
+      <span class="hero-credit">Foto: Masjid Ulul Albab UII</span>
       <div class="slide-overlay"></div>
       <div class="container slide-content">
         <div class="slide-text">
@@ -370,7 +321,7 @@
         <h2>THREE CORE FUNCTIONS.</h2>
         <p>Dewan Permusyawaratan Mahasiswa <br>Universitas Islam Indonesia</p>
       </div>
-      <a href="/tentang/profil-dewan" class="link-more">Profil Dewan
+      <a href="{{ route('profil-dewan.index') }}" class="link-more">Profil Dewan
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
