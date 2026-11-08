@@ -36,10 +36,15 @@ class DocumentController extends Controller
         ]);
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
+        $defaultCategory = filled($request->query('kategori'))
+            ? DocumentCategory::query()->where('slug', $request->query('kategori'))->first()
+            : null;
+
         return view('admin.documents.form', [
             'document' => new Document([
+                'document_category_id' => $defaultCategory?->id,
                 'published_at' => now(),
                 'year' => now()->year,
             ]),

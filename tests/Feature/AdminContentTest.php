@@ -113,6 +113,28 @@ class AdminContentTest extends TestCase
         $this->assertSame('PDF', $document->extension);
     }
 
+    public function test_document_create_preselects_lpj_and_lha_categories(): void
+    {
+        $lpj = DocumentCategory::query()->where('slug', 'lpj')->firstOrFail();
+        $lha = DocumentCategory::query()->where('slug', 'lha')->firstOrFail();
+
+        $this->actingAs($this->admin)
+            ->get(route('admin.documents.index'))
+            ->assertOk()
+            ->assertSee(route('admin.documents.create', ['kategori' => 'lpj']), false)
+            ->assertSee(route('admin.documents.create', ['kategori' => 'lha']), false);
+
+        $this->actingAs($this->admin)
+            ->get(route('admin.documents.create', ['kategori' => 'lpj']))
+            ->assertOk()
+            ->assertSee('value="'.$lpj->id.'" selected', false);
+
+        $this->actingAs($this->admin)
+            ->get(route('admin.documents.create', ['kategori' => 'lha']))
+            ->assertOk()
+            ->assertSee('value="'.$lha->id.'" selected', false);
+    }
+
     public function test_document_requires_a_file_or_external_link(): void
     {
         $category = DocumentCategory::query()->firstOrFail();

@@ -24,10 +24,20 @@
             </button>
         </form>
 
-        <a href="{{ route('admin.documents.create') }}"
-           class="rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-800">
-            Dokumen baru
-        </a>
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('admin.documents.create', ['kategori' => 'lpj']) }}"
+               class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                Upload LPJ
+            </a>
+            <a href="{{ route('admin.documents.create', ['kategori' => 'lha']) }}"
+               class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                Upload LHA
+            </a>
+            <a href="{{ route('admin.documents.create') }}"
+               class="rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-800">
+                Dokumen baru
+            </a>
+        </div>
     </div>
 
     <div class="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-white">
