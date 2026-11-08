@@ -240,12 +240,6 @@
   addEventListener('scroll', prog, { passive: true });
 
   const sel = $('periode');
-  Object.keys(window.UNIT_DATA).forEach(p => {
-    const o = document.createElement('option');
-    o.value = p;
-    o.textContent = 'Periode ' + p;
-    sel.appendChild(o);
-  });
   sel.addEventListener('change', render);
 
   render(); prog();
@@ -286,7 +280,11 @@
       <ol id="toc" aria-label="Navigasi {{ $unit->short_name }}"></ol>
       <div class="ctrls">
         <label class="sel">
-          <select id="periode" aria-label="Periode kepengurusan"></select>
+          <select id="periode" aria-label="Periode kepengurusan">
+            @foreach (array_keys($unitData ?? []) as $periodName)
+              <option value="{{ $periodName }}" @selected($loop->first)>Periode {{ $periodName }}</option>
+            @endforeach
+          </select>
         </label>
       </div>
     </div>

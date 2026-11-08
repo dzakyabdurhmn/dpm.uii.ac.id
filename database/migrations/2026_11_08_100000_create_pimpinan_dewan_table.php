@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('pimpinan_dewans', function (Blueprint $table) {
+        Schema::create('pimpinan_dewan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('periode_id')->constrained('periods')->onDelete('cascade');
             $table->string('jabatan'); // Ketua, Sekjen, Komisi 1, Komisi 2, Komisi 3, Komisi 4, Anggota Komisi 1-4
@@ -32,6 +32,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('pimpinan_dewans');
+        Schema::dropIfExists('pimpinan_dewan');
     }
 };

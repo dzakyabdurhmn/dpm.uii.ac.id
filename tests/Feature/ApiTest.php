@@ -7,7 +7,6 @@ use App\Models\Document;
 use App\Models\DocumentCategory;
 use App\Models\LegalProduct;
 use App\Models\Post;
-use App\Models\PostCategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -40,7 +39,7 @@ class ApiTest extends TestCase
             ]);
     }
 
-    public function test_settings_endpoint_exposes_site_identity_and_navigation(): void
+    public function test_settings_endpoint_exposes_site_identity_and_sections(): void
     {
         $response = $this->getJson('/api/settings')
             ->assertOk()
@@ -48,10 +47,11 @@ class ApiTest extends TestCase
             ->assertJsonPath('data.social.instagram', 'https://www.instagram.com/dpmuii/')
             ->assertJsonPath('data.social.linkedin', 'https://www.linkedin.com/company/dewan-permusyawaratan-mahasiswa/')
             ->assertJsonPath('data.social.twitter', 'https://twitter.com/DPM_UII')
-            ->assertJsonFragment(['key' => 'visi-misi']);
+            ->assertJsonFragment(['key' => 'sambutan']);
 
-        $this->assertContains('/tentang/visi-misi', array_column($response->json('data.sections'), 'url'));
-        $this->assertNotEmpty($response->json('data.navigation'));
+        $this->assertContains('/tentang/sambutan', array_column($response->json('data.sections'), 'url'));
+        // Navigasi header statis di frontend, bukan dari database.
+        $this->assertSame([], $response->json('data.navigation'));
     }
 
     public function test_documents_can_be_filtered_by_quarter(): void
@@ -130,10 +130,7 @@ class ApiTest extends TestCase
 
     public function test_posts_listing_hides_drafts_and_show_returns_body(): void
     {
-        $category = PostCategory::query()->firstOrCreate(['slug' => 'pengumuman'], ['name' => 'Pengumuman']);
-
         Post::query()->create([
-            'post_category_id' => $category->id,
             'title' => 'Berita Terbit',
             'slug' => 'berita-terbit-api',
             'body' => '<p>Konten berita</p>',
@@ -142,7 +139,6 @@ class ApiTest extends TestCase
         ]);
 
         Post::query()->create([
-            'post_category_id' => $category->id,
             'title' => 'Berita Draf',
             'slug' => 'berita-draf-api',
             'body' => '<p>Belum terbit</p>',

@@ -73,7 +73,6 @@ class HomeController extends Controller
                 'posts' => PostResource::collection(
                     Post::query()
                         ->published()
-                        ->with('category')
                         ->latest('published_at')
                         ->limit(3)
                         ->get()

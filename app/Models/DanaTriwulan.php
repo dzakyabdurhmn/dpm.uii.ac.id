@@ -51,9 +51,4 @@ class DanaTriwulan extends Model
     {
         return $this->hasMany(DanaSeksi::class);
     }
-
-    public function revisi(): HasMany
-    {
-        return $this->hasMany(DanaRevisi::class);
-    }
 }

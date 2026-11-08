@@ -15,6 +15,10 @@ class PageContent extends Model
         'title',
         'subtitle',
         'body',
+        'signature_role',
+        'signature_name',
+        'signature_fakultas',
+        'signature_nim',
     ];
 
     /**

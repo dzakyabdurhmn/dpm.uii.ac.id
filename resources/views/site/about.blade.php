@@ -39,6 +39,19 @@
                 }
             }
         }
+
+        // Identitas penanda tangan dari admin menang atas hasil parsing body lama.
+        if ($section === 'sambutan' && filled($content?->signature_name)) {
+            $sambutanSignature = [
+                'name' => $content->signature_name,
+                'role' => $content->signature_role ?: 'Ketua DPM UII',
+                'org' => array_values(array_filter([
+                    $content->signature_fakultas,
+                    filled($content->signature_nim) ? 'NIM '.$content->signature_nim : null,
+                ])),
+                'period' => $sambutanSignature['period'] ?? null,
+            ];
+        }
     @endphp
 
     <style>

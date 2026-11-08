@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->string('type')->nullable()->after('post_category_id')
+            $table->string('type')->nullable()
                 ->comment('Type for Sosialisasi: peraturan, kebijakan, program, lain-lain');
         });
     }

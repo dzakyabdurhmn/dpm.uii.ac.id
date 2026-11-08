@@ -15,22 +15,10 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->timestamps();
         });
-
-        Schema::table('posts', function (Blueprint $table) {
-            $table->foreignId('post_category_id')
-                ->nullable()
-                ->after('id')
-                ->constrained()
-                ->nullOnDelete();
-        });
     }
 
     public function down(): void
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('post_category_id');
-        });
-
         Schema::dropIfExists('post_categories');
     }
 };

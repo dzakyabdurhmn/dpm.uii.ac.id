@@ -43,18 +43,38 @@ class PageContentController extends Controller
 
         abort_if($config === null, 404);
 
-        $data = $request->validate([
+        $rules = [
             'body' => ['nullable', 'string'],
-        ]);
+        ];
 
-        PageContent::query()->updateOrCreate(
-            ['key' => $section],
-            [
-                'title' => $config['title'],
-                'subtitle' => $config['subtitle'],
-                'body' => $data['body'] ?? null,
-            ],
-        );
+        // Sambutan punya blok identitas penanda tangan di bawah editor.
+        if ($section === 'sambutan') {
+            $rules += [
+                'signature_role' => ['nullable', 'string', 'max:100'],
+                'signature_name' => ['nullable', 'string', 'max:150'],
+                'signature_fakultas' => ['nullable', 'string', 'max:150'],
+                'signature_nim' => ['nullable', 'string', 'max:30'],
+            ];
+        }
+
+        $data = $request->validate($rules);
+
+        $attributes = [
+            'title' => $config['title'],
+            'subtitle' => $config['subtitle'],
+            'body' => $data['body'] ?? null,
+        ];
+
+        if ($section === 'sambutan') {
+            $attributes += [
+                'signature_role' => $data['signature_role'] ?? null,
+                'signature_name' => $data['signature_name'] ?? null,
+                'signature_fakultas' => $data['signature_fakultas'] ?? null,
+                'signature_nim' => $data['signature_nim'] ?? null,
+            ];
+        }
+
+        PageContent::query()->updateOrCreate(['key' => $section], $attributes);
 
         return redirect()
             ->route('admin.page-contents.edit', $section)

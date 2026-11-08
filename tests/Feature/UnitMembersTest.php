@@ -114,7 +114,8 @@ class UnitMembersTest extends TestCase
             ->assertSee('Periode '.$current->name)
             ->assertSee('Periode '.$previous->name)
             ->assertSee('Anggota Terkini')
-            ->assertSee('Fakultas Teknik / Informatika')
+            // Deskripsi ikut ke dataset JSON; @json meng-escape garis miring.
+            ->assertSee('Fakultas Teknik \/ Informatika', false)
             ->assertSee('Anggota Lama');
     }
 }

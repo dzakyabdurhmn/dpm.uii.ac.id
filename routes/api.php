@@ -32,7 +32,6 @@ Route::name('api.')->group(function () {
     Route::get('documents/reports', [DocumentController::class, 'reports'])->name('documents.reports');
 
     Route::get('posts', [PostController::class, 'index'])->name('posts.index');
-    Route::get('posts/categories', [PostController::class, 'categories'])->name('posts.categories');
     Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 
     Route::get('units', [UnitController::class, 'index'])->name('units.index');

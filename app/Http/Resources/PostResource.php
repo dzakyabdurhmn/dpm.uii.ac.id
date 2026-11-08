@@ -20,11 +20,8 @@ class PostResource extends JsonResource
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
             'body' => $this->when($request->routeIs('api.posts.show'), $this->body),
-            'category' => $this->whenLoaded('category', fn () => $this->category ? [
-                'id' => $this->category->id,
-                'name' => $this->category->name,
-                'slug' => $this->category->slug,
-            ] : null),
+            'type' => $this->type,
+            'type_label' => $this->type_label,
             'featured_image' => $this->featured_image ? asset($this->featured_image) : null,
             'published_at' => $this->published_at?->toIso8601String(),
             'url' => route('news.show', $this),

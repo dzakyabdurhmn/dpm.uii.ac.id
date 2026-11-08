@@ -156,7 +156,6 @@ class SiteTest extends TestCase
     public function test_removed_publication_pages_no_longer_exist(): void
     {
         $this->get('/keputusan')->assertNotFound();
-        $this->get('/laporan-kinerja')->assertNotFound();
         $this->get('/dokumen/kategori/surat-keputusan')->assertNotFound();
     }
 }

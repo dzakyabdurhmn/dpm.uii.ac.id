@@ -5,9 +5,9 @@ namespace Tests\Feature;
 use App\Models\Document;
 use App\Models\DocumentCategory;
 use App\Models\Media;
+use App\Models\PageContent;
 use App\Models\Post;
 use App\Models\Setting;
-use App\Models\SiteContent;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -53,24 +53,39 @@ class AdminContentTest extends TestCase
             ->assertSessionHasErrors('title');
     }
 
-    public function test_admin_can_update_a_fixed_content_section(): void
+    public function test_admin_can_update_the_sambutan_wysiwyg_content(): void
     {
         $this->actingAs($this->admin)
-            ->put(route('admin.contents.update', 'visi-misi'), [
-                'body' => '<h2>Visi</h2><p>Parlemen mahasiswa yang aspiratif.</p>',
-            ])
-            ->assertRedirect();
-
-        $content = SiteContent::query()->where('key', 'visi-misi')->firstOrFail();
-        $this->assertStringContainsString('aspiratif', $content->body);
-
-        $this->get(route('about.show', 'visi-misi'))
+            ->get(route('admin.page-contents.edit', 'sambutan'))
             ->assertOk()
-            ->assertSee('aspiratif');
+            ->assertSee('data-rich-editor', false)
+            ->assertSee('Identitas Penanda Tangan');
+
+        $this->actingAs($this->admin)
+            ->put(route('admin.page-contents.update', 'sambutan'), [
+                'body' => '<h2>Salam</h2><p>Parlemen mahasiswa yang aspiratif.</p>',
+                'signature_role' => 'Ketua DPM UII',
+                'signature_name' => 'Ahmad Fauzan',
+                'signature_fakultas' => 'Fakultas Hukum',
+                'signature_nim' => '21522045',
+            ])
+            ->assertRedirect(route('admin.page-contents.edit', 'sambutan'));
+
+        $content = PageContent::query()->where('key', 'sambutan')->firstOrFail();
+        $this->assertStringContainsString('aspiratif', $content->body);
+        $this->assertSame('Ahmad Fauzan', $content->signature_name);
+        $this->assertSame('21522045', $content->signature_nim);
+
+        $this->get(route('about.show', 'sambutan'))
+            ->assertOk()
+            ->assertSee('aspiratif')
+            ->assertSee('Ahmad Fauzan')
+            ->assertSee('Fakultas Hukum')
+            ->assertSee('NIM 21522045');
 
         // Section di luar daftar tetap tidak bisa diakses.
         $this->actingAs($this->admin)
-            ->put(route('admin.contents.update', 'halaman-bebas'), ['body' => '<p>x</p>'])
+            ->put(route('admin.page-contents.update', 'halaman-bebas'), ['body' => '<p>x</p>'])
             ->assertNotFound();
     }
 
@@ -144,17 +159,16 @@ class AdminContentTest extends TestCase
             ->assertSessionHasErrors('file');
     }
 
-    public function test_admin_can_update_site_settings(): void
+    public function test_admin_can_update_site_contact_settings(): void
     {
         $this->actingAs($this->admin)
             ->put(route('admin.settings.update'), [
-                'site_name' => 'DPM UII Baru',
-                'site_tagline' => 'Dewan Permusyawaratan Mahasiswa',
                 'contact_email' => 'dpm@uii.ac.id',
+                'contact_phone' => '0274-898444',
             ])
             ->assertRedirect(route('admin.settings.edit'));
 
-        $this->assertSame('DPM UII Baru', Setting::get('site_name'));
-        $this->get('/')->assertOk()->assertSee('DPM UII Baru');
+        $this->assertSame('dpm@uii.ac.id', Setting::get('contact_email'));
+        $this->assertSame('0274-898444', Setting::get('contact_phone'));
     }
 }
