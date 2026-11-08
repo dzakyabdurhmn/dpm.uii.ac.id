@@ -1,5 +1,5 @@
 -- DPM UII — dump MySQL (hasil konversi dari PostgreSQL)
--- Dibuat: 2026-11-08 05:57:51
+-- Dibuat: 2026-11-08 07:46:28
 
 SET NAMES utf8mb4;
 SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO';
@@ -835,7 +835,19 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
   (50, '2026_11_08_100003_add_signature_to_page_contents_table', 11);
 
 INSERT INTO `officials` (`id`, `organizational_unit_id`, `period_id`, `name`, `position`, `photo_path`, `email`, `instagram`, `linkedin`, `sort_order`, `is_active`, `created_at`, `updated_at`, `description`, `fakultas`, `prodi`, `angkatan`, `nim`) VALUES
-  (1, 1, 3, 'Troy amirul ahmad', NULL, 'uploads/fungsionaris/pimpinan-dewan/32a65320-20aa-4fc8-aebe-3de4edf4f063.jpg', '23215075@students.uii.ac.id', 'https://www.instagram.com/dpmub/', 'https://www.instagram.com/dpp/', 1, 1, '2026-11-06 15:06:50', '2026-11-06 15:06:50', 'testtt', 'Bisnis dan Ekonomika', 'Akuntansi Pepajakan', '2023', '23215075');
+  (1, 1, 4, 'Troy Amirul Akhmad', 'Ketua Umum', 'uploads/fungsionaris/pimpinan-dewan/32a65320-20aa-4fc8-aebe-3de4edf4f063.jpg', '23215075@students.uii.ac.id', 'https://www.instagram.com/dpmub/', 'https://www.instagram.com/dpp/', 1, 1, '2026-11-06 15:06:50', '2026-11-08 07:19:53', NULL, 'Bisnis dan Ekonomika', 'Sarjana Terapan Akuntansi Perpajakan', '2023', '23215075'),
+  (2, 2, 4, 'Dimas Andika Putra', 'Kepala MENTARI', NULL, NULL, NULL, NULL, 1, 1, '2026-11-08 06:36:07', '2026-11-08 07:16:00', NULL, 'Bisnis dan Ekonomika', NULL, '2024', '24215039'),
+  (3, 2, 4, 'Siti Maghfira Lahinta', 'Koordinator Biro Administrasi dan Kearsipan', NULL, NULL, NULL, NULL, 2, 1, '2026-11-08 06:36:07', '2026-11-08 07:16:00', NULL, 'Psikologi', NULL, '2023', '23320242'),
+  (4, 2, 4, 'Ilham Juluborita', 'Staf Administrasi dan Kearsipan', NULL, NULL, NULL, NULL, 3, 1, '2026-11-08 06:36:07', '2026-11-08 07:16:00', NULL, 'Bisnis dan Ekonomika', NULL, '2024', '24311094'),
+  (5, 2, 4, 'Fathya Adya Farahdiba', 'Staf Administrasi dan Kearsipan', NULL, NULL, NULL, NULL, 4, 1, '2026-11-08 06:36:07', '2026-11-08 07:16:00', NULL, 'Ilmu Sosial Budaya', NULL, '2025', '25323135'),
+  (6, 2, 4, 'Imawan Caesar Wahyudi', 'Staf Administrasi dan Kearsipan', NULL, NULL, NULL, NULL, 5, 1, '2026-11-08 06:36:07', '2026-11-08 07:16:00', NULL, 'Ilmu Sosial Budaya', NULL, '2024', '24321304'),
+  (7, 2, 4, 'Yanuar Farrel Yudistira', 'Kabiro Media dan Inventaris', NULL, NULL, NULL, NULL, 6, 1, '2026-11-08 06:36:07', '2026-11-08 07:16:00', NULL, 'Bisnis dan Ekonomika', NULL, '2024', '24215016'),
+  (8, 2, 4, 'Nurul Ayu Afiah', 'Staf Media dan Inventaris', NULL, NULL, NULL, NULL, 7, 1, '2026-11-08 06:36:07', '2026-11-08 07:16:00', NULL, 'Bisnis dan Ekonomika', NULL, '2025', '25215042'),
+  (9, 2, 4, 'Laras Fadhilatul Amaro', 'Staf Media dan Inventaris', NULL, NULL, NULL, NULL, 8, 1, '2026-11-08 06:36:07', '2026-11-08 07:16:00', NULL, 'Bisnis dan Ekonomika', NULL, '2025', '25214152'),
+  (10, 2, 4, 'Najwa Fauziah Ismail', 'Staf Media dan Inventaris', NULL, NULL, NULL, NULL, 9, 1, '2026-11-08 06:36:07', '2026-11-08 07:16:00', NULL, 'Hukum', NULL, '2025', '25410044'),
+  (11, 2, 4, 'Muhammad Dzaky Abdurrahman', 'Staf Media dan Inventaris', NULL, NULL, NULL, NULL, 10, 1, '2026-11-08 06:36:07', '2026-11-08 07:16:00', NULL, 'Bisnis dan Ekonomika', NULL, '2025', '25311205'),
+  (12, 1, 4, 'Asep Subagya', 'Sekretaris Jenderal', NULL, '23215044@students.uii.ac.id', NULL, NULL, 2, 1, '2026-11-08 07:05:17', '2026-11-08 07:05:17', NULL, 'Bisnis dan Ekonomika', 'Sarjana Terapan Akuntansi Perpajakan', '2023', '23215044'),
+  (13, 1, 4, 'Annisa Fidanta Shafir', 'Ketua Komisi', NULL, '23215020@students.uii.ac.id', NULL, NULL, 3, 1, '2026-11-08 07:05:29', '2026-11-08 07:05:29', NULL, 'Bisnis dan Ekonomika', 'Sarjana Terapan Akuntansi Perpajakan', '2023', '23215020');
 
 INSERT INTO `organizational_units` (`id`, `parent_id`, `type`, `name`, `slug`, `description`, `logo_path`, `sort_order`, `is_active`, `created_at`, `updated_at`, `abbreviation`, `tasks`, `work_programs`, `email`) VALUES
   (1, NULL, 'pimpinan', 'Pimpinan Dewan', 'pimpinan-dewan', NULL, NULL, 1, 1, '2026-11-02 04:29:53', '2026-11-02 04:29:53', NULL, NULL, NULL, NULL),
@@ -866,9 +878,10 @@ INSERT INTO `pengaturan_halaman` (`id`, `halaman`, `kunci`, `nilai`, `created_at
   (4, 'distribusi_dana', 'dasar_hukum', 'PDKM UII dan PDPM UII', '2026-11-07 19:47:20', '2026-11-07 19:47:20');
 
 INSERT INTO `periods` (`id`, `name`, `starts_on`, `ends_on`, `is_active`, `created_at`, `updated_at`) VALUES
-  (1, '2023/2024', '2023-09-01', '2024-08-31', 0, '2026-11-02 04:29:17', '2026-11-02 04:29:17'),
-  (2, '2024/2025', '2024-09-01', '2025-08-31', 0, '2026-11-02 04:29:18', '2026-11-02 04:29:18'),
-  (3, '2025/2026', '2025-09-01', '2026-08-31', 1, '2026-11-02 04:29:20', '2026-11-07 22:50:02');
+  (1, '2023/2024', '2023-09-01', '2024-08-31', 0, '2026-11-02 04:29:17', '2026-11-08 07:04:59'),
+  (2, '2024/2025', '2024-09-01', '2025-08-31', 0, '2026-11-02 04:29:18', '2026-11-08 07:04:59'),
+  (3, '2025/2026', '2025-09-01', '2026-08-31', 0, '2026-11-02 04:29:20', '2026-11-08 07:04:59'),
+  (4, '2026/2027', '2026-09-01', '2027-08-31', 1, '2026-11-08 07:03:02', '2026-11-08 07:03:05');
 
 INSERT INTO `pimpinan_dewan` (`id`, `periode_id`, `jabatan`, `nama`, `fakultas`, `prodi`, `angkatan`, `nim`, `email`, `instagram`, `linkedin`, `foto_path`, `sort_order`, `is_active`, `created_at`, `updated_at`) VALUES
   (1, 3, 'Ketua', 'Ketua DPM UII', 'Fakultas Hukum', NULL, NULL, '21000001', NULL, NULL, NULL, NULL, 1, 1, '2026-11-07 20:58:20', '2026-11-07 20:58:20'),
@@ -880,9 +893,12 @@ INSERT INTO `pimpinan_dewan` (`id`, `periode_id`, `jabatan`, `nama`, `fakultas`,
   (7, 3, 'Anggota Komisi 1', 'Anggota Komisi I', 'Fakultas Hukum', NULL, NULL, '21000007', NULL, NULL, NULL, NULL, 7, 1, '2026-11-07 20:58:29', '2026-11-07 20:58:29'),
   (8, 3, 'Anggota Komisi 2', 'Anggota Komisi II', 'Fakultas Ekonomi', NULL, NULL, '21000008', NULL, NULL, NULL, NULL, 8, 1, '2026-11-07 20:58:30', '2026-11-07 20:58:30'),
   (9, 3, 'Anggota Komisi 3', 'Anggota Komisi III', 'Fakultas Ilmu Sosial dan Politik', NULL, NULL, '21000009', NULL, NULL, NULL, NULL, 9, 1, '2026-11-07 20:58:32', '2026-11-07 20:58:32'),
-  (10, 3, 'Anggota Komisi 4', 'Anggota Komisi IV', 'Fakultas Teknik', NULL, NULL, '21000010', NULL, NULL, NULL, NULL, 10, 1, '2026-11-07 20:58:33', '2026-11-07 20:58:33');
+  (10, 3, 'Anggota Komisi 4', 'Anggota Komisi IV', 'Fakultas Teknik', NULL, NULL, '21000010', NULL, NULL, NULL, NULL, 10, 1, '2026-11-07 20:58:33', '2026-11-07 20:58:33'),
+  (11, 4, 'Ketua Umum', 'Troy Amirul Akhmad', 'Bisnis dan Ekonomika', 'Sarjana Terapan Akuntansi Perpajakan', '2023', '23215075', '23215075@students.uii.ac.id', NULL, NULL, NULL, 1, 1, '2026-11-08 07:05:07', '2026-11-08 07:05:07'),
+  (12, 4, 'Sekretaris Jenderal', 'Asep Subagya', 'Bisnis dan Ekonomika', 'Sarjana Terapan Akuntansi Perpajakan', '2023', '23215044', '23215044@students.uii.ac.id', NULL, NULL, NULL, 2, 1, '2026-11-08 07:05:19', '2026-11-08 07:05:19'),
+  (13, 4, 'Ketua Komisi', 'Annisa Fidanta Shafir', 'Bisnis dan Ekonomika', 'Sarjana Terapan Akuntansi Perpajakan', '2023', '23215020', '23215020@students.uii.ac.id', NULL, NULL, NULL, 3, 1, '2026-11-08 07:05:31', '2026-11-08 07:05:31');
 
--- pimpinan_tugas: tidak ada data
+-- pioneering_tugas: lihat blok INSERT di bagian bawah dump
 
 INSERT INTO `posts` (`id`, `title`, `slug`, `excerpt`, `body`, `status`, `published_at`, `featured_image`, `meta_title`, `meta_description`, `created_at`, `updated_at`, `type`) VALUES
   (5, 'Pelatihan Legislasi untuk Anggota DPM UII Baru', 'pelatihan-legislasi-untuk-anggota-dpm-uis-baru', 'Badan Legislasi (Baleg) mengadakan pelatihan dasar legislasi bagi anggota DPM UII periode 2025/2026.', '<p>Pelatihan berlangsung selama 2 hari dan mencakup materi: tata cara sidang, teknis drafting peraturan, dan kajian hukum dasar.</p><p>\"Kami ingin memastikan seluruh anggota memahami proses legislasi dengan baik,\" kata Ketua Baleg.</p>', 'published', '2026-10-13 05:19:32', NULL, NULL, NULL, '2026-11-02 04:34:43', '2026-11-02 05:19:47', NULL),
@@ -902,12 +918,15 @@ INSERT INTO `posts` (`id`, `title`, `slug`, `excerpt`, `body`, `status`, `publis
   (12, 'Sosialisasi Kebijakan Baru: Advokasi Keringanan UKT Mahasiswa', 'sosialisasi-kebijakan-baru-adovkasi-keringanan-ukt-mahasiswa', 'BKSAJ menggelar sosialisasi kebijakan advokasi keringanan UKT bagi mahasiswa terdampak ekonomi.', '<p>Kebijakan ini merupakan hasil advokasi DPM UII kepada Rektorat UII. Sosialisasi menjelaskan syarat, prosedur pengajuan, dan jadwal verifikasi.</p>', 'published', '2026-10-25 05:19:32', NULL, NULL, NULL, '2026-11-02 04:49:07', '2026-11-02 05:19:58', 'kebijakan');
 
 INSERT INTO `profil_dewans` (`id`, `nama_lengkap`, `nim`, `fakultas`, `program_studi`, `angkatan`, `email_kampus`, `jabatan`, `unit_kerja`, `periode`, `masa_jabatan`, `status`, `bio`, `tugas_tanggung_jawab`, `instagram`, `email`, `created_at`, `updated_at`) VALUES
-  (1, 'Rizky Ananda', '202024001', 'Fakultas Hukum', 'Ilmu Hukum', '2020', 'rizy@uii.ac.id', 'Ketua Komisi I', 'Dewan Permusyawaratan Mahasiswa', '2025/2026', '1 Juni 2025 - 31 Mei 2027', 'Aktif', 'Mahasiswa aktif Fakultas Hukum UII, terpilih sebagai Ketua Komisi I DPM UII periode 2025/2026.', 'Memimpin dan mengoordinasikan kerja Komisi I, melakukan Laporan Kinerja pada Sidang Pleno DPM UII, berkoordinasi dengan alat kelengkapan dewan dan pimpinan.', 'https://instagram.com/rizy.ananda', 'rizy@uii.ac.id', '2026-11-07 16:55:02', '2026-11-07 16:55:02'),
-  (2, 'Aulia Rahmawati', '202024002', 'Fakultas Hukum', 'Ilmu Hukum', '2023', 'aulia@uii.ac.id', 'Sekretaris Jendral', 'Dewan Permusyawaratan Mahasiswa', '2025/2026', '1 Juni 2025 - 31 Mei 2027', 'Aktif', 'Mahasiswa aktif Fakultas Hukum UII, menjabat sebagai Sekretaris Jendral DPM UII periode 2025/2026.', 'Menyusun rapat dan meeting, mencatat keputusan plenog, melakukan pengarsipan dokumen resmi DPM UII.', 'https://instagram.com/aulia.rahmawati', 'aulia@uii.ac.id', '2026-11-07 16:55:08', '2026-11-07 16:55:08'),
-  (3, 'Farhan Hidayat', '202024003', 'Fakultas Ilmu Agama Islam', 'Hukum Ekonomi Syariah', '2024', 'farhan@uii.ac.id', 'Anggota Komisi I', 'Dewan Permusyawaratan Mahasiswa', '2025/2026', '1 Juni 2025 - 31 Mei 2027', 'Aktif', 'Mahasiswa aktif Fakultas Ilmu Agama Islam UII, menjadi anggota Komisi I DPM UII periode 2025/2026.', 'Membantu koordinasi kerja Komisi I, melakukan penelitian dan studi kasus sesuai bidang tugas.', 'https://instagram.com/farhan.hidayat', 'farhan@uii.ac.id', '2026-11-07 16:55:09', '2026-11-07 16:55:09'),
+  (1, 'Rizky Ananda', '202024001', 'Fakultas Hukum', 'Ilmu Hukum', '2020', 'rizy@uii.ac.id', 'Ketua Komisi I', 'Dewan Permusyawaratan Mahasiswa', '2025/2026', '1 Juni 2025 - 31 Mei 2027', 'Selesai', 'Mahasiswa aktif Fakultas Hukum UII, terpilih sebagai Ketua Komisi I DPM UII periode 2025/2026.', 'Memimpin dan mengoordinasikan kerja Komisi I, melakukan Laporan Kinerja pada Sidang Pleno DPM UII, berkoordinasi dengan alat kelengkapan dewan dan pimpinan.', 'https://instagram.com/rizy.ananda', 'rizy@uii.ac.id', '2026-11-07 16:55:02', '2026-11-08 07:28:00'),
+  (2, 'Aulia Rahmawati', '202024002', 'Fakultas Hukum', 'Ilmu Hukum', '2023', 'aulia@uii.ac.id', 'Sekretaris Jendral', 'Dewan Permusyawaratan Mahasiswa', '2025/2026', '1 Juni 2025 - 31 Mei 2027', 'Selesai', 'Mahasiswa aktif Fakultas Hukum UII, menjabat sebagai Sekretaris Jendral DPM UII periode 2025/2026.', 'Menyusun rapat dan meeting, mencatat keputusan plenog, melakukan pengarsipan dokumen resmi DPM UII.', 'https://instagram.com/aulia.rahmawati', 'aulia@uii.ac.id', '2026-11-07 16:55:08', '2026-11-08 07:28:00'),
+  (3, 'Farhan Hidayat', '202024003', 'Fakultas Ilmu Agama Islam', 'Hukum Ekonomi Syariah', '2024', 'farhan@uii.ac.id', 'Anggota Komisi I', 'Dewan Permusyawaratan Mahasiswa', '2025/2026', '1 Juni 2025 - 31 Mei 2027', 'Selesai', 'Mahasiswa aktif Fakultas Ilmu Agama Islam UII, menjadi anggota Komisi I DPM UII periode 2025/2026.', 'Membantu koordinasi kerja Komisi I, melakukan penelitian dan studi kasus sesuai bidang tugas.', 'https://instagram.com/farhan.hidayat', 'farhan@uii.ac.id', '2026-11-07 16:55:09', '2026-11-08 07:28:00'),
   (4, 'Fikri Maulana', '202023001', '', '', '', 'fikri@uii.ac.id', 'Ketua Umum', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 Juni 2024 - 31 Mei 2026', 'Selesai', 'Mengelola seluruh kegiatan DPM UII periode 2024/2025.', 'Mendorong berjalannya program-program DPM UII, melakukan koordinasi dengan seluruh unit kerja dan alat kelengkapan.', 'https://instagram.com/fikri.maulana', 'fikri@uii.ac.id', '2026-11-07 16:55:10', '2026-11-07 16:55:10'),
   (5, 'Intan Permata', '202023002', '', '', '', 'intan@uii.ac.id', 'Sekretaris Jendral', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 Juni 2024 - 31 Mei 2026', 'Selesai', 'Mengatur administrasi dan sekretariat DPM UII periode 2024/2025.', 'Menyusun berita acara, mengurus surat menyurat DPM UII, serta menyelenggarakan rapat plenipoten.', 'https://instagram.com/intan.permata', 'intan@uii.ac.id', '2026-11-07 16:55:11', '2026-11-07 16:55:11'),
-  (6, 'Raka Wirawan', '202023003', 'Fakultas Teknologi Industri', 'Teknik Industri', '2023', 'raka@uii.ac.id', 'Ketua Komisi II', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 Juni 2024 - 31 Mei 2026', 'Selesai', 'MimpinKomisi II untuk memperbaiki tata tertib dan kerangka kerja komisi.', 'Mengarahkan anggota Komisi II, melakukan evaluasi kerja rutin, serta melaporkan hasil komisi pada sidang plenog.', 'https://instagram.com/raka.wirawan', 'raka@uii.ac.id', '2026-11-07 16:55:11', '2026-11-07 16:55:11');
+  (6, 'Raka Wirawan', '202023003', 'Fakultas Teknologi Industri', 'Teknik Industri', '2023', 'raka@uii.ac.id', 'Ketua Komisi II', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 Juni 2024 - 31 Mei 2026', 'Selesai', 'MimpinKomisi II untuk memperbaiki tata tertib dan kerangka kerja komisi.', 'Mengarahkan anggota Komisi II, melakukan evaluasi kerja rutin, serta melaporkan hasil komisi pada sidang plenog.', 'https://instagram.com/raka.wirawan', 'raka@uii.ac.id', '2026-11-07 16:55:11', '2026-11-07 16:55:11'),
+  (7, 'Troy Amirul Akhmad', '23215075', 'Bisnis dan Ekonomika', 'Sarjana Terapan Akuntansi Perpajakan', '2023', '23215075@students.uii.ac.id', 'Ketua Umum', 'Dewan Permusyawaratan Mahasiswa', '2026/2027', 'Belum terverifikasi', 'Aktif', NULL, 'Memimpin dan mengoordinasikan seluruh pelaksanaan tugas serta fungsi DPM UII.\nMengarahkan penyelenggaraan fungsi legislasi, anggaran, dan pengawasan DPM UII.\nMewakili DPM UII dalam hubungan kelembagaan dengan LEM UII dan pihak terkait.\nMengawasi pelaksanaan program kerja dan kinerja seluruh alat kelengkapan dewan.', NULL, '23215075@students.uii.ac.id', '2026-11-08 07:05:02', '2026-11-08 07:05:02'),
+  (8, 'Asep Subagya', '23215044', 'Bisnis dan Ekonomika', 'Sarjana Terapan Akuntansi Perpajakan', '2023', '23215044@students.uii.ac.id', 'Sekretaris Jenderal', 'Dewan Permusyawaratan Mahasiswa', '2026/2027', 'Belum terverifikasi', 'Aktif', NULL, 'Mengelola administrasi kesekretariatan, agenda rapat, pencatatan, dan pengarsipan dokumen resmi DPM UII.\nMengoordinasikan administrasi dan pelaporan hasil kerja seluruh alat kelengkapan dewan.\nMemastikan kelancaran komunikasi, koordinasi, dan dokumentasi antara pimpinan, komisi, serta unit kerja DPM UII.\nMenyampaikan hasil pelaksanaan administrasi dan kesekretariatan dalam forum resmi DPM UII.', NULL, '23215044@students.uii.ac.id', '2026-11-08 07:05:14', '2026-11-08 07:05:14'),
+  (9, 'Annisa Fidanta Shafir', '23215020', 'Bisnis dan Ekonomika', 'Sarjana Terapan Akuntansi Perpajakan', '2023', '23215020@students.uii.ac.id', 'Ketua Komisi', 'Dewan Permusyawaratan Mahasiswa', '2026/2027', 'Belum terverifikasi', 'Aktif', NULL, 'Memimpin dan mengoordinasikan pelaksanaan tugas serta program kerja komisi.\nMengarahkan pembahasan kebijakan sesuai bidang komisi.\nMengawasi pelaksanaan tugas anggota komisi serta memastikan tercapainya target kerja.\nMenyampaikan hasil kerja dan rekomendasi komisi dalam Sidang Pleno DPM UII.', NULL, '23215020@students.uii.ac.id', '2026-11-08 07:05:26', '2026-11-08 07:05:26');
 
 -- sessions: tidak ada data
 
@@ -933,5 +952,20 @@ INSERT INTO `settings` (`id`, `key`, `value`, `created_at`, `updated_at`) VALUES
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
   (1, 'Administrator', 'admin@dpm.uii.ac.id', '2026-11-02 04:28:49', '$2y$12$rT.97tm1v1i5Gd8jBtqFQ.Qxu59FFtiT88c6E5pc3NJnJPyo.yjTK', '0bZQRLuUHBvkbiJJQghqoUvTGOTJ7FosmAfp32QKJ5KgDwWF12nLfJy55BkQ', '2026-11-02 04:28:50', '2026-11-02 07:42:13');
 
+INSERT INTO `pimpinan_tugas` (`id`, `pimpinan_dewan_id`, `tugas`, `sort_order`, `created_at`, `updated_at`) VALUES
+  (1, 11, 'Memimpin dan mengoordinasikan seluruh pelaksanaan tugas serta fungsi DPM UII.', 1, '2026-11-08 07:05:09', '2026-11-08 07:05:09'),
+  (2, 11, 'Mengarahkan penyelenggaraan fungsi legislasi, anggaran, dan pengawasan DPM UII.', 2, '2026-11-08 07:05:10', '2026-11-08 07:05:10'),
+  (3, 11, 'Mewakili DPM UII dalam hubungan kelembagaan dengan LEM UII dan pihak terkait.', 3, '2026-11-08 07:05:11', '2026-11-08 07:05:11'),
+  (4, 11, 'Mengawasi pelaksanaan program kerja dan kinerja seluruh alat kelengkapan dewan.', 4, '2026-11-08 07:05:12', '2026-11-08 07:05:12'),
+  (5, 12, 'Mengelola administrasi kesekretariatan, agenda rapat, pencatatan, dan pengarsipan dokumen resmi DPM UII.', 1, '2026-11-08 07:05:21', '2026-11-08 07:05:21'),
+  (6, 12, 'Mengoordinasikan administrasi dan pelaporan hasil kerja seluruh alat kelengkapan dewan.', 2, '2026-11-08 07:05:22', '2026-11-08 07:05:22'),
+  (7, 12, 'Memastikan kelancaran komunikasi, koordinasi, dan dokumentasi antara pimpinan, komisi, serta unit kerja DPM UII.', 3, '2026-11-08 07:05:23', '2026-11-08 07:05:23'),
+  (8, 12, 'Menyampaikan hasil pelaksanaan administrasi dan kesekretariatan dalam forum resmi DPM UII.', 4, '2026-11-08 07:05:24', '2026-11-08 07:05:24'),
+  (9, 13, 'Memimpin dan mengoordinasikan pelaksanaan tugas serta program kerja komisi.', 1, '2026-11-08 07:05:33', '2026-11-08 07:05:33'),
+  (10, 13, 'Mengarahkan pembahasan kebijakan sesuai bidang komisi.', 2, '2026-11-08 07:05:34', '2026-11-08 07:05:34'),
+  (11, 13, 'Mengawasi pelaksanaan tugas anggota komisi serta memastikan tercapainya target kerja.', 3, '2026-11-08 07:05:35', '2026-11-08 07:05:35'),
+  (12, 13, 'Menyampaikan hasil kerja dan rekomendasi komisi dalam Sidang Pleno DPM UII.', 4, '2026-11-08 07:05:36', '2026-11-08 07:05:36');
+
 SET FOREIGN_KEY_CHECKS=1;
+
 
