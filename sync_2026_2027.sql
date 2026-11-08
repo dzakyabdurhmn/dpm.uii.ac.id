@@ -50,8 +50,8 @@ VALUES
    'Memimpin dan mengoordinasikan pelaksanaan tugas serta program kerja komisi.\nMengarahkan pembahasan kebijakan sesuai bidang komisi.\nMengawasi pelaksanaan tugas anggota komisi serta memastikan tercapainya target kerja.\nMenyampaikan hasil kerja dan rekomendasi komisi dalam Sidang Pleno DPM UII.',
    NULL, '23215020@students.uii.ac.id', NOW(), NOW());
 
--- Data profil periode sebelumnya ditandai selesai supaya tidak muncul lagi.
-UPDATE `profil_dewans` SET `status` = 'Selesai', `updated_at` = NOW() WHERE `periode` <> '2026/2027' AND `status` = 'Aktif';
+-- Data contoh periode sebelumnya (dari seeder) dibuang, bukan arsip.
+DELETE FROM `profil_dewans` WHERE `nim` IN ('202024001', '202024002', '202024003');
 
 -- ---------------------------------------------------------------------
 -- 4. MENTARI (10 orang, periode 2026/2027)
