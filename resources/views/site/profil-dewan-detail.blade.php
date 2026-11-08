@@ -143,10 +143,18 @@
 
       <section aria-labelledby="s2">
         <div class="sh"><span>03</span><h2 id="s2">Tugas dan Tanggung Jawab</h2></div>
+        @php
+            $tugas = array_values(array_filter(preg_split('/\R/u', (string) $profil?->tugas_tanggung_jawab)));
+            $tugas = $tugas ?: [
+                'Memimpin dan mengoordinasikan kerja komisi sesuai pembagian tugas.',
+                'Melaporkan hasil kerja komisi pada Sidang Pleno DPM UII.',
+                'Berkoordinasi dengan pimpinan dan alat kelengkapan dewan terkait.',
+            ];
+        @endphp
         <ol class="tg">
-          <li><b>01</b><span>{{ $profil?->tugas_tanggung_jawab ?: 'Memimpin dan mengoordinasikan kerja komisi sesuai pembagian tugas.' }}</span></li>
-          <li><b>02</b><span>Melaporkan hasil kerja komisi pada Sidang Pleno DPM UII.</span></li>
-          <li><b>03</b><span>Berkoordinasi dengan pimpinan dan alat kelengkapan dewan terkait.</span></li>
+          @foreach ($tugas as $index => $item)
+          <li><b>{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</b><span>{{ $item }}</span></li>
+          @endforeach
         </ol>
       </section>
 

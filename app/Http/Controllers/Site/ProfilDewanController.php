@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\Period;
 use App\Models\ProfilDewan;
 use Illuminate\View\View;
 
@@ -13,14 +14,19 @@ class ProfilDewanController extends Controller
      */
     public function index(): View
     {
+        $periode = Period::active();
+
         $profils = ProfilDewan::query()
             ->where('status', 'Aktif')
-            ->orderBy('periode')
+            ->when($periode, fn ($query) => $query->where('periode', $periode->name))
             ->orderBy('jabatan')
             ->get();
 
         // Group by jabatan type
-        $pimpinan = $profils->filter(fn ($p) => str_contains($p->jabatan, 'Ketua Umum') || str_contains($p->jabatan, 'Wakil Ketua Umum') || str_contains($p->jabatan, 'Sekretaris Jendral'));
+        $pimpinan = $profils->filter(fn ($p) => str_contains($p->jabatan, 'Ketua Umum')
+            || str_contains($p->jabatan, 'Wakil Ketua Umum')
+            || str_contains($p->jabatan, 'Sekretaris')
+            || str_contains($p->jabatan, 'Ketua Komisi'));
         $komisi1 = $profils->filter(fn ($p) => str_contains($p->jabatan, 'Komisi I'));
         $komisi2 = $profils->filter(fn ($p) => str_contains($p->jabatan, 'Komisi II'));
         $komisi3 = $profils->filter(fn ($p) => str_contains($p->jabatan, 'Komisi III'));
@@ -33,7 +39,7 @@ class ProfilDewanController extends Controller
             'komisi2' => $komisi2,
             'komisi3' => $komisi3,
             'komisi4' => $komisi4,
-            'periode' => '2025/2026',
+            'periode' => $periode?->name,
         ]);
     }
 

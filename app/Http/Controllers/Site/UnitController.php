@@ -27,7 +27,7 @@ class UnitController extends Controller
         abort_unless($unit->is_active, 404);
 
         $periods = Period::query()->orderByDesc('name')->get(['id', 'name', 'is_active']);
-        $activePeriod = Period::active()->first(['id', 'name']);
+        $activePeriod = Period::query()->where('is_active', true)->first(['id', 'name']);
 
         $periodIds = $periods->pluck('id')->toArray();
 

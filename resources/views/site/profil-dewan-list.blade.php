@@ -83,25 +83,36 @@
   </nav>
   <span class="eyebrow">Tentang DPM UII</span>
   <h1>Profil Dewan</h1>
-  <p class="pg-desc">Susunan pimpinan dan komisi Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia pada periode kepengurusan <strong style="color:#fff">2025/2026</strong>.</p>
+  <p class="pg-desc">Susunan pimpinan dan komisi Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia pada periode kepengurusan <strong style="color:#fff">{{ $periode ?? '—' }}</strong>.</p>
 </div></section>
+
+@php
+    $komisiConfig = [
+        'komisi1' => ['no' => 'I', 'key' => 'komisi-1', 'title' => 'Komisi I', 'desc' => 'Menangani penyusunan, pembahasan, dan pengawasan produk hukum KM UII.'],
+        'komisi2' => ['no' => 'II', 'key' => 'komisi-2', 'title' => 'Komisi II', 'desc' => 'Mengawasi kinerja lembaga dan alat kelengkapan KM UII serta audit pertanggungjawaban.'],
+        'komisi3' => ['no' => 'III', 'key' => 'komisi-3', 'title' => 'Komisi III', 'desc' => 'Menampung aspirasi dan memperjuangkan kesejahteraan mahasiswa UII.'],
+        'komisi4' => ['no' => 'IV', 'key' => 'komisi-4', 'title' => 'Komisi IV', 'desc' => 'Membangun relasi dan kerjasama strategis antar lembaga kemahasiswaan.'],
+    ];
+    $komisiSections = [];
+    foreach ($komisiConfig as $var => $komisi) {
+        if ($$var->isNotEmpty()) {
+            $komisiSections[$var] = $komisi;
+        }
+    }
+@endphp
 
 <!-- ================= SUBNAV ================= -->
 <div class="subnav" id="subnav"><div class="container subnav-inner">
   <ol id="toc">
     <li><a href="#pimpinan"><em>01</em>Pimpinan</a></li>
-    <li><a href="#komisi-1"><em>I</em>Komisi I</a></li>
-    <li><a href="#komisi-2"><em>II</em>Komisi II</a></li>
-    <li><a href="#komisi-3"><em>III</em>Komisi III</a></li>
-    <li><a href="#komisi-4"><em>IV</em>Komisi IV</a></li>
+    @foreach ($komisiSections as $komisi)
+      <li><a href="#{{ $komisi['key'] }}"><em>{{ $komisi['no'] }}</em>{{ $komisi['title'] }}</a></li>
+    @endforeach
   </ol>
   <div class="ctrls">
     <label class="sel">
       <select id="periode" aria-label="Periode kepengurusan">
-        <option value="2025/2026" selected>Periode 2025/2026</option>
-        @if ($periode !== '2025/2026')
-        <option value="{{ $periode }}">Periode {{ $periode }}</option>
-        @endif
+        <option value="{{ $periode }}" selected>Periode {{ $periode ?? '—' }}</option>
       </select>
     </label>
   </div>
@@ -123,7 +134,7 @@
     @php
         $ketuaUmum = $pimpinan->firstWhere('jabatan', 'Ketua Umum');
         $wakilKetuaUmum = $pimpinan->firstWhere('jabatan', 'Wakil Ketua Umum');
-        $sekjen = $pimpinan->firstWhere('jabatan', 'Sekretaris Jendral');
+        $sekjen = $pimpinan->first(fn ($p) => str_contains($p->jabatan, 'Sekretaris'));
     @endphp
 
     @if($ketuaUmum)
@@ -175,15 +186,31 @@
       </a>
       @endif
     </div>
+    @php
+        $pimpinanIds = [$ketuaUmum?->id, $wakilKetuaUmum?->id, $sekjen?->id];
+        $pimpinanLain = $pimpinan->reject(fn ($p) => in_array($p->id, $pimpinanIds, true));
+    @endphp
+
+    @if ($pimpinanLain->isNotEmpty())
+    <div class="g3" style="margin-top:14px">
+      @foreach ($pimpinanLain as $p)
+      <a class="mc" href="{{ route('profil-dewan.detail', $p->nim) }}">
+        <div class="av">
+          <svg class="sil" viewBox="0 0 100 120" aria-hidden="true"><circle cx="50" cy="40" r="20"/><path d="M12 120c0-26 17-42 38-42s38 16 38 42z"/></svg>
+        </div>
+        <span>
+          <small>{{ $p->jabatan }}</small>
+          <h3>{{ $p->nama_lengkap }}</h3>
+          <span class="m">{{ $p->fakultas }} · {{ $p->program_studi }}</span>
+        </span>
+      </a>
+      @endforeach
+    </div>
+    @endif
   </div>
 </section>
 
-@foreach([
-    'komisi1' => ['no' => 'I', 'key' => 'komisi-1', 'title' => 'Komisi I', 'desc' => 'Menangani penyusunan, pembahasan, dan pengawasan produk hukum KM UII.'],
-    'komisi2' => ['no' => 'II', 'key' => 'komisi-2', 'title' => 'Komisi II', 'desc' => 'Mengawasi kinerja lembaga dan alat kelengkapan KM UII serta audit pertanggungjawaban.'],
-    'komisi3' => ['no' => 'III', 'key' => 'komisi-3', 'title' => 'Komisi III', 'desc' => 'Menampung aspirasi dan memperjuangkan kesejahteraan mahasiswa UII.'],
-    'komisi4' => ['no' => 'IV', 'key' => 'komisi-4', 'title' => 'Komisi IV', 'desc' => 'Membangun relasi dan kerjasama strategis antar lembaga kemahasiswaan.'],
-] as $var => $komisi)
+@foreach ($komisiSections as $var => $komisi)
     {{-- Get komisi members (exclude Ketua) --}}
     @php
         $komisiMembers = $$var->filter(fn ($p) => !str_contains($p->jabatan, 'Ketua Komisi'));
