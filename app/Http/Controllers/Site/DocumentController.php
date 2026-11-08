@@ -128,24 +128,11 @@ class DocumentController extends Controller
     }
 
     /**
-     * Semua dokumen dalam grup "Dana" (distribusi, LPJ, LHA, laporan keuangan).
+     * Halaman Dana: tiga pintu masuk (LPJ, LHA, Distribusi Dana).
      */
-    public function dana(Request $request): View
+    public function dana(): View
     {
-        $documents = $this->documents($request, null)
-            ->whereHas('category', fn ($query) => $query->where('group', 'Dana'))
-            ->paginate(15)
-            ->withQueryString();
-
-        return view('site.documents.index', [
-            'documents' => $documents,
-            'categories' => $this->categoryList(),
-            'years' => $this->years(),
-            'periods' => $this->periods(),
-            'filters' => $this->filters($request, null),
-            'heading' => 'Dana',
-            'description' => 'Distribusi dana, laporan pertanggungjawaban (LPJ), dan laporan hasil audit (LHA) KM UII.',
-        ]);
+        return view('site.documents.dana');
     }
 
     /**

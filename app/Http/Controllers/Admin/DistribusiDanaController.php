@@ -42,7 +42,7 @@ class DistribusiDanaController extends Controller
     {
         $periods = Period::orderByDesc('name')->get();
         $komponen = KomponenDana::where('is_tampil', true)->orderBy('urutan')->get();
-        $lembaga = Lembaga::where('is_active', true)->orderBy('tingkat')->orderBy('sort_order')->get();
+        $lembaga = Lembaga::where('is_aktif', true)->orderBy('tingkat')->orderBy('nama')->get();
         $fakultas = Fakultas::orderBy('urutan')->get();
 
         return view('admin.distribusi-dana.form', [
@@ -85,7 +85,7 @@ class DistribusiDanaController extends Controller
     {
         $periods = Period::orderByDesc('name')->get();
         $komponen = KomponenDana::where('is_tampil', true)->orderBy('urutan')->get();
-        $lembaga = Lembaga::where('is_active', true)->orderBy('tingkat')->orderBy('sort_order')->get();
+        $lembaga = Lembaga::where('is_aktif', true)->orderBy('tingkat')->orderBy('nama')->get();
         $fakultas = Fakultas::orderBy('urutan')->get();
 
         // Load existing data
@@ -178,7 +178,7 @@ class DistribusiDanaController extends Controller
             'komponen.*.id' => ['required_if:komponen,,exists:komponen_dana,id'],
             'komponen.*.jumlah' => ['required_if:komponen,,numeric', 'min:0'],
             'alokasi_distribusi' => ['nullable', 'array'],
-            'alokasi_distribusi.*.lembaga_id' => ['required_if:alokasi_distribusi,,exists:lembagas,id'],
+            'alokasi_distribusi.*.lembaga_id' => ['required_if:alokasi_distribusi,,exists:lembaga,id'],
             'alokasi_distribusi.*.jumlah' => ['required_if:alokasi_distribusi,,numeric', 'min:0'],
             'alokasi_taktis' => ['nullable', 'array'],
             'alokasi_taktis.*.fakultas_id' => ['nullable', 'exists:fakultas,id'],

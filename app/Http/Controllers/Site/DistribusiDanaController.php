@@ -15,21 +15,34 @@ use App\Models\Fakultas;
 use App\Models\KomponenDana;
 use App\Models\Lembaga;
 use App\Models\MahasiswaFakultas;
+use App\Models\Period;
+use Illuminate\Http\Request;
 
 class DistribusiDanaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $triwulan = DanaTriwulan::where('status', 'terbit')
-            ->orderByDesc('periode_id')
+        $published = DanaTriwulan::where('status', 'terbit')
             ->orderByDesc('triwulan')
-            ->first();
+            ->get();
 
-        if (! $triwulan) {
+        if ($published->isEmpty()) {
             abort(404, 'Data distribusi dana belum tersedia.');
         }
 
-        $periode = $triwulan->periode;
+        $periods = Period::query()
+            ->whereIn('id', $published->pluck('periode_id')->unique())
+            ->orderByDesc('name')
+            ->get();
+
+        $periode = $periods->firstWhere('id', (int) $request->query('periode')) ?? $periods->first();
+
+        $triwulanOptions = $published->where('periode_id', $periode->id)->sortByDesc('triwulan')->values();
+
+        $triwulan = $triwulanOptions->firstWhere('triwulan', (int) $request->query('triwulan'))
+            ?? $triwulanOptions->first();
+
+        $triwulanLabel = static fn (int $number): string => 'Triwulan '.(['I', 'II', 'III', 'IV'][$number - 1] ?? $number);
 
         // Komponen dana dengan jumlah
         $komponen = KomponenDana::where('is_tampil', true)
@@ -127,11 +140,17 @@ class DistribusiDanaController extends Controller
         // Hitung persentase
         $bilahPersen = $totalDana > 0 ? round(($distribusiTotal / $totalDana) * 100, 1) : 0;
 
+        $universitasTotal = $universitasLembaga->sum('jumlah');
+        $fakultasTotal = $fakultasLembaga->sum('jumlah');
+        $universitasPersen = $distribusiTotal > 0 ? (int) round(($universitasTotal / $distribusiTotal) * 100) : 0;
+        $fakultasPersen = $distribusiTotal > 0 ? (int) round(($fakultasTotal / $distribusiTotal) * 100) : 0;
+
         return view('site.dana.distribusi', compact(
-            'triwulan', 'periode', 'komponen', 'totalDana', 'distribusiTotal',
-            'taktisTotal', 'taktisSisa', 'alokasiDistribusi', 'universitasLembaga',
-            'fakultasLembaga', 'totalPerFakultas', 'lembagaKhususAnak',
-            'alokasiTaktis', 'mahasiswa', 'totalMahasiswa', 'danaInfo',
+            'triwulan', 'periode', 'periods', 'triwulanOptions', 'triwulanLabel',
+            'komponen', 'totalDana', 'distribusiTotal', 'taktisTotal', 'taktisSisa',
+            'alokasiDistribusi', 'universitasLembaga', 'fakultasLembaga', 'totalPerFakultas',
+            'lembagaKhususAnak', 'universitasTotal', 'fakultasTotal', 'universitasPersen',
+            'fakultasPersen', 'alokasiTaktis', 'mahasiswa', 'totalMahasiswa', 'danaInfo',
             'danaSeksi', 'dokumenLpj', 'dokumenLha', 'bilahPersen'
         ));
     }

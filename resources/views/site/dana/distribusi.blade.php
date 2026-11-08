@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
 @section('title', 'Distribusi Dana — DPM UII')
-@section('meta_description', 'Transparansi distribusi dana DPM UII periode {{ $periode?->name }} triwulan {{ $triwulan?->triwulan }}.')
+@section('meta_description', 'Transparansi distribusi dana DPM UII periode '.$periode->name.' '.$triwulanLabel($triwulan->triwulan).'.')
 
 @push('styles')
 <style>
@@ -69,37 +69,47 @@
 @section('content')
 <!-- ================= HERO ================= -->
 <section class="pg-head"><div class="container hero-grid"><div>
-  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Beranda</a><span aria-hidden="true">/</span><a href="keuangan.html">Keuangan</a><span aria-hidden="true">/</span><span aria-current="page">Distribusi Dana</span></nav>
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Beranda</a><span aria-hidden="true">/</span><a href="{{ route('documents.dana') }}">Keuangan</a><span aria-hidden="true">/</span><span aria-current="page">Distribusi Dana</span></nav>
   <span class="eyebrow">Keuangan · Transparansi Dana</span><h1>Distribusi Dana</h1>
   <p class="pg-desc">Alokasi dana lembaga KM UII per triwulan: dari total dana, pembagian universitas dan fakultas, hingga dana taktis.</p>
-  <div class="flt"><div class="fg"><small>Periode</small><div class="tw" role="group" aria-label="Pilih periode"><a href="#" aria-current="page">2025/2026</a><span title="Belum ada data">2024/2025</span><span title="Belum ada data">2023/2024</span></div></div>
-  <div class="fg"><small>Triwulan</small><div class="tw" role="group" aria-label="Pilih triwulan"><a href="#" aria-current="page">Triwulan I</a><span title="Belum dirilis">Triwulan II</span><span title="Belum dirilis">Triwulan III</span><span title="Belum dirilis">Triwulan IV</span></div></div></div>
-  <p class="src">Menampilkan: Periode 2025/2026 · Triwulan I</p></div></div></section>
+  <div class="flt">
+    <div class="fg"><small>Periode</small><div class="tw" role="group" aria-label="Pilih periode">
+      @foreach($periods as $option)
+        <a href="{{ route('dana.distribusi', ['periode' => $option->id]) }}" @if($option->id === $periode->id) aria-current="page" @endif>{{ $option->name }}</a>
+      @endforeach
+    </div></div>
+    <div class="fg"><small>Triwulan</small><div class="tw" role="group" aria-label="Pilih triwulan">
+      @foreach($triwulanOptions as $option)
+        <a href="{{ route('dana.distribusi', ['periode' => $periode->id, 'triwulan' => $option->triwulan]) }}" @if($option->triwulan === $triwulan->triwulan) aria-current="page" @endif>{{ $triwulanLabel($option->triwulan) }}</a>
+      @endforeach
+    </div></div>
+  </div>
+  <p class="src">Menampilkan: Periode {{ $periode->name }} · {{ $triwulanLabel($triwulan->triwulan) }}</p></div></div></section>
 <nav class="dd-nav" aria-label="Bagian halaman"><div class="container"><a href="#overview">Overview</a><a href="#pembagian">Pembagian</a><a href="#universitas">Universitas</a><a href="#fakultas">Fakultas</a><a href="#perfakultas">Per Fakultas</a><a href="#rasio">Rasio Mahasiswa</a><a href="#taktis">Dana Taktis</a></div></nav>
 
 <!-- ================= OVERVIEW ================= -->
-<section class="dd-sec" id="overview"><div class="container"><div class="dd-h"><span class="no">01</span><h2>Overview dana Triwulan I</h2></div>
-  <div class="total"><div class="big"><small>Total dana Triwulan I</small><b>Rp {{ number_format($totalDana, 0, ',', '.') }}</b><div class="pr"><div class="t"><span>Dari total dana merupakan dana distribusi</span><b>±{{ $bilahPersen }}%</b></div><i><u style="--w:{{ $bilahPersen }}%"></u></i></div></div><div class="kcs"><div class="kc"><small>Dana Transisi</small><b>Rp {{ number_format($komponen->firstWhere('kode','transisi')?->jumlah ?? 0, 0, ',', '.') }}</b></div><div class="kc"><small>Dana Taktis</small><b>Rp {{ number_format($taktisTotal, 0, ',', '.') }}</b></div><div class="kc"><small>Pengembangan dan Pengelolaan Aset</small><b>Rp {{ number_format($komponen->firstWhere('kode','aset')?->jumlah ?? 0, 0, ',', '.') }}</b></div><div class="kc hl"><small>Dana Distribusi</small><b>Rp {{ number_format($distribusiTotal, 0, ',', '.') }}</b></div></div></div>
+<section class="dd-sec" id="overview"><div class="container"><div class="dd-h"><span class="no">01</span><h2>Overview dana {{ $triwulanLabel($triwulan->triwulan) }}</h2></div>
+  <div class="total"><div class="big"><small>Total dana {{ $triwulanLabel($triwulan->triwulan) }}</small><b>Rp {{ number_format($totalDana, 0, ',', '.') }}</b><div class="pr"><div class="t"><span>Dari total dana merupakan dana distribusi</span><b>±{{ $bilahPersen }}%</b></div><i><u style="--w:{{ $bilahPersen }}%"></u></i></div></div><div class="kcs"><div class="kc"><small>Dana Transisi</small><b>Rp {{ number_format($komponen->firstWhere('kode','transisi')?->jumlah ?? 0, 0, ',', '.') }}</b></div><div class="kc"><small>Dana Taktis</small><b>Rp {{ number_format($taktisTotal, 0, ',', '.') }}</b></div><div class="kc"><small>Pengembangan dan Pengelolaan Aset</small><b>Rp {{ number_format($komponen->firstWhere('kode','aset')?->jumlah ?? 0, 0, ',', '.') }}</b></div><div class="kc hl"><small>Dana Distribusi</small><b>Rp {{ number_format($distribusiTotal, 0, ',', '.') }}</b></div></div></div>
   <p class="fyi">Sekitar {{ $bilahPersen }}% dari total dana didistribusikan untuk mendukung lembaga mahasiswa di KM UII.</p></div></section>
 
 <!-- ================= PEMBAGIAN ================= -->
 <section class="dd-sec alt" id="pembagian"><div class="container"><div class="dd-h"><span class="no">02</span><h2>Distribusi dana: universitas dan fakultas</h2></div>
-  <div class="split"><div class="donut" role="img" aria-label="Universitas 31 persen, Fakultas 69 persen"><span><b>Rp {{ number_format($distribusiTotal, 0, ',', '.') }}</b>dana distribusi</span></div>
-  <div class="legend"><div class="lg2"><i class="sw"></i><div><h3>Universitas (31%)</h3><p>Lembaga tingkat universitas</p></div><b>Rp {{ number_format($universitasLembaga->sum('jumlah'), 0, ',', '.') }}</b></div><div class="lg2"><i class="sw b"></i><div><h3>Fakultas (69%)</h3><p>Organisasi tingkat fakultas</p></div><b>Rp {{ number_format($fakultasLembaga->sum('jumlah'), 0, ',', '.') }}</b></div></div></div>
-  <p class="fyi">Porsi dana terbesar (69%) dialokasikan untuk organisasi tingkat fakultas.</p></div></section>
+  <div class="split"><div class="donut" role="img" aria-label="Universitas {{ $universitasPersen }} persen, Fakultas {{ $fakultasPersen }} persen" style="background: conic-gradient(var(--white) 0 {{ $universitasPersen }}%, #2D4A7A {{ $universitasPersen }}% 100%)"><span><b>Rp {{ number_format($distribusiTotal, 0, ',', '.') }}</b>dana distribusi</span></div>
+  <div class="legend"><div class="lg2"><i class="sw"></i><div><h3>Universitas ({{ $universitasPersen }}%)</h3><p>Lembaga tingkat universitas</p></div><b>Rp {{ number_format($universitasTotal, 0, ',', '.') }}</b></div><div class="lg2"><i class="sw b"></i><div><h3>Fakultas ({{ $fakultasPersen }}%)</h3><p>Organisasi tingkat fakultas</p></div><b>Rp {{ number_format($fakultasTotal, 0, ',', '.') }}</b></div></div></div>
+  <p class="fyi">Porsi terbesar ({{ $fakultasPersen }}%) dialokasikan untuk organisasi tingkat fakultas.</p></div></section>
 
 <!-- ================= UNIVERSITAS ================= -->
 <section class="dd-sec" id="universitas"><div class="container"><div class="dd-h"><span class="no">03</span><h2>Dana tingkat universitas</h2></div>
-  <div class="tot"><small>Total dana universitas</small><b>Rp {{ number_format($universitasLembaga->sum('jumlah'), 0, ',', '.') }}</b></div>
-  <ul class="bl nf"><li><span class="l">Lembaga Khusus Universitas</span><i class="b"><u style="--w:100.0%"></u></i><span class="v">60%<small>Rp {{ number_format($universitasLembaga->sum('jumlah') * 0.60, 0, ',', '.') }}</small></span></li><li><span class="l">LEM Universitas</span><i class="b"><u style="--w:56.7%"></u></i><span class="v">34%<small>Rp {{ number_format($universitasLembaga->sum('jumlah') * 0.34, 0, ',', '.') }}</small></span></li><li><span class="l">DPM Universitas</span><i class="b"><u style="--w:10.0%"></u></i><span class="v">6%<small>Rp {{ number_format($universitasLembaga->sum('jumlah') * 0.06, 0, ',', '.') }}</small></span></li></ul>
-  <div class="sub"><h3>Rincian Lembaga Khusus Universitas</h3><div class="chips4"><div><b>Mapala Unisi</b><em>35%</em><small>Rp {{ number_format($universitasLembaga->sum('jumlah') * 0.60 * 0.35, 0, ',', '.') }}</small></div><div><b>LPM Himmah</b><em>35%</em><small>Rp {{ number_format($universitasLembaga->sum('jumlah') * 0.60 * 0.35, 0, ',', '.') }}</small></div><div><b>Marching Band UII</b><em>30%</em><small>Rp {{ number_format($universitasLembaga->sum('jumlah') * 0.60 * 0.30, 0, ',', '.') }}</small></div><div><b>KOPMA UII</b><em>0%</em><small>Rp0</small></div></div></div>
+  <div class="tot"><small>Total dana universitas</small><b>Rp {{ number_format($universitasTotal, 0, ',', '.') }}</b></div>
+  <ul class="bl nf"><li><span class="l">Lembaga Khusus Universitas</span><i class="b"><u style="--w:100.0%"></u></i><span class="v">60%<small>Rp {{ number_format($universitasTotal * 0.60, 0, ',', '.') }}</small></span></li><li><span class="l">LEM Universitas</span><i class="b"><u style="--w:56.7%"></u></i><span class="v">34%<small>Rp {{ number_format($universitasTotal * 0.34, 0, ',', '.') }}</small></span></li><li><span class="l">DPM Universitas</span><i class="b"><u style="--w:10.0%"></u></i><span class="v">6%<small>Rp {{ number_format($universitasTotal * 0.06, 0, ',', '.') }}</small></span></li></ul>
+  <div class="sub"><h3>Rincian Lembaga Khusus Universitas</h3><div class="chips4"><div><b>Mapala Unisi</b><em>35%</em><small>Rp {{ number_format($universitasTotal * 0.60 * 0.35, 0, ',', '.') }}</small></div><div><b>LPM Himmah</b><em>35%</em><small>Rp {{ number_format($universitasTotal * 0.60 * 0.35, 0, ',', '.') }}</small></div><div><b>Marching Band UII</b><em>30%</em><small>Rp {{ number_format($universitasTotal * 0.60 * 0.30, 0, ',', '.') }}</small></div><div><b>KOPMA UII</b><em>0%</em><small>Rp0</small></div></div></div>
   <p class="fyi">Sebanyak 60% dana universitas diperuntukkan bagi Lembaga Khusus Universitas.</p></div></section>
 
 <!-- ================= FAKULTAS ================= -->
 <section class="dd-sec alt" id="fakultas"><div class="container"><div class="dd-h"><span class="no">04</span><h2>Dana tingkat fakultas</h2></div>
-  <div class="tot"><small>Total dana fakultas</small><b>Rp {{ number_format($fakultasLembaga->sum('jumlah'), 0, ',', '.') }}</b></div>
-  <ul class="bl nf"><li><span class="l">LEM Fakultas</span><i class="b"><u style="--w:100.0%"></u></i><span class="v">62%<small>Rp {{ number_format($fakultasLembaga->sum('jumlah') * 0.62, 0, ',', '.') }}</small></span></li><li><span class="l">LPM Fakultas</span><i class="b"><u style="--w:51.6%"></u></i><span class="v">32%<small>Rp {{ number_format($fakultasLembaga->sum('jumlah') * 0.32, 0, ',', '.') }}</small></span></li><li><span class="l">DPM Fakultas</span><i class="b"><u style="--w:9.7%"></u></i><span class="v">6%<small>Rp {{ number_format($fakultasLembaga->sum('jumlah') * 0.06, 0, ',', '.') }}</small></span></li><li><span class="l">KOPMA Fakultas</span><i class="b"><u style="--w:0.0%"></u></i><span class="v">0%<small>Rp0</small></span></li></ul>
-  <p class="fyi">Sebanyak 69% dana TW I dialokasikan bagi lembaga di fakultas.</p></div></section>
+  <div class="tot"><small>Total dana fakultas</small><b>Rp {{ number_format($fakultasTotal, 0, ',', '.') }}</b></div>
+  <ul class="bl nf"><li><span class="l">LEM Fakultas</span><i class="b"><u style="--w:100.0%"></u></i><span class="v">62%<small>Rp {{ number_format($fakultasTotal * 0.62, 0, ',', '.') }}</small></span></li><li><span class="l">LPM Fakultas</span><i class="b"><u style="--w:51.6%"></u></i><span class="v">32%<small>Rp {{ number_format($fakultasTotal * 0.32, 0, ',', '.') }}</small></span></li><li><span class="l">DPM Fakultas</span><i class="b"><u style="--w:9.7%"></u></i><span class="v">6%<small>Rp {{ number_format($fakultasTotal * 0.06, 0, ',', '.') }}</small></span></li><li><span class="l">KOPMA Fakultas</span><i class="b"><u style="--w:0.0%"></u></i><span class="v">0%<small>Rp0</small></span></li></ul>
+  <p class="fyi">Sebanyak {{ $fakultasPersen }}% dana {{ $triwulanLabel($triwulan->triwulan) }} dialokasikan bagi lembaga di fakultas.</p></div></section>
 
 <!-- ================= PER FAKULTAS ================= -->
 <section class="dd-sec" id="perfakultas"><div class="container"><div class="dd-h"><span class="no">05</span><h2>Total dana per fakultas</h2></div>
@@ -110,7 +120,7 @@
     @php $i++; @endphp
     @endforeach
   </ul>
-  <p class="fyi">Fakultas Bisnis dan Ekonomika menjadi penerima dana terbesar pada Triwulan I.</p></div></section>
+  <p class="fyi">{{ ($totalPerFakultas->first()['fakultas'] ?? null)?->nama ?? 'Fakultas terbesar' }} menjadi penerima dana terbesar pada {{ $triwulanLabel($triwulan->triwulan) }}.</p></div></section>
 
 <!-- ================= RASIO ================= -->
 <section class="dd-sec alt" id="rasio"><div class="container"><div class="dd-h"><span class="no">06</span><h2>Rasio mahasiswa per fakultas</h2></div>
@@ -125,7 +135,7 @@
 
 <!-- ================= TAKTIS ================= -->
 <section class="dd-sec" id="taktis"><div class="container"><div class="dd-h"><span class="no">07</span><h2>Dana taktis</h2></div>
-  <div class="tot"><small>Total dana taktis Triwulan I</small><b>Rp {{ number_format($taktisTotal, 0, ',', '.') }}</b></div>
+  <div class="tot"><small>Total dana taktis {{ $triwulanLabel($triwulan->triwulan) }}</small><b>Rp {{ number_format($taktisTotal, 0, ',', '.') }}</b></div>
   <div class="tbw"><table class="tb"><thead><tr><th>Distribusi</th><th class="n">Jumlah</th></tr></thead><tbody>
     @php $rk = 1; @endphp
     @foreach($alokasiTaktis as $t)
@@ -133,9 +143,9 @@
     @php $rk++; @endphp
     @endforeach
     </tbody><tfoot><tr><td>Total terdistribusi</td><td class="n">Rp {{ number_format($alokasiTaktis->sum('jumlah'), 0, ',', '.') }}</td></tr></tfoot></table></div>
-  <p class="fyi">Sisa dana taktis TW I, yaitu Rp {{ number_format($taktisSisa, 0, ',', '.') }}, akan digunakan sebagai dana cadangan untuk mendukung pelaksanaan kegiatan Pesta dan Pekta.</p></div></section>
+  <p class="fyi">Sisa dana taktis {{ $triwulanLabel($triwulan->triwulan) }}, yaitu Rp {{ number_format($taktisSisa, 0, ',', '.') }}, akan digunakan sebagai dana cadangan untuk mendukung pelaksanaan kegiatan Pesta dan Pekta.</p></div></section>
 
-<section class="dd-end"><div class="container"><p class="src">Sumber: publikasi Distribusi Dana Triwulan I 2025/2026, DPM UII. Dasar pengaturan: PKM UII No. 3 Tahun 2024 tentang Distribusi dan Alokasi Dana KM UII.</p></div></section>
+<section class="dd-end"><div class="container"><p class="src">Sumber: publikasi Distribusi Dana {{ $triwulanLabel($triwulan->triwulan) }} {{ $periode->name }}, DPM UII. Dasar pengaturan: PKM UII No. 3 Tahun 2024 tentang Distribusi dan Alokasi Dana KM UII.</p></div></section>
 
 <script>
   (function () {
