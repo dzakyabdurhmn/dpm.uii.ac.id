@@ -14,7 +14,7 @@
         ]],
         ['group' => 'Struktur', 'items' => [
             ['label' => 'Pimpinan Dewan', 'url' => route('admin.pimpinan-dewan.index'), 'match' => 'admin.pimpinan-dewan.*'],
-            ['label' => 'Distribusi Dana', 'url' => route('admin.distribusi-dana'), 'match' => 'admin.distribusi-dana.*'],
+            ['label' => 'Distribusi Dana', 'url' => route('admin.distribusi-dana.index'), 'match' => 'admin.distribusi-dana.*'],
             ['label' => 'Aspirasi', 'url' => route('admin.aspirasi.index'), 'match' => 'admin.aspirasi.*'],
             ['label' => 'Alat Kelengkapan', 'url' => route('admin.units.index'), 'match' => 'admin.units.*'],
             ['label' => 'Periode', 'url' => route('admin.periods.index'), 'match' => 'admin.periods.*'],
