@@ -11,6 +11,7 @@ use App\Models\DanaSeksi;
 use App\Models\DanaTriwulan;
 use App\Models\Fakultas;
 use App\Models\KomponenDana;
+use App\Models\Lembaga;
 use App\Models\MahasiswaFakultas;
 use App\Models\Period;
 use Illuminate\Http\RedirectResponse;
@@ -19,57 +20,158 @@ use Illuminate\View\View;
 
 class DistribusiDanaController extends Controller
 {
+    /**
+     * List all triwulan for all periods (history).
+     */
     public function index(): View
     {
-        $periode = Period::where('is_active', true)->first();
-        $triwulan = DanaTriwulan::where('periode_id', $periode?->id)
+        $triwulanList = DanaTriwulan::with('periode')
+            ->orderByDesc('periode_id')
             ->orderByDesc('triwulan')
-            ->first();
+            ->paginate(20);
 
-        $komponen = KomponenDana::where('is_tampil', true)
-            ->orderBy('urutan')
-            ->get();
-
-        $alokasiDistribusi = AlokasiDistribusi::where('dana_triwulan_id', $triwulan?->id)
-            ->with('lembaga.fakultas')
-            ->get();
-
-        $alokasiTaktis = AlokasiTaktis::where('dana_triwulan_id', $triwulan?->id)
-            ->with('fakultas')
-            ->get();
-
-        $mahasiswa = MahasiswaFakultas::where('periode_id', $periode?->id)
-            ->with('fakultas')
-            ->get();
-
-        $danaInfo = DanaInfo::where('dana_triwulan_id', $triwulan?->id)
-            ->pluck('teks', 'seksi');
-
-        $danaSeksi = DanaSeksi::where('dana_triwulan_id', $triwulan?->id)
-            ->orderBy('urutan')
-            ->get();
-
-        $totalDana = $triwulan?->total_dana ?? 0;
-
-        $distribusiDk = DanaKomponen::where('dana_triwulan_id', $triwulan?->id)
-            ->where('komponen_id', KomponenDana::where('peran', 'distribusi')->value('id'))
-            ->value('jumlah') ?? 0;
-        $taktisDk = DanaKomponen::where('dana_triwulan_id', $triwulan?->id)
-            ->where('komponen_id', KomponenDana::where('peran', 'taktis')->value('id'))
-            ->value('jumlah') ?? 0;
-
-        return view('admin.distribusi-dana.index', compact(
-            'periode', 'triwulan', 'komponen', 'alokasiDistribusi',
-            'alokasiTaktis', 'mahasiswa', 'danaInfo', 'danaSeksi',
-            'totalDana', 'distribusiDk', 'taktisDk'
-        ));
+        return view('admin.distribusi-dana.index', [
+            'triwulanList' => $triwulanList,
+        ]);
     }
 
-    public function update(Request $request): RedirectResponse
+    /**
+     * Show form to create new triwulan.
+     */
+    public function create(): View
     {
-        $validated = $request->validate([
+        $periods = Period::orderByDesc('name')->get();
+        $komponen = KomponenDana::where('is_tampil', true)->orderBy('urutan')->get();
+        $lembaga = Lembaga::where('is_active', true)->orderBy('tingkat')->orderBy('sort_order')->get();
+        $fakultas = Fakultas::orderBy('urutan')->get();
+
+        return view('admin.distribusi-dana.form', [
+            'periods' => $periods,
+            'komponen' => $komponen,
+            'lembaga' => $lembaga,
+            'fakultas' => $fakultas,
+            'triwulan' => null,
+            'existingData' => [],
+        ]);
+    }
+
+    /**
+     * Store new triwulan.
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $this->validateRequest($request);
+
+        $periode = Period::findOrFail($validated['periode_id']);
+
+        $triwulan = DanaTriwulan::create([
+            'periode_id' => $periode->id,
+            'triwulan' => $validated['triwulan'],
+            'total_dana' => $validated['total_dana'],
+            'status' => $validated['status'],
+        ]);
+
+        $this->saveRelatedData($triwulan, $periode, $validated);
+
+        return redirect()
+            ->route('admin.distribusi-dana.edit', $triwulan)
+            ->with('success', 'Triwulan baru berhasil dibuat.');
+    }
+
+    /**
+     * Show form to edit existing triwulan.
+     */
+    public function edit(DanaTriwulan $distribusiDana): View
+    {
+        $periods = Period::orderByDesc('name')->get();
+        $komponen = KomponenDana::where('is_tampil', true)->orderBy('urutan')->get();
+        $lembaga = Lembaga::where('is_active', true)->orderBy('tingkat')->orderBy('sort_order')->get();
+        $fakultas = Fakultas::orderBy('urutan')->get();
+
+        // Load existing data
+        $existingData = [
+            'komponen' => DanaKomponen::where('dana_triwulan_id', $distribusiDana->id)
+                ->pluck('jumlah', 'komponen_id')
+                ->toArray(),
+            'alokasi_distribusi' => AlokasiDistribusi::where('dana_triwulan_id', $distribusiDana->id)
+                ->pluck('jumlah', 'lembaga_id')
+                ->toArray(),
+            'alokasi_taktis' => AlokasiTaktis::where('dana_triwulan_id', $distribusiDana->id)
+                ->get()
+                ->mapWithKeys(fn ($t) => [$t->fakultas_id ?? 'universitas' => ['jumlah' => $t->jumlah, 'keterangan' => $t->keterangan]])
+                ->toArray(),
+            'mahasiswa' => MahasiswaFakultas::where('periode_id', $distribusiDana->periode_id)
+                ->pluck('jumlah_mahasiswa', 'fakultas_id')
+                ->toArray(),
+            'dana_info' => DanaInfo::where('dana_triwulan_id', $distribusiDana->id)
+                ->pluck('teks', 'seksi')
+                ->toArray(),
+            'dana_seksi' => DanaSeksi::where('dana_triwulan_id', $distribusiDana->id)
+                ->orderBy('urutan')
+                ->get()
+                ->mapWithKeys(fn ($s) => [$s->seksi => ['judul' => $s->judul, 'urutan' => $s->urutan, 'is_tampil' => $s->is_tampil]])
+                ->toArray(),
+        ];
+
+        return view('admin.distribusi-dana.form', [
+            'periods' => $periods,
+            'komponen' => $komponen,
+            'lembaga' => $lembaga,
+            'fakultas' => $fakultas,
+            'triwulan' => $distribusiDana,
+            'existingData' => $existingData,
+        ]);
+    }
+
+    /**
+     * Update existing triwulan.
+     */
+    public function update(Request $request, DanaTriwulan $distribusiDana): RedirectResponse
+    {
+        $validated = $this->validateRequest($request, $distribusiDana);
+
+        $distribusiDana->update([
+            'periode_id' => $validated['periode_id'],
+            'triwulan' => $validated['triwulan'],
+            'total_dana' => $validated['total_dana'],
+            'status' => $validated['status'],
+        ]);
+
+        $periode = Period::findOrFail($validated['periode_id']);
+        $this->saveRelatedData($distribusiDana, $periode, $validated);
+
+        return redirect()
+            ->route('admin.distribusi-dana.edit', $distribusiDana)
+            ->with('success', 'Data distribusi dana berhasil diperbarui.');
+    }
+
+    /**
+     * Delete triwulan.
+     */
+    public function destroy(DanaTriwulan $distribusiDana): RedirectResponse
+    {
+        $distribusiDana->delete();
+
+        return redirect()
+            ->route('admin.distribusi-dana.index')
+            ->with('success', 'Triwulan berhasil dihapus.');
+    }
+
+    /**
+     * Validation rules.
+     */
+    private function validateRequest(Request $request, ?DanaTriwulan $existing = null): array
+    {
+        $triwulanRule = ['required', 'integer', 'min:1', 'max:4'];
+        if ($existing) {
+            $triwulanRule[] = 'unique:dana_triwulan,triwulan,'.$existing->id.',id,periode_id,'.$request->input('periode_id');
+        } else {
+            $triwulanRule[] = 'unique:dana_triwulan,triwulan,NULL,id,periode_id,'.$request->input('periode_id');
+        }
+
+        return $request->validate([
             'periode_id' => ['required', 'exists:periods,id'],
-            'triwulan' => ['required', 'integer', 'min:1', 'max:4'],
+            'triwulan' => $triwulanRule,
             'total_dana' => ['required', 'numeric', 'min:0'],
             'status' => ['required', 'in:draft,terbit'],
             'komponen' => ['nullable', 'array'],
@@ -94,17 +196,13 @@ class DistribusiDanaController extends Controller
             'dana_seksi.*.urutan' => ['required_if:dana_seksi,,integer'],
             'dana_seksi.*.is_tampil' => ['boolean'],
         ]);
+    }
 
-        $periode = Period::findOrFail($validated['periode_id']);
-
-        $triwulan = DanaTriwulan::updateOrCreate(
-            ['periode_id' => $periode->id, 'triwulan' => $validated['triwulan']],
-            [
-                'total_dana' => $validated['total_dana'],
-                'status' => $validated['status'],
-            ]
-        );
-
+    /**
+     * Save all related data for a triwulan.
+     */
+    private function saveRelatedData(DanaTriwulan $triwulan, Period $periode, array $validated): void
+    {
         // Komponen dana
         if (isset($validated['komponen'])) {
             foreach ($validated['komponen'] as $k) {
@@ -125,11 +223,12 @@ class DistribusiDanaController extends Controller
             }
         }
 
-        // Alokasi taktis
+        // Alokasi taktis (universitas = fakultas_id null)
         if (isset($validated['alokasi_taktis'])) {
-            foreach ($validated['alokasi_taktis'] as $t) {
+            foreach ($validated['alokasi_taktis'] as $key => $t) {
+                $fakultasId = $t['fakultas_id'] ?? null;
                 AlokasiTaktis::updateOrCreate(
-                    ['dana_triwulan_id' => $triwulan->id, 'fakultas_id' => $t['fakultas_id'] ?? null],
+                    ['dana_triwulan_id' => $triwulan->id, 'fakultas_id' => $fakultasId],
                     ['jumlah' => $t['jumlah'], 'keterangan' => $t['keterangan'] ?? null]
                 );
             }
@@ -164,8 +263,5 @@ class DistribusiDanaController extends Controller
                 );
             }
         }
-
-        return redirect()->route('admin.distribusi-dana')
-            ->with('success', 'Data distribusi dana berhasil disimpan.');
     }
 }

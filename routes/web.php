@@ -124,8 +124,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('pimpinan-dewan/{pimpinan}/tugas/{tugas}', [PimpinanDewanController::class, 'tugasDestroy'])
             ->name('pimpinan-dewan.tugas.destroy');
 
-        Route::get('distribusi-dana', [AdminDistribusiDanaController::class, 'index'])->name('distribusi-dana');
-        Route::put('distribusi-dana', [AdminDistribusiDanaController::class, 'update'])->name('distribusi-dana.update');
+        Route::resource('distribusi-dana', AdminDistribusiDanaController::class)
+            ->except(['show'])
+            ->names('distribusi-dana');
 
         Route::resource('aspirasi', ComplaintController::class)->only(['index', 'edit', 'update', 'destroy'])
             ->names('aspirasi');
