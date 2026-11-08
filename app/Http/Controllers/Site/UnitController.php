@@ -46,24 +46,19 @@ class UnitController extends Controller
         $unitData = [];
         foreach ($periods as $period) {
             $members = $officialsByPeriod[$period->id] ?? collect();
+            $lead = $members->first(
+                fn (Official $official): bool => (bool) preg_match('/^(kepala|ketua|presiden|direktur)\b/i', (string) $official->position),
+            );
+
             $unitData[$period->name] = [
                 'period' => $period,
-                'members' => $members->map(function ($o) {
-                    return [
-                        'name' => $o->name,
-                        'position' => $o->position,
-                        'fakultas' => $o->fakultas,
-                        'prodi' => $o->prodi,
-                        'angkatan' => $o->angkatan,
-                        'nim' => $o->nim,
-                        'description' => $o->description,
-                        'photo_path' => $o->photo_path,
-                        'email' => $o->email,
-                        'instagram' => $o->instagram,
-                        'linkedin' => $o->linkedin,
-                        'sort_order' => $o->sort_order,
-                    ];
-                })->toArray(),
+                'unit_name' => $unit->short_name,
+                'lead' => $lead ? $this->memberData($lead) : null,
+                'members' => $members
+                    ->reject(fn (Official $official): bool => $lead !== null && $official->id === $lead->id)
+                    ->map(fn (Official $official): array => $this->memberData($official))
+                    ->values()
+                    ->all(),
             ];
         }
 
@@ -75,22 +70,8 @@ class UnitController extends Controller
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get(['id', 'name', 'position', 'fakultas', 'prodi', 'angkatan', 'nim', 'description', 'photo_path', 'email', 'instagram', 'linkedin', 'sort_order'])
-            ->map(function ($o) {
-                return [
-                    'name' => $o->name,
-                    'position' => $o->position,
-                    'fakultas' => $o->fakultas,
-                    'prodi' => $o->prodi,
-                    'angkatan' => $o->angkatan,
-                    'nim' => $o->nim,
-                    'description' => $o->description,
-                    'photo_path' => $o->photo_path,
-                    'email' => $o->email,
-                    'instagram' => $o->instagram,
-                    'linkedin' => $o->linkedin,
-                    'sort_order' => $o->sort_order,
-                ];
-            })->toArray();
+            ->map(fn (Official $official): array => $this->memberData($official))
+            ->toArray();
 
         return view('site.units.show', [
             'unit' => $unit,
@@ -98,5 +79,26 @@ class UnitController extends Controller
             'activePeriod' => $activePeriod?->name,
             'unassigned' => $unassigned,
         ]);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function memberData(Official $official): array
+    {
+        return [
+            'name' => $official->name,
+            'position' => $official->position,
+            'fakultas' => $official->fakultas,
+            'prodi' => $official->prodi,
+            'angkatan' => $official->angkatan,
+            'nim' => $official->nim,
+            'description' => $official->description,
+            'photo_path' => $official->photo_path,
+            'email' => $official->email,
+            'instagram' => $official->instagram,
+            'linkedin' => $official->linkedin,
+            'sort_order' => $official->sort_order,
+        ];
     }
 }

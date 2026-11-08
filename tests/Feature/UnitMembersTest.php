@@ -118,4 +118,33 @@ class UnitMembersTest extends TestCase
             ->assertSee('Fakultas Teknik \/ Informatika', false)
             ->assertSee('Anggota Lama');
     }
+
+    public function test_unit_page_puts_the_kepala_in_the_lead_section(): void
+    {
+        $unit = OrganizationalUnit::query()->where('slug', 'mentari')->firstOrFail();
+        $period = Period::query()->where('is_active', true)->firstOrFail();
+
+        Official::query()->create([
+            'organizational_unit_id' => $unit->id,
+            'period_id' => $period->id,
+            'name' => 'Kepala Uji',
+            'position' => 'Kepala MENTARI',
+            'nim' => '24215039',
+            'sort_order' => 1,
+        ]);
+
+        Official::query()->create([
+            'organizational_unit_id' => $unit->id,
+            'period_id' => $period->id,
+            'name' => 'Staf Uji',
+            'position' => 'Staf Media dan Inventaris',
+            'nim' => '25215042',
+            'sort_order' => 2,
+        ]);
+
+        $this->get(route('units.show', $unit))
+            ->assertOk()
+            ->assertSee('"lead":{"name":"Kepala Uji"', false)
+            ->assertSee('"members":[{"name":"Staf Uji"', false);
+    }
 }
