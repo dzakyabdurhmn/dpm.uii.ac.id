@@ -148,19 +148,10 @@ class DocumentController extends Controller
     /**
      * Halaman LPJ (Laporan Pertanggungjawaban).
      */
-    public function lpj(Request $request): View
+    public function lpj(): View
     {
-        $documents = Document::query()
-            ->published()
-            ->with('category')
-            ->whereHas('category', fn ($q) => $q->where('group', 'Dana')->where('slug', 'lpj'))
-            ->orderByDesc('year')
-            ->orderByDesc('quarter')
-            ->latest('published_at')
-            ->get();
-
         return view('site.documents.lpj', [
-            'documents' => $documents,
+            'groups' => $this->reportGroups('lpj'),
             'type' => 'lpj',
         ]);
     }
@@ -168,21 +159,50 @@ class DocumentController extends Controller
     /**
      * Halaman LHA (Laporan Hasil Audit).
      */
-    public function lha(Request $request): View
+    public function lha(): View
+    {
+        return view('site.documents.lha', [
+            'groups' => $this->reportGroups('lha'),
+            'type' => 'lha',
+        ]);
+    }
+
+    /**
+     * Kelompokkan dokumen LPJ/LHA per periode (fallback ke tahun bila tanpa periode).
+     *
+     * @return Collection<int, array{label: string, note: string|null, documents: Collection<int, Document>}>
+     */
+    private function reportGroups(string $categorySlug): Collection
     {
         $documents = Document::query()
             ->published()
-            ->with('category')
-            ->whereHas('category', fn ($q) => $q->where('group', 'Dana')->where('slug', 'lha'))
-            ->orderByDesc('year')
+            ->whereHas('category', fn ($query) => $query->where('group', 'Dana')->where('slug', $categorySlug))
             ->orderByDesc('quarter')
             ->latest('published_at')
             ->get();
 
-        return view('site.documents.lha', [
-            'documents' => $documents,
-            'type' => 'lha',
-        ]);
+        $groups = Period::query()
+            ->orderByDesc('starts_on')
+            ->orderByDesc('name')
+            ->get()
+            ->map(fn (Period $period): array => [
+                'label' => $period->name,
+                'note' => $period->is_active ? 'Periode berjalan' : 'Selesai',
+                'documents' => $documents->where('period_id', $period->id)->values(),
+            ]);
+
+        $documents->whereNull('period_id')
+            ->groupBy('year')
+            ->sortKeysDesc()
+            ->each(function (Collection $items, int|string $year) use ($groups): void {
+                $groups->push([
+                    'label' => $year !== '' ? (string) $year : 'Tanpa tahun',
+                    'note' => null,
+                    'documents' => $items->values(),
+                ]);
+            });
+
+        return $groups;
     }
 
     public function download(Document $document): RedirectResponse

@@ -29,12 +29,11 @@
     </nav>
     <p class="nb">Setiap lembaga penerima dana KM UII wajib mempertanggungjawabkan penggunaan dananya. Dokumen berikut diarsipkan per periode kepengurusan.</p>
 
-    {{-- 2025/2026 Periode berjalan --}}
-    <section class="lg">
-      <h2>2025/2026<small>Periode berjalan</small></h2>
-      <ul class="ldl">
-        @if($documents->where('year', 2026)->isNotEmpty())
-          @foreach($documents->where('year', 2026)->sortByDesc('quarter') as $doc)
+    @foreach ($groups as $group)
+      <section class="lg">
+        <h2>{{ $group['label'] }}@if ($group['note'])<small>{{ $group['note'] }}</small>@endif</h2>
+        <ul class="ldl">
+          @forelse ($group['documents'] as $doc)
             <li class="ld">
               <span class="ic" aria-hidden="true">PDF</span>
               <div>
@@ -50,54 +49,19 @@
                 <span class="soon">Belum tersedia</span>
               @endif
             </li>
-          @endforeach
-        @else
-          <li class="ld">
-            <span class="ic" aria-hidden="true">PDF</span>
-            <div>
-              <h3>Belum ada LPJ untuk periode 2025/2026</h3>
-              <p>Data akan tersedia segera.</p>
-            </div>
-            <span class="soon">Belum tersedia</span>
-          </li>
-        @endif
-      </ul>
-    </section>
-
-    {{-- 2024/2025 Selesai --}}
-    <section class="lg">
-      <h2>2024/2025<small>Selesai</small></h2>
-      <ul class="ldl">
-        @if($documents->where('year', 2025)->isNotEmpty())
-          @foreach($documents->where('year', 2025)->sortByDesc('quarter') as $doc)
+          @empty
             <li class="ld">
               <span class="ic" aria-hidden="true">PDF</span>
               <div>
-                <h3>{{ $doc->title }}</h3>
-                <p>{{ $doc->published_at?->format('d F Y') ?? 'Tanggal tidak tersedia' }}</p>
+                <h3>Belum ada {{ strtoupper($type) }} untuk periode {{ $group['label'] }}</h3>
+                <p>Data akan tersedia segera.</p>
               </div>
-              @if($doc->isPublished())
-                <a class="btn" href="{{ $doc->download_url }}" download>
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                  <span>Unduh</span>
-                </a>
-              @else
-                <span class="soon">Belum tersedia</span>
-              @endif
+              <span class="soon">Belum tersedia</span>
             </li>
-          @endforeach
-        @else
-          <li class="ld">
-            <span class="ic" aria-hidden="true">PDF</span>
-            <div>
-              <h3>Belum ada LPJ untuk periode 2024/2025</h3>
-              <p>Data akan tersedia segera.</p>
-            </div>
-            <span class="soon">Belum tersedia</span>
-          </li>
-        @endif
-      </ul>
-    </section>
+          @endforelse
+        </ul>
+      </section>
+    @endforeach
   </div>
 </section>
 

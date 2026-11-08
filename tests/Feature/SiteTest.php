@@ -153,6 +153,45 @@ class SiteTest extends TestCase
             ->assertDontSee('Keputusan Uji Publikasi');
     }
 
+    public function test_lpj_and_lha_pages_group_documents_from_the_database(): void
+    {
+        $lpj = DocumentCategory::query()->where('slug', 'lpj')->firstOrFail();
+        $lha = DocumentCategory::query()->where('slug', 'lha')->firstOrFail();
+        $period = Period::query()->where('name', '2025/2026')->firstOrFail();
+
+        // Tahun sengaja berbeda dari label periode: pengelompokan harus ikut periode.
+        Document::query()->create([
+            'document_category_id' => $lpj->id,
+            'period_id' => $period->id,
+            'title' => 'LPJ Terbit 2026',
+            'external_url' => 'https://example.com/lpj.pdf',
+            'year' => 2019,
+            'quarter' => 4,
+            'published_at' => now()->subDay(),
+        ]);
+
+        Document::query()->create([
+            'document_category_id' => $lha->id,
+            'title' => 'LHA Tanpa Periode 2024',
+            'external_url' => 'https://example.com/lha.pdf',
+            'year' => 2024,
+            'published_at' => now()->subDay(),
+        ]);
+
+        $this->get(route('documents.lpj'))
+            ->assertOk()
+            ->assertSee('LPJ Terbit 2026')
+            ->assertSee('2025/2026')
+            ->assertDontSee('LHA Tanpa Periode 2024');
+
+        // Dokumen tanpa periode dikelompokkan per tahun.
+        $this->get(route('documents.lha'))
+            ->assertOk()
+            ->assertSee('LHA Tanpa Periode 2024')
+            ->assertSee('<h2>2024</h2>', false)
+            ->assertDontSee('LPJ Terbit 2026');
+    }
+
     public function test_removed_publication_pages_no_longer_exist(): void
     {
         $this->get('/keputusan')->assertNotFound();
