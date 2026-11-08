@@ -71,7 +71,7 @@
   .kom-lead { margin-bottom: 14px; }
   .empty { padding: 28px; border: 1px dashed var(--b-default); border-radius: 8px; text-align: center; color: var(--t-cap); font-size: 14px; }
 
-  .pdlg2 { width: min(520px, calc(100vw - 32px)); padding: 0; border: 1px solid var(--b-btn); border-radius: 12px; background: var(--navy-card); color: var(--t-body); box-shadow: var(--sh-lg); }
+  .pdlg2 { margin: auto; width: min(520px, calc(100vw - 32px)); padding: 0; border: 1px solid var(--b-btn); border-radius: 12px; background: var(--navy-card); color: var(--t-body); box-shadow: var(--sh-lg); }
   .pdlg2::backdrop { background: rgba(0,10,25,.72); backdrop-filter: blur(3px); }
   .pdlg2 .av { height: 240px; } .pdlg2 .av b { font-size: 72px; }
   .pd-body { padding: 26px 28px 28px; }
@@ -149,7 +149,7 @@
   window.PROFIL_DEWAN_DATA = @json($profilData ?? []);
 
   const $ = id => document.getElementById(id);
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&', '<': '<', '>': '>', '"': '"' }[c]));
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => '&#' + c.charCodeAt(0) + ';');
   const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const ini = n => n.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
   const SIL = '<svg class="sil" viewBox="0 0 100 120" aria-hidden="true"><circle cx="50" cy="40" r="20"/><path d="M12 120c0-26 17-42 38-42s38 16 38 42z"/></svg>';
