@@ -159,9 +159,9 @@
   .mega-docs a:hover { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
   .mega-docs small { display: block; margin-top: 3px; font-size: 11.5px; font-weight: 500; letter-spacing: .3px; color: var(--t-cap); }
 
-  .mega-links { display: flex; flex-direction: column; padding: 22px 24px; background: var(--navy-footer); border-left: 1px solid var(--b-default); border-right: 1px solid var(--b-default); 
+  .mega-links { display: flex; flex-direction: column; padding: 22px 24px; background: var(--navy-footer); border-left: 1px solid var(--b-default); border-right: 1px solid var(--b-default);
     /* Add scrolling for many items */
-    max-height: 100%; overflow-y: auto; 
+    max-height: 100%; overflow-y: auto;
   }
   .mega-links a { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--b-default); font-size: 13.5px; font-weight: 600; line-height: 1.4; color: var(--white); }
   .mega-links a:last-child { border-bottom: 0; }
@@ -459,7 +459,6 @@
                 <a href="{{ url('/tentang/visi-misi') }}"><span>Visi Misi</span></a>
                 <a href="{{ url('/tentang/struktur') }}"><span>Struktur</span></a>
                 <a href="{{ url('/tentang/kedudukan-tugas-wewenang') }}"><span>Kedudukan, Tugas dan Wewenang</span></a>
-                <a href="{{ url('/tentang/profil-dewan') }}"><span>Profil Dewan</span></a>
               </div>
               <a class="mega-feature" href="{{ url('/tentang/struktur') }}">
                 <div class="mf-art" aria-hidden="true"><img src="{{ asset('images/unit-embung.webp') }}" alt="" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;"></div>
