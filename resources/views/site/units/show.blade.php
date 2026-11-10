@@ -175,7 +175,7 @@
   function buildToc(d) {
     const toc = $('toc');
     if (!toc) return;
-    let html = '<li><a href="#lead"><em>01</em>Pimpinan</a></li>';
+    let html = '<li><a href="#lead"><em>01</em>Kepala</a></li>';
     if (d.members?.length) {
       html += '<li><a href="#anggota"><em>02</em>Anggota</a></li>';
     }
@@ -296,8 +296,8 @@
       <div class="unit-head">
         <div>
           <span class="no" aria-hidden="true">01</span>
-          <h2 id="h-lead">Pimpinan {{ $unit->short_name }}</h2>
-          <p>Ketua, Sekretaris, Bendahara, dan jajaran pimpinan.</p>
+          <h2 id="h-lead">Kepala {{ $unit->short_name }}</h2>
+          <p>Ketua, Sekretaris, Bendahara, dan jajaran kepala.</p>
         </div>
       </div>
       <div id="leadBox"></div>
