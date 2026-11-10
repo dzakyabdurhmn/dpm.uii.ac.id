@@ -43,6 +43,9 @@ class UnitController extends Controller
         // Group by period
         $officialsByPeriod = $allOfficials->groupBy('period_id');
 
+        // Periode tanpa anggota tidak ditampilkan.
+        $periods = $periods->filter(fn (Period $period): bool => ($officialsByPeriod[$period->id] ?? collect())->isNotEmpty())->values();
+
         $unitData = [];
         foreach ($periods as $period) {
             $members = $officialsByPeriod[$period->id] ?? collect();

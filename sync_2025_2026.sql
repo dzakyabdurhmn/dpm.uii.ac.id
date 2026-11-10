@@ -1,6 +1,7 @@
 -- =====================================================================
--- Sinkronisasi periode 2025/2026 + BAK & BPA ke MySQL produksi
+-- Sinkronisasi periode 2025/2026 ke MySQL produksi
 -- Jalankan sekali di phpMyAdmin (database dpmuii_new).
+-- Isi periode 2025/2026: Pimpinan (3), MENTARI (10), BPA (21).
 -- Aman dijalankan berulang: data lama dihapus dulu sebelum insert.
 -- =====================================================================
 
@@ -21,8 +22,8 @@ UPDATE `periods` SET `is_active` = 1, `updated_at` = NOW() WHERE `name` = '2025/
 SET @periode := (SELECT `id` FROM `periods` WHERE `name` = '2025/2026' LIMIT 1);
 SET @lama := (SELECT `id` FROM `periods` WHERE `name` = '2026/2027' LIMIT 1);
 
-SET @bak := (SELECT `id` FROM `organizational_units` WHERE `slug` = 'badan-audit-kemahasiswaan' LIMIT 1);
 SET @bpa := (SELECT `id` FROM `organizational_units` WHERE `slug` = 'badan-pengelola-aset' LIMIT 1);
+SET @bak := (SELECT `id` FROM `organizational_units` WHERE `slug` = 'badan-audit-kemahasiswaan' LIMIT 1);
 
 -- ---------------------------------------------------------------------
 -- 3. Pimpinan, MENTARI, dan profil dewan masuk periode 2025/2026
@@ -31,25 +32,12 @@ UPDATE `officials` SET `period_id` = @periode, `updated_at` = NOW() WHERE `perio
 UPDATE `pimpinan_dewan` SET `periode_id` = @periode, `updated_at` = NOW() WHERE `periode_id` = @lama;
 UPDATE `profil_dewans` SET `periode` = '2025/2026', `updated_at` = NOW() WHERE `periode` = '2026/2027';
 
--- ---------------------------------------------------------------------
--- 4. BAK - Badan Audit Kemahasiswaan
--- ---------------------------------------------------------------------
+-- Data BAK tidak termasuk periode ini (belum ada roster 2025/2026).
 DELETE FROM `officials` WHERE `organizational_unit_id` = @bak
   AND `name` IN ('Hasan Basri', 'Nabila Putri', 'Adi Nugroho', 'Rika Wulandari', 'Tommy Gunawan', 'Lina Marlina', 'Yoga Pratama');
 
-INSERT INTO `officials`
-  (`organizational_unit_id`, `period_id`, `name`, `position`, `photo_path`, `email`, `instagram`, `linkedin`, `sort_order`, `is_active`, `created_at`, `updated_at`, `description`, `fakultas`, `prodi`, `angkatan`, `nim`)
-VALUES
-  (@bak, @periode, 'Hasan Basri', 'Ketua', NULL, 'hasan-basri@students.uii.ac.id', NULL, NULL, 1, 1, NOW(), NOW(), 'Memimpin audit keuangan seluruh lembaga KM UII', NULL, NULL, NULL, NULL),
-  (@bak, @periode, 'Nabila Putri', 'Wakil Ketua', NULL, 'nabila-putri@students.uii.ac.id', NULL, NULL, 2, 1, NOW(), NOW(), 'Membantu ketua dalam perencanaan dan eksekusi audit', NULL, NULL, NULL, NULL),
-  (@bak, @periode, 'Adi Nugroho', 'Sekretaris', NULL, 'adi-nugroho@students.uii.ac.id', NULL, NULL, 3, 1, NOW(), NOW(), 'Mengelola administrasi audit dan penyusunan LHA', NULL, NULL, NULL, NULL),
-  (@bak, @periode, 'Rika Wulandari', 'Bendahara', NULL, 'rika-wulandari@students.uii.ac.id', NULL, NULL, 4, 1, NOW(), NOW(), 'Mengelola dana operasional Badan Audit', NULL, NULL, NULL, NULL),
-  (@bak, @periode, 'Tommy Gunawan', 'Auditor Senior', NULL, 'tommy-gunawan@students.uii.ac.id', NULL, NULL, 5, 1, NOW(), NOW(), 'Melakukan audit lapangan ke lembaga-lembaga KM', NULL, NULL, NULL, NULL),
-  (@bak, @periode, 'Lina Marlina', 'Auditor Junior', NULL, 'lina-marlina@students.uii.ac.id', NULL, NULL, 6, 1, NOW(), NOW(), 'Membantu pelaksanaan audit dan verifikasi dokumen', NULL, NULL, NULL, NULL),
-  (@bak, @periode, 'Yoga Pratama', 'Analis Laporan', NULL, 'yoga-pratama@students.uii.ac.id', NULL, NULL, 7, 1, NOW(), NOW(), 'Menganalisis laporan keuangan dan menyusun temuan audit', NULL, NULL, NULL, NULL);
-
 -- ---------------------------------------------------------------------
--- 5. BPA - Badan Pengelola Aset (Data Fungsionaris BPA 2026)
+-- 4. BPA - Badan Pengelola Aset (Data Fungsionaris BPA 2026)
 -- ---------------------------------------------------------------------
 DELETE FROM `officials` WHERE `organizational_unit_id` = @bpa
   AND `nim` IN ('24216008', '24311030', '25320485', '25320418', '23410811', '24410667', '25410714', '24311415', '24411100', '24410767', '24311020', '25523065', '24523172', '24311422', '24411051', '25320177', '24216013', '25522223', '24311529', '24523219', '24215056');
@@ -80,7 +68,7 @@ VALUES
   (@bpa, @periode, 'Akbar Muntaqo', 'Staf Ahli Keuangan', NULL, '24215056@students.uii.ac.id', NULL, NULL, 21, 1, NOW(), NOW(), 'ADKEU', 'Bisnis dan Ekonomika', 'Akuntansi Perpajakan', '2024', '24215056');
 
 -- ---------------------------------------------------------------------
--- 6. Cek hasil
+-- 5. Cek hasil
 -- ---------------------------------------------------------------------
 SELECT `id`, `name`, `starts_on`, `ends_on`, `is_active` FROM `periods` ORDER BY `id`;
 SELECT `organizational_unit_id`, `period_id`, COUNT(*) AS jumlah FROM `officials` GROUP BY `organizational_unit_id`, `period_id` ORDER BY `organizational_unit_id`;
