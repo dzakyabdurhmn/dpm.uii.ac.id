@@ -66,6 +66,66 @@ class ProfilDewanTest extends TestCase
             ->assertDontSee('Komisi IV');
     }
 
+    public function test_profil_dewan_page_shows_archived_period_on_request(): void
+    {
+        $active = Period::query()->where('is_active', true)->firstOrFail();
+        $arsip = Period::query()->where('is_active', false)->firstOrFail();
+
+        ProfilDewan::query()->create([
+            'nama_lengkap' => 'Ketua Aktif',
+            'nim' => '99999992',
+            'jabatan' => 'Ketua Umum',
+            'periode' => $active->name,
+            'status' => 'Aktif',
+        ]);
+
+        ProfilDewan::query()->create([
+            'nama_lengkap' => 'Ketua Arsip',
+            'nim' => '99999995',
+            'jabatan' => 'Ketua Umum',
+            'periode' => $arsip->name,
+            'status' => 'Selesai',
+        ]);
+
+        $this->get(route('profil-dewan.index', ['periode' => $arsip->name]))
+            ->assertOk()
+            ->assertSee('Ketua Arsip')
+            ->assertDontSee('Ketua Aktif');
+
+        $this->get(route('profil-dewan.index'))
+            ->assertOk()
+            ->assertSee('Ketua Aktif')
+            ->assertDontSee('Ketua Arsip');
+    }
+
+    public function test_profil_dewan_page_groups_members_by_komisi(): void
+    {
+        $active = Period::query()->where('is_active', true)->firstOrFail();
+
+        ProfilDewan::query()->create([
+            'nama_lengkap' => 'Ketua Commission Tiga',
+            'nim' => '99999994',
+            'jabatan' => 'Ketua Komisi III',
+            'periode' => $active->name,
+            'status' => 'Aktif',
+        ]);
+
+        ProfilDewan::query()->create([
+            'nama_lengkap' => 'Anggota Commission Dua',
+            'nim' => '99999993',
+            'jabatan' => 'Anggota Komisi II',
+            'periode' => $active->name,
+            'status' => 'Aktif',
+        ]);
+
+        $this->get(route('profil-dewan.index'))
+            ->assertOk()
+            ->assertSee('id="komisi-2"', false)
+            ->assertSee('id="komisi-3"', false)
+            ->assertSee('Ketua Commission Tiga')
+            ->assertSee('Anggota Commission Dua');
+    }
+
     public function test_profil_dewan_detail_lists_every_task_from_the_database(): void
     {
         $active = Period::query()->where('is_active', true)->firstOrFail();
