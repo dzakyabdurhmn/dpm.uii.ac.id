@@ -33,7 +33,7 @@
     --sh-sm: 0 4px 12px rgba(0,0,0,0.25);
     --sh-md: 0 8px 24px rgba(0,0,0,0.40);
     --sh-lg: 0 16px 48px rgba(0,0,0,0.55);
-    --gold: #f2b31a;
+    --gold: #9db4d4;
     --container: 1200px;
   }
 
@@ -62,8 +62,8 @@
   .btn.dl:hover svg { transform: translateX(3px); }
 
   .sheet { position: relative; background: rgba(255,255,255,0.02); border: 1px solid var(--b-default); border-radius: 12px; padding: 24px; }
-  .seal { display: inline-flex; width: 48px; height: 48px; background: linear-gradient(135deg, var(--gold) 0%, #d4a017 100%); border-radius: 8px; margin-bottom: 12px; }
-  .seal svg { width: 28px; height: 28px; stroke: #001E43; stroke-width: 2.5; fill: none; margin: 10px auto; display: block; }
+  .seal { display: inline-flex; width: 48px; height: 48px; background: rgba(255,255,255,0.06); border: 1px solid var(--b-btn); border-radius: 8px; margin-bottom: 12px; }
+  .seal svg { width: 28px; height: 28px; stroke: var(--white); stroke-width: 2; fill: none; margin: 10px auto; display: block; }
   .sheet small { display: block; font-size: 11px; color: var(--t-cap); margin-bottom: 16px; }
   .sh-mid { font-size: 13px; line-height: 1.6; color: var(--t-sub); margin-bottom: 12px; }
   .sh-mid b { font-family: 'Wix Madefor Display', sans-serif; font-size: 28px; font-weight: 800; color: var(--white); display: block; margin-bottom: 4px; }
@@ -104,6 +104,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 12px;
+    min-width: 0;
   }
   .edcard {
     background: #001A3A;
@@ -176,10 +177,10 @@
 
   .links { display: flex; flex-direction: column; gap: 16px; }
   .links a { display: flex; align-items: flex-start; gap: 16px; padding: 20px; background: var(--navy-card); border: 1px solid var(--b-default); border-radius: 10px; transition: all .2s; text-decoration: none; }
-  .links a:hover { border-color: var(--gold); background: rgba(242,179,26,0.05); transform: translateX(4px); }
+  .links a:hover { border-color: var(--b-btn); background: var(--bg-hover); transform: translateX(4px); }
   .links strong { display: block; font-family: 'Wix Madefor Display', sans-serif; font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
   .links span { font-size: 13.5px; color: var(--t-sub); line-height: 1.6; }
-  .links em { display: block; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--gold); font-style: normal; }
+  .links em { display: block; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--white); font-style: normal; }
 
   /* ============ TYPE PAGE STYLES (Toolbar Design) ============ */
   .pg-head-inner { position: relative; display: grid; grid-template-columns: 1.35fr .65fr; gap: 56px; align-items: end; }
@@ -319,10 +320,36 @@
     .doc-hero { padding: 0 16px; }
     .pg-stat { padding: 14px 14px; } .pg-stat strong { font-size: 16px; white-space: nowrap; }
     .facts-row { grid-template-columns: 1fr; }
-    .edcards { grid-template-columns: 1fr; }
     .band-wide { padding: 32px 0; }
     .reader-body { padding: 16px; }
     .sec-h h2 { font-size: 20px; }
+
+    /* Bar tahun: ringkas, satu baris bisa digeser, tidak menutupi layar */
+    .edbar-wrap { padding: 10px 0; }
+    .edhead { margin-bottom: 8px; gap: 10px; }
+    .edhead-hint { display: none; }
+    .edcards {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 8px;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .edcards::-webkit-scrollbar { display: none; }
+    .edcard {
+      flex: 0 0 auto;
+      min-width: 92px;
+      padding: 9px 14px;
+      border-radius: 10px;
+      scroll-snap-align: start;
+    }
+    .edcard:hover { transform: none; }
+    .edcard .ec-year { font-size: 17px; letter-spacing: -.2px; }
+    .edcard .ec-count { font-size: 11px; margin-top: 3px; }
+    .ednote { display: none; }
   }
   @endif
 
@@ -671,7 +698,12 @@
       overflow-x: auto;
       scrollbar-width: none;
       padding-bottom: 2px;
+      min-width: 0;
+      flex: 1 1 auto;
+      width: 100%;
+      max-width: 100%;
   }
+  .law-toolbar-row { min-width: 0; }
   .year-pills::-webkit-scrollbar { display: none; }
   .year-pill {
       display: inline-flex;
@@ -874,9 +906,9 @@
       gap: 5px;
       padding: 2px 8px;
       border-radius: 100px;
-      background: rgba(245, 158, 11, 0.12);
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      color: #fbbf24;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: var(--white);
       font-size: 10.5px;
       font-weight: 600;
   }

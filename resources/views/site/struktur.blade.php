@@ -69,6 +69,10 @@
   @media (max-width: 1080px) {
     .hero-grid { grid-template-columns: 1fr; }
     .hero-art { display: none; }
+    .band { padding: 72px 0; }
+    .band-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .band-head { position: static; }
+    .big-no { font-size: 64px; }
     .lv { grid-template-columns: 1fr; }
   }
   @media (max-width: 720px) {
@@ -76,6 +80,14 @@
     .org-wrap { padding: 44px 0 24px; }
     .org-card { padding: 18px; }
     .scroll-hint { display: block; }
+    .band { padding: 56px 0; }
+    .band-head p { font-size: 14px; }
+    .big-no { font-size: 56px; letter-spacing: -2px; }
+    .org-scroll { -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
+    .org { min-width: 480px; }
+    .lv article { padding: 20px; }
+    .legend { gap: 12px 24px; }
+    .org-note { padding: 12px 14px; }
   }
   @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
 </style>
