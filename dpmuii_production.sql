@@ -1783,15 +1783,15 @@ ALTER TABLE `pimpinan_tugas`
 
 -- ============================================================
 -- TAMBAHAN DATA (periode lampau + BAK 2025/2026)
--- Semua data di atas dipertahankan apa adanya; blok ini hanya
--- menambah/melengkapi, tidak menghapus data lama kecuali 3 baris
--- profil_dewans contoh (Fikri Maulana, Intan Permata, Raka Wirawan).
+-- Data asli di atas dipertahankan; blok ini hanya menambah/melengkapi.
+-- 3 baris profil_dewans contoh (Fikri Maulana, Intan Permata, Raka
+-- Wirawan) dihapus karena bukan data resmi.
 -- ============================================================
 
--- Kategori konten untuk post yang sudah ada (sebelumnya belum punya kolom ini).
+-- Kategori konten untuk post yang sudah ada.
 UPDATE `posts` SET `category` = 'berita-kegiatan' WHERE `category` = 'berita';
 
--- Deskripsi singkat alat kelengkapan (dipakai kartu Beranda & hero halaman unit).
+-- Deskripsi singkat alat kelengkapan (kartu Beranda & hero halaman unit).
 UPDATE `organizational_units` SET `description` = 'Media dan Kesekretariatan' WHERE `slug` = 'mentari' AND (`description` IS NULL OR `description` = '');
 UPDATE `organizational_units` SET `description` = 'Badan Legislasi' WHERE `slug` = 'badan-legislasi' AND (`description` IS NULL OR `description` = '');
 UPDATE `organizational_units` SET `description` = 'Badan Pengawasan' WHERE `slug` = 'badan-pengawasan' AND (`description` IS NULL OR `description` = '');
@@ -1800,7 +1800,7 @@ UPDATE `organizational_units` SET `description` = 'Badan Audit Kemahasiswaan' WH
 UPDATE `organizational_units` SET `description` = 'Badan Pengelola Aset' WHERE `slug` = 'badan-pengelola-aset' AND (`description` IS NULL OR `description` = '');
 UPDATE `organizational_units` SET `description` = 'Pimpinan Dewan' WHERE `slug` = 'pimpinan-dewan' AND (`description` IS NULL OR `description` = '');
 
--- Periode kepengurusan yang belum ada (2025/2026 sudah ada).
+-- Periode kepengurusan yang belum ada.
 INSERT INTO `periods` (`id`, `name`, `starts_on`, `ends_on`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, '2023/2024', '2023-09-01', '2024-08-31', 0, NOW(), NOW()),
 (2, '2024/2025', '2024-09-01', '2025-08-31', 0, NOW(), NOW());
@@ -1818,16 +1818,16 @@ INSERT INTO `officials` (`id`, `organizational_unit_id`, `period_id`, `name`, `p
 (43, 6, 3, 'Sigit Danna Kurniawan', 'Staff Konsultan Keuangan', NULL, NULL, NULL, NULL, 9, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, '24215009'),
 (44, 6, 3, 'Excella Putri', 'Staff Konsultan Keuangan', NULL, NULL, NULL, NULL, 10, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, '24311419'),
 (45, 1, 1, 'M Rafsan Jzani', 'Ketua Umum', NULL, NULL, NULL, NULL, 1, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(46, 1, 1, 'Nanda Revi Saputri', 'Anggota', NULL, NULL, NULL, NULL, 2, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(47, 1, 1, 'Potrika Janno Vitanka', 'Anggota', NULL, NULL, NULL, NULL, 3, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(48, 1, 1, 'Muhammad Rafly Aryasatya', 'Anggota', NULL, NULL, NULL, NULL, 4, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(49, 1, 1, 'Rafli Jaisy Muhammad', 'Anggota', NULL, NULL, NULL, NULL, 5, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(50, 1, 1, 'M. Raihan Alfarizy', 'Anggota', NULL, NULL, NULL, NULL, 6, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(51, 1, 1, 'Ghiyats Fahim Abdulkarim', 'Anggota', NULL, NULL, NULL, NULL, 7, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(52, 1, 1, 'Anis Banowati', 'Anggota', NULL, NULL, NULL, NULL, 8, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(53, 1, 1, 'Syifa Aldora Cahyaimani', 'Anggota', NULL, NULL, NULL, NULL, 9, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(54, 1, 1, 'Nur Biyantara Efendi', 'Anggota', NULL, NULL, NULL, NULL, 10, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(55, 1, 1, 'Muhammad Nawawi', 'Anggota', NULL, NULL, NULL, NULL, 11, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
+(46, 1, 1, 'Nanda Revi Saputri', 'Sekretaris Jenderal', NULL, NULL, NULL, NULL, 2, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
+(47, 12, 1, 'Potrika Janno Vitanka', 'Ketua Komisi I', NULL, NULL, NULL, NULL, 1, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
+(48, 12, 1, 'Muhammad Rafly Aryasatya', 'Anggota Komisi I', NULL, NULL, NULL, NULL, 2, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
+(49, 12, 1, 'Rafli Jaisy Muhammad', 'Anggota Komisi I', NULL, NULL, NULL, NULL, 3, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
+(50, 13, 1, 'M. Raihan Alfarizy', 'Ketua Komisi II', NULL, NULL, NULL, NULL, 1, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
+(51, 13, 1, 'Ghiyats Fahim Abdulkarim', 'Anggota Komisi II', NULL, NULL, NULL, NULL, 2, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
+(52, 13, 1, 'Anis Banowati', 'Anggota Komisi II', NULL, NULL, NULL, NULL, 3, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
+(53, 14, 1, 'Syifa Aldora Cahyaimani', 'Ketua Komisi III', NULL, NULL, NULL, NULL, 1, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
+(54, 14, 1, 'Nur Biyantara Efendi', 'Anggota Komisi III', NULL, NULL, NULL, NULL, 2, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
+(55, 14, 1, 'Muhammad Nawawi', 'Anggota Komisi III', NULL, NULL, NULL, NULL, 3, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
 (56, 1, 2, 'Cipta Aditya Pratama Kolopita', 'Ketua Umum', NULL, NULL, NULL, NULL, 1, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
 (57, 1, 2, 'Nawad Jamunnasyath Karobbi', 'Sekretaris Jenderal', NULL, NULL, NULL, NULL, 2, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
 (58, 12, 2, 'Shendy Pratama', 'Ketua Komisi I', NULL, NULL, NULL, NULL, 1, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
@@ -1838,25 +1838,24 @@ INSERT INTO `officials` (`id`, `organizational_unit_id`, `period_id`, `name`, `p
 (63, 13, 2, 'Pasha Aulia Amanah', 'Anggota Komisi II', NULL, NULL, NULL, NULL, 3, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
 (64, 14, 2, 'Fatharani Raihan Firdaus', 'Ketua Komisi III', NULL, NULL, NULL, NULL, 1, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
 (65, 14, 2, 'Audyo Turi Mesa', 'Anggota Komisi III', NULL, NULL, NULL, NULL, 2, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(66, 14, 2, 'Maryam Faizah Rosyadi', 'Anggota Komisi III', NULL, NULL, NULL, NULL, 3, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL),
-(67, 15, 2, 'Hidayat Fathirrizqi Azmi', 'Ketua Komisi IV', NULL, NULL, NULL, NULL, 1, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL);
+(66, 14, 2, 'Maryam Faizah Rosyadi', 'Anggota Komisi III', NULL, NULL, NULL, NULL, 3, 1, NOW(), NOW(), NULL, NULL, NULL, NULL, NULL);
 
--- Hapus 3 profil dewan contoh periode 2024/2025, ganti dengan data asli.
+-- Hapus 3 profil dewan contoh periode 2024/2025, ganti data resmi.
 DELETE FROM `profil_dewans` WHERE `id` IN (4, 5, 6);
 
--- Profil dewan periode 2023/2024 dan 2024/2025 (untuk halaman /profil-dewan).
+-- Profil dewan 2023/2024 dan 2024/2025 (halaman /profil-dewan).
 INSERT INTO `profil_dewans` (`id`, `nama_lengkap`, `nim`, `fakultas`, `program_studi`, `angkatan`, `email_kampus`, `jabatan`, `unit_kerja`, `periode`, `masa_jabatan`, `status`, `bio`, `tugas_tanggung_jawab`, `instagram`, `email`, `created_at`, `updated_at`) VALUES
 (10, 'M Rafsan Jzani', NULL, NULL, NULL, NULL, NULL, 'Ketua Umum', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(11, 'Nanda Revi Saputri', NULL, NULL, NULL, NULL, NULL, 'Anggota', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(12, 'Potrika Janno Vitanka', NULL, NULL, NULL, NULL, NULL, 'Anggota', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(13, 'Muhammad Rafly Aryasatya', NULL, NULL, NULL, NULL, NULL, 'Anggota', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(14, 'Rafli Jaisy Muhammad', NULL, NULL, NULL, NULL, NULL, 'Anggota', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(15, 'M. Raihan Alfarizy', NULL, NULL, NULL, NULL, NULL, 'Anggota', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(16, 'Ghiyats Fahim Abdulkarim', NULL, NULL, NULL, NULL, NULL, 'Anggota', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(17, 'Anis Banowati', NULL, NULL, NULL, NULL, NULL, 'Anggota', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(18, 'Syifa Aldora Cahyaimani', NULL, NULL, NULL, NULL, NULL, 'Anggota', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(19, 'Nur Biyantara Efendi', NULL, NULL, NULL, NULL, NULL, 'Anggota', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(20, 'Muhammad Nawawi', NULL, NULL, NULL, NULL, NULL, 'Anggota', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
+(11, 'Nanda Revi Saputri', NULL, NULL, NULL, NULL, NULL, 'Sekretaris Jenderal', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
+(12, 'Potrika Janno Vitanka', NULL, NULL, NULL, NULL, NULL, 'Ketua Komisi I', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
+(13, 'Muhammad Rafly Aryasatya', NULL, NULL, NULL, NULL, NULL, 'Anggota Komisi I', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
+(14, 'Rafli Jaisy Muhammad', NULL, NULL, NULL, NULL, NULL, 'Anggota Komisi I', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
+(15, 'M. Raihan Alfarizy', NULL, NULL, NULL, NULL, NULL, 'Ketua Komisi II', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
+(16, 'Ghiyats Fahim Abdulkarim', NULL, NULL, NULL, NULL, NULL, 'Anggota Komisi II', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
+(17, 'Anis Banowati', NULL, NULL, NULL, NULL, NULL, 'Anggota Komisi II', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
+(18, 'Syifa Aldora Cahyaimani', NULL, NULL, NULL, NULL, NULL, 'Ketua Komisi III', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
+(19, 'Nur Biyantara Efendi', NULL, NULL, NULL, NULL, NULL, 'Anggota Komisi III', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
+(20, 'Muhammad Nawawi', NULL, NULL, NULL, NULL, NULL, 'Anggota Komisi III', 'Dewan Permusyawaratan Mahasiswa', '2023/2024', '1 September 2023 - 31 Agustus 2024', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
 (21, 'Cipta Aditya Pratama Kolopita', NULL, NULL, NULL, NULL, NULL, 'Ketua Umum', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 September 2024 - 31 Agustus 2025', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
 (22, 'Nawad Jamunnasyath Karobbi', NULL, NULL, NULL, NULL, NULL, 'Sekretaris Jenderal', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 September 2024 - 31 Agustus 2025', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
 (23, 'Shendy Pratama', NULL, NULL, NULL, NULL, NULL, 'Ketua Komisi I', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 September 2024 - 31 Agustus 2025', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
@@ -1867,19 +1866,16 @@ INSERT INTO `profil_dewans` (`id`, `nama_lengkap`, `nim`, `fakultas`, `program_s
 (28, 'Pasha Aulia Amanah', NULL, NULL, NULL, NULL, NULL, 'Anggota Komisi II', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 September 2024 - 31 Agustus 2025', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
 (29, 'Fatharani Raihan Firdaus', NULL, NULL, NULL, NULL, NULL, 'Ketua Komisi III', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 September 2024 - 31 Agustus 2025', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
 (30, 'Audyo Turi Mesa', NULL, NULL, NULL, NULL, NULL, 'Anggota Komisi III', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 September 2024 - 31 Agustus 2025', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(31, 'Maryam Faizah Rosyadi', NULL, NULL, NULL, NULL, NULL, 'Anggota Komisi III', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 September 2024 - 31 Agustus 2025', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW()),
-(32, 'Hidayat Fathirrizqi Azmi', NULL, NULL, NULL, NULL, NULL, 'Ketua Komisi IV', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 September 2024 - 31 Agustus 2025', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW());
+(31, 'Maryam Faizah Rosyadi', NULL, NULL, NULL, NULL, NULL, 'Anggota Komisi III', 'Dewan Permusyawaratan Mahasiswa', '2024/2025', '1 September 2024 - 31 Agustus 2025', 'Selesai', NULL, NULL, NULL, NULL, NOW(), NOW());
 
--- Catat migrasi baru supaya `php artisan migrate` tidak menjalankannya ulang.
+-- Catat migrasi baru agar `php artisan migrate` tidak mengulang.
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (51, '2026_11_10_000001_add_category_to_posts_table', 12),
 (52, '2026_11_10_000002_fill_organizational_unit_descriptions', 12);
 
--- Sesuaikan AUTO_INCREMENT setelah penambahan data.
-ALTER TABLE `officials` MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
-ALTER TABLE `profil_dewans` MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+ALTER TABLE `officials` MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+ALTER TABLE `profil_dewans` MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 ALTER TABLE `migrations` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
-
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
 
