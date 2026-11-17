@@ -119,7 +119,7 @@ CREATE TABLE `complaints` (
   `id` bigint(20) NOT NULL,
   `ticket_number` varchar(255) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `phone` varchar(30) DEFAULT NULL,
   `category` varchar(255) DEFAULT NULL,
   `subject` varchar(255) NOT NULL,
@@ -1875,7 +1875,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 
 ALTER TABLE `officials` MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 ALTER TABLE `profil_dewans` MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
-ALTER TABLE `migrations` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+ALTER TABLE `migrations` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(53, '2026_11_17_013216_make_complaints_email_nullable', 13);
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
 

@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UnitController as AdminUnitController;
 use App\Http\Controllers\LaporanKinerjaController;
 use App\Http\Controllers\Site\AboutController;
+use App\Http\Controllers\Site\AspirasiController;
 use App\Http\Controllers\Site\BioLinkController;
 use App\Http\Controllers\Site\DistribusiDanaController;
 use App\Http\Controllers\Site\DocumentController;
@@ -35,6 +36,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::post('/aspirasi', [AspirasiController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('aspirasi.store');
 
 Route::get('/produk-hukum', [LegalProductController::class, 'index'])->name('legal-products.index');
 Route::get('/produk-hukum/{type}', [LegalProductController::class, 'type'])->name('legal-products.type')

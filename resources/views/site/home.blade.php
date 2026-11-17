@@ -532,6 +532,7 @@
       <button type="submit" class="btn">Kirim Aspirasi
         <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </button>
+      <div class="form-error" id="formError" role="alert" style="display:none;color:#b42318;font-size:13.5px;margin-top:2px"></div>
       <div class="success" id="formSuccess" role="status">Terima kasih, aspirasimu telah kami terima.</div>
     </form>
   </div>
@@ -614,21 +615,101 @@
     schedule();
   })();
 
-  // Form aspirasi (demo: sambungkan ke endpoint sebenarnya)
-  const form = document.getElementById('aspirasiForm');
-  const ok = document.getElementById('formSuccess');
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    let valid = true;
-    form.querySelectorAll('.field').forEach(f => {
-      const input = f.querySelector('input, textarea');
-      const bad = !input.value.trim();
-      f.classList.toggle('err', bad);
-      if (bad) valid = false;
+  // Form aspirasi
+  (function () {
+    const form = document.getElementById('aspirasiForm');
+    if (!form) return;
+
+    const ok = document.getElementById('formSuccess');
+    const fail = document.getElementById('formError');
+    const button = form.querySelector('button[type="submit"]');
+    const buttonLabel = button.innerHTML;
+    const fields = { nama: 'nama', kontak: 'kontak', pesan: 'pesan' };
+
+    const clearFieldErrors = () => {
+      form.querySelectorAll('.field').forEach(f => f.classList.remove('err'));
+      form.querySelectorAll('.msg-err').forEach(m => { m.textContent = m.dataset.default || m.textContent; });
+    };
+
+    const showAlert = (message) => {
+      if (!message) { fail.style.display = 'none'; fail.textContent = ''; return; }
+      fail.textContent = message;
+      fail.style.display = 'block';
+    };
+
+    form.querySelectorAll('.msg-err').forEach(m => { m.dataset.default = m.textContent; });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      showAlert('');
+      ok.classList.remove('show');
+      clearFieldErrors();
+
+      const payload = {};
+      let valid = true;
+
+      form.querySelectorAll('.field').forEach(f => {
+        const input = f.querySelector('input, textarea');
+        const value = input.value.trim();
+        payload[input.name] = value;
+        const bad = !value || (input.name === 'pesan' && value.length < 20);
+        f.classList.toggle('err', bad);
+        if (bad) {
+          valid = false;
+          const msg = f.querySelector('.msg-err');
+          if (msg && input.name === 'pesan' && value) msg.textContent = 'Tulis aspirasi minimal 20 karakter.';
+        }
+      });
+
+      if (!valid) return;
+
+      button.disabled = true;
+      button.textContent = 'Mengirim...';
+
+      try {
+        const res = await fetch(@json(route('aspirasi.store', absolute: false)), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          if (res.status === 422 && data.errors) {
+            Object.entries(data.errors).forEach(([key, messages]) => {
+              const name = Object.keys(fields).find(k => k === key);
+              const field = name ? form.querySelector('[name="' + name + '"]').closest('.field') : null;
+              if (field) {
+                field.classList.add('err');
+                const msg = field.querySelector('.msg-err');
+                if (msg) msg.textContent = messages[0];
+              } else {
+                showAlert(messages[0]);
+              }
+            });
+          } else if (res.status === 429) {
+            showAlert('Terlalu banyak pengiriman. Coba lagi beberapa saat lagi.');
+          } else {
+            showAlert('Aspirasi gagal dikirim. Silakan coba lagi.');
+          }
+          return;
+        }
+
+        ok.textContent = 'Terima kasih, aspirasimu telah kami terima. Nomor tiket: ' + data.data.ticket_number;
+        ok.classList.add('show');
+        form.reset();
+      } catch (err) {
+        showAlert('Tidak dapat menghubungi server. Periksa koneksi Anda lalu coba lagi.');
+      } finally {
+        button.disabled = false;
+        button.innerHTML = buttonLabel;
+      }
     });
-    if (!valid) { ok.classList.remove('show'); return; }
-    ok.classList.add('show');
-    form.reset();
-  });
+  })();
 </script>
 @endpush
