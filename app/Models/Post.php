@@ -15,6 +15,19 @@ class Post extends Model
     public const STATUS_PUBLISHED = 'published';
 
     /**
+     * Kategori konten. Menentukan halaman publik mana yang menampilkannya:
+     * Berita, Berita Kegiatan, Pengumuman, atau Sosialisasi.
+     *
+     * @var array<string, string>
+     */
+    public const CATEGORIES = [
+        'berita' => 'Berita Umum',
+        'berita-kegiatan' => 'Berita Kegiatan',
+        'pengumuman' => 'Pengumuman',
+        'sosialisasi' => 'Sosialisasi',
+    ];
+
+    /**
      * Jenis sosialisasi: peraturan, kebijakan, program, dan lainnya.
      *
      * @var array<string, string>
@@ -27,6 +40,7 @@ class Post extends Model
     ];
 
     protected $fillable = [
+        'category',
         'type',
         'title',
         'slug',
@@ -68,7 +82,26 @@ class Post extends Model
 
     public function isSocialization(): bool
     {
-        return filled($this->type);
+        return $this->category === 'sosialisasi';
+    }
+
+    public function scopeCategory(Builder $query, string ...$categories): Builder
+    {
+        return $query->whereIn('category', $categories);
+    }
+
+    public function getCategoryLabelAttribute(): string
+    {
+        return self::CATEGORIES[$this->category] ?? ucfirst((string) $this->category);
+    }
+
+    /**
+     * URL gambar utama. Berkas media disimpan di public/uploads, jadi jangan
+     * ditambahi prefix "storage/" (dulu Beranda memakai prefix itu dan gambarnya 404).
+     */
+    public function getFeaturedImageUrlAttribute(): ?string
+    {
+        return filled($this->featured_image) ? asset($this->featured_image) : null;
     }
 
     public function getTypeLabelAttribute(): ?string

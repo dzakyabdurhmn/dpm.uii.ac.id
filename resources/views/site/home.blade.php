@@ -399,17 +399,19 @@
       <div>
         <span class="eyebrow">Alat Kelengkapan</span>
         <h2>Badan dan Unit Kerja DPM UII</h2>
-        <p>Enam alat kelengkapan yang menggerakkan kerja parlemen mahasiswa.</p>
+        <p>{{ $units->count() }} alat kelengkapan yang menggerakkan kerja parlemen mahasiswa.</p>
       </div>
     </div>
 
     <div class="grid g3">
-      <a href="/unit/mentari" class="card unit reveal"><div><h3>Mentari</h3><p>Media &amp; Kesekretariatan</p></div></a>
-      <a href="/unit/badan-legislasi" class="card unit reveal d1"><div><h3>Baleg</h3><p>Badan Legislasi</p></div></a>
-      <a href="/unit/badan-pengawasan" class="card unit reveal d2"><div><h3>Bawas</h3><p>Badan Pengawasan</p></div></a>
-      <a href="/unit/badan-kerjasama-advokasi-dan-jaringan" class="card unit reveal"><div><h3>Bksaj</h3><p>Badan Kerjasama, Advokasi &amp; Jaringan</p></div></a>
-      <a href="/unit/badan-audit-kemahasiswaan" class="card unit reveal d1"><div><h3>BAK</h3><p>Badan Audit Kemahasiswaan</p></div></a>
-      <a href="/unit/badan-pengelola-aset" class="card unit reveal d2"><div><h3>BPA</h3><p>Badan Pengelola Aset</p></div></a>
+      @foreach ($units as $unit)
+        <a href="{{ $unit->url }}" class="card unit reveal {{ $loop->index % 3 === 1 ? 'd1' : ($loop->index % 3 === 2 ? 'd2' : '') }}">
+          <div>
+            <h3>{{ $unit->short_name }}</h3>
+            <p>{{ $unit->name !== $unit->short_name ? $unit->name : ($unit->description ?: ucfirst($unit->type)) }}</p>
+          </div>
+        </a>
+      @endforeach
     </div>
   </div>
 </section>
@@ -428,20 +430,20 @@
       <div class="reveal">
         <div class="panel-title">
           <h3>Berita Kegiatan</h3>
-          <a href="/berita" class="link-more">Semua berita</a>
+          <a href="/berita-kegiatan" class="link-more">Semua berita</a>
         </div>
         <div class="news-list">
           @forelse($latestNews as $post)
             <a href="{{ $post->url }}" class="card news-item">
               <div class="news-thumb">
-                @if($post->featured_image)
-                  <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" loading="lazy">
+                @if($post->featured_image_url)
+                  <img src="{{ $post->featured_image_url }}" alt="{{ $post->title }}" loading="lazy">
                 @else
                   <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>
                 @endif
               </div>
               <div>
-                <div class="meta">{{ $post->type ? $post->type_label : 'Berita' }} · {{ $post->published_at?->translatedFormat('d M Y') }}</div>
+                <div class="meta">{{ $post->isSocialization() ? $post->type_label : $post->category_label }} · {{ $post->published_at?->translatedFormat('d M Y') }}</div>
                 <h3>{{ Str::limit($post->title, 60) }}</h3>
                 <p>{{ Str::limit($post->excerpt ?? $post->body, 120) }}</p>
               </div>

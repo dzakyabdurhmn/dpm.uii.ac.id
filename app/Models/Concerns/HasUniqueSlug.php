@@ -10,7 +10,8 @@ trait HasUniqueSlug
     public static function bootHasUniqueSlug(): void
     {
         static::saving(function (self $model): void {
-            $model->slug = static::uniqueSlug((string) ($model->slug ?: $model->title), $model->getKey());
+            $source = $model->slug ?: ($model->title ?? $model->name ?? '');
+            $model->slug = static::uniqueSlug((string) $source, $model->getKey());
         });
     }
 

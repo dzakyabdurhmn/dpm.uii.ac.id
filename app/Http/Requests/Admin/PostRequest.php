@@ -19,6 +19,7 @@ class PostRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'category' => ['required', 'string', Rule::in(array_keys(Post::CATEGORIES))],
             'type' => ['nullable', 'string', Rule::in(array_keys(Post::SOCIALIZATION_TYPES))],
             'title' => ['required', 'string', 'max:150'],
             'slug' => ['nullable', 'string', 'max:150', 'alpha_dash'],
@@ -35,7 +36,11 @@ class PostRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'type' => filled($this->input('type')) ? $this->input('type') : null,
+            'category' => filled($this->input('category')) ? $this->input('category') : 'berita',
+            // Jenis sosialisasi hanya relevan untuk kategori Sosialisasi.
+            'type' => $this->input('category') === 'sosialisasi' && filled($this->input('type'))
+                ? $this->input('type')
+                : null,
             'slug' => filled($this->input('slug')) ? $this->input('slug') : null,
             'published_at' => filled($this->input('published_at')) ? $this->input('published_at') : null,
         ]);
@@ -48,6 +53,7 @@ class PostRequest extends FormRequest
     {
         return [
             'title.required' => 'Judul berita wajib diisi.',
+            'category.required' => 'Kategori konten wajib dipilih.',
             'slug.alpha_dash' => 'Slug hanya boleh berisi huruf, angka, dan tanda hubung.',
             'status.required' => 'Status berita wajib dipilih.',
             'published_at.date' => 'Tanggal terbit tidak valid.',

@@ -82,6 +82,19 @@ class PeriodController extends Controller
     }
 
     /**
+     * Pindahkan konteks kerja admin ke periode lain tanpa mengubah periode aktif
+     * situs. Dipakai pemilih periode di header admin.
+     */
+    public function context(Request $request, Period $period): RedirectResponse
+    {
+        $request->session()->put('admin_period_id', $period->id);
+
+        return redirect()
+            ->back(fallback: route('admin.dashboard'))
+            ->with('success', 'Sekarang mengelola konten periode '.$period->name.'.');
+    }
+
+    /**
      * @return array<string, mixed>
      */
     private function validated(Request $request, ?Period $period = null): array

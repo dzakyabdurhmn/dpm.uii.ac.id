@@ -16,6 +16,13 @@
                 <option value="draft" @selected($status === 'draft')>Draf</option>
             </select>
 
+            <select name="kategori" class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                <option value="">Semua kategori</option>
+                @foreach (\App\Models\Post::CATEGORIES as $key => $label)
+                    <option value="{{ $key }}" @selected($kategori === $key)>{{ $label }}</option>
+                @endforeach
+            </select>
+
             <button type="submit" class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
                 Filter
             </button>
@@ -50,7 +57,11 @@
                                 </a>
                                 <p class="text-xs text-slate-500">/berita/{{ $post->slug }}</p>
                             </td>
-                            <td class="px-5 py-3 text-slate-600">{{ $post->category?->name ?? '—' }}</td>
+                            <td class="px-5 py-3 text-slate-600">
+                                <span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">
+                                    {{ $post->category_label }}
+                                </span>
+                            </td>
                             <td class="px-5 py-3 text-slate-600">
                                 {{ $post->published_at?->translatedFormat('d M Y') ?? '—' }}
                             </td>

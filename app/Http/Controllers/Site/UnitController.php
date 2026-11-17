@@ -17,6 +17,7 @@ class UnitController extends Controller
                 ->active()
                 ->whereNull('parent_id')
                 ->whereIn('type', ['lembaga', 'badan', 'direktorat', 'komisi', 'pimpinan'])
+                ->withCount(['officials' => fn ($query) => $query->where('is_active', true)])
                 ->orderBy('sort_order')
                 ->get(),
         ]);
@@ -27,11 +28,10 @@ class UnitController extends Controller
         abort_unless($unit->is_active, 404);
 
         $periods = Period::query()->orderByDesc('name')->get(['id', 'name', 'is_active']);
-        $activePeriod = Period::query()->where('is_active', true)->first(['id', 'name']);
 
         $periodIds = $periods->pluck('id')->toArray();
 
-        // Get all officials for all periods for this unit
+        // Semua anggota unit ini, dikelompokkan per periode.
         $allOfficials = Official::query()
             ->where('organizational_unit_id', $unit->id)
             ->where('is_active', true)
@@ -40,11 +40,24 @@ class UnitController extends Controller
             ->orderBy('name')
             ->get(['id', 'name', 'position', 'fakultas', 'prodi', 'angkatan', 'nim', 'description', 'photo_path', 'email', 'instagram', 'linkedin', 'period_id', 'sort_order']);
 
-        // Group by period
         $officialsByPeriod = $allOfficials->groupBy('period_id');
 
+        // Anggota yang belum terikat periode tampil di semua periode.
+        $unassigned = Official::query()
+            ->where('organizational_unit_id', $unit->id)
+            ->where('is_active', true)
+            ->whereNull('period_id')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get(['id', 'name', 'position', 'fakultas', 'prodi', 'angkatan', 'nim', 'description', 'photo_path', 'email', 'instagram', 'linkedin', 'sort_order'])
+            ->map(fn (Official $official): array => $this->memberData($official))
+            ->values()
+            ->all();
+
         // Periode tanpa anggota tidak ditampilkan.
-        $periods = $periods->filter(fn (Period $period): bool => ($officialsByPeriod[$period->id] ?? collect())->isNotEmpty())->values();
+        $periods = $periods
+            ->filter(fn (Period $period): bool => ($officialsByPeriod[$period->id] ?? collect())->isNotEmpty())
+            ->values();
 
         $unitData = [];
         foreach ($periods as $period) {
@@ -54,7 +67,7 @@ class UnitController extends Controller
             );
 
             $unitData[$period->name] = [
-                'period' => $period,
+                'period' => $period->name,
                 'unit_name' => $unit->short_name,
                 'lead' => $lead ? $this->memberData($lead) : null,
                 'members' => $members
@@ -62,25 +75,22 @@ class UnitController extends Controller
                     ->map(fn (Official $official): array => $this->memberData($official))
                     ->values()
                     ->all(),
+                'unassigned' => $unassigned,
+                'total' => $members->count() + count($unassigned),
+                'positions' => $members->pluck('position')->filter()->unique()->count(),
             ];
         }
 
-        // Also get unassigned
-        $unassigned = Official::query()
-            ->where('organizational_unit_id', $unit->id)
-            ->where('is_active', true)
-            ->whereNull('period_id')
-            ->orderBy('sort_order')
-            ->orderBy('name')
-            ->get(['id', 'name', 'position', 'fakultas', 'prodi', 'angkatan', 'nim', 'description', 'photo_path', 'email', 'instagram', 'linkedin', 'sort_order'])
-            ->map(fn (Official $official): array => $this->memberData($official))
-            ->toArray();
+        // Angka di hero mengikuti periode yang sedang tampil (default: periode terbaru yang punya anggota).
+        $defaultPeriod = $periods->first();
+        $default = $defaultPeriod ? $unitData[$defaultPeriod->name] : ['total' => count($unassigned), 'positions' => 0];
 
         return view('site.units.show', [
             'unit' => $unit,
             'unitData' => $unitData,
-            'activePeriod' => $activePeriod?->name,
-            'unassigned' => $unassigned,
+            'activePeriod' => $defaultPeriod?->name,
+            'totalMembers' => $default['total'],
+            'uniquePositions' => $default['positions'],
         ]);
     }
 

@@ -423,9 +423,6 @@
   }
 </style>
 
-<link rel="stylesheet" href="/build/assets/app-DVB7LGv8.css">
-<link rel="stylesheet" href="/build/assets/app-TkRHIDj2.css">
-
 @stack('styles')
 </head>
 <body>

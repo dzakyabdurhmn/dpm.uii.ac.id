@@ -17,6 +17,9 @@ class OfficialController extends Controller
         $data = $this->validated($request);
         $data['photo_path'] = $this->storePhoto($request, $unit);
 
+        // Form menambahkan anggota ke periode yang sedang dipilih di header admin.
+        $data['period_id'] = $data['period_id'] ?? $request->session()->get('admin_period_id');
+
         $unit->officials()->create($data);
 
         return redirect()

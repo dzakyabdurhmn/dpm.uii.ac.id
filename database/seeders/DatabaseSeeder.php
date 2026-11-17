@@ -111,16 +111,16 @@ class DatabaseSeeder extends Seeder
 
     private function seedUnits(): void
     {
-        // Hanya kerangka alat kelengkapan yang disiapkan. Penjelasan tiap unit
-        // sengaja dikosongkan: diisi sendiri lewat admin (menu Alat Kelengkapan).
+        // Kerangka alat kelengkapan. Deskripsi singkat dipakai sebagai subjudul
+        // kartu di Beranda dan hero halaman unit; admin bebas mengubahnya.
         $units = [
-            ['type' => 'pimpinan', 'name' => 'Pimpinan Dewan', 'abbreviation' => null, 'sort_order' => 1],
-            ['type' => 'lembaga', 'name' => 'Mentari', 'abbreviation' => 'Mentari', 'sort_order' => 2],
-            ['type' => 'badan', 'name' => 'Badan Legislasi', 'abbreviation' => 'Baleg', 'sort_order' => 3],
-            ['type' => 'badan', 'name' => 'Badan Pengawasan', 'abbreviation' => 'Bawas', 'sort_order' => 4],
-            ['type' => 'badan', 'name' => 'Badan Kerjasama, Advokasi, dan Jaringan', 'abbreviation' => 'Bksaj', 'sort_order' => 5],
-            ['type' => 'badan', 'name' => 'Badan Audit Kemahasiswaan', 'abbreviation' => 'BAK', 'sort_order' => 6],
-            ['type' => 'badan', 'name' => 'Badan Pengelola Aset', 'abbreviation' => 'BPA', 'sort_order' => 7],
+            ['type' => 'pimpinan', 'name' => 'Pimpinan Dewan', 'abbreviation' => null, 'description' => 'Pimpinan Dewan', 'sort_order' => 1],
+            ['type' => 'lembaga', 'name' => 'Mentari', 'abbreviation' => 'Mentari', 'description' => 'Media dan Kesekretariatan', 'sort_order' => 2],
+            ['type' => 'badan', 'name' => 'Badan Legislasi', 'abbreviation' => 'Baleg', 'description' => 'Badan Legislasi', 'sort_order' => 3],
+            ['type' => 'badan', 'name' => 'Badan Pengawasan', 'abbreviation' => 'Bawas', 'description' => 'Badan Pengawasan', 'sort_order' => 4],
+            ['type' => 'badan', 'name' => 'Badan Kerjasama, Advokasi, dan Jaringan', 'abbreviation' => 'Bksaj', 'description' => 'Badan Kerjasama, Advokasi, dan Jaringan', 'sort_order' => 5],
+            ['type' => 'badan', 'name' => 'Badan Audit Kemahasiswaan', 'abbreviation' => 'BAK', 'description' => 'Badan Audit Kemahasiswaan', 'sort_order' => 6],
+            ['type' => 'badan', 'name' => 'Badan Pengelola Aset', 'abbreviation' => 'BPA', 'description' => 'Badan Pengelola Aset', 'sort_order' => 7],
             // Komisi Dewan
             ['type' => 'komisi', 'name' => 'Komisi I', 'abbreviation' => 'I', 'description' => 'Bidang Hukum, Peraturan, dan Ketertiban Dewan', 'sort_order' => 10],
             ['type' => 'komisi', 'name' => 'Komisi II', 'abbreviation' => 'II', 'description' => 'Bidang Anggaran, Keuangan, dan Aset Dewan', 'sort_order' => 11],

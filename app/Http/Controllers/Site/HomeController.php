@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
-use App\Models\Document;
-use App\Models\DocumentCategory;
-use App\Models\LegalProduct;
 use App\Models\OrganizationalUnit;
 use App\Models\Post;
 use Illuminate\View\View;
@@ -15,36 +12,24 @@ class HomeController extends Controller
     public function index(): View
     {
         return view('site.home', [
-            'latestLegal' => LegalProduct::query()
-                ->active()
-                ->ordered()
-                ->limit(4)
-                ->get(),
-            'latestDocuments' => Document::query()
-                ->published()
-                ->with('category')
-                ->latest('published_at')
-                ->limit(4)
-                ->get(),
             'latestNews' => Post::query()
                 ->published()
+                ->category('berita-kegiatan', 'berita')
                 ->latest('published_at')
                 ->limit(4)
                 ->get(),
             'latestAnnouncements' => Post::query()
                 ->published()
+                ->category('pengumuman')
                 ->latest('published_at')
-                ->limit(3)
+                ->limit(4)
                 ->get(),
+            // Kartu "Alat Kelengkapan" di Beranda memakai data yang sama dengan
+            // halaman /alat-kelengkapan, supaya unit baru langsung muncul.
             'units' => OrganizationalUnit::query()
                 ->active()
-                ->whereIn('type', ['badan', 'lembaga'])
-                ->orderBy('sort_order')
-                ->get(),
-            'contentSections' => collect(),
-            'financialCategories' => DocumentCategory::query()
-                ->where('group', 'Dana')
-                ->whereHas('documents', fn ($query) => $query->published())
+                ->whereNull('parent_id')
+                ->whereIn('type', ['lembaga', 'badan'])
                 ->orderBy('sort_order')
                 ->get(),
         ]);

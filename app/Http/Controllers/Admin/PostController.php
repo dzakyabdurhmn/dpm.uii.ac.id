@@ -15,12 +15,17 @@ class PostController extends Controller
     {
         $search = trim((string) $request->query('q'));
         $status = $request->query('status');
+        $kategori = $request->query('kategori');
 
         $posts = Post::query()
             ->when($search !== '', fn ($query) => $query->where('title', 'like', "%{$search}%"))
             ->when(
                 in_array($status, [Post::STATUS_DRAFT, Post::STATUS_PUBLISHED], true),
                 fn ($query) => $query->where('status', $status),
+            )
+            ->when(
+                is_string($kategori) && array_key_exists($kategori, Post::CATEGORIES),
+                fn ($query) => $query->where('category', $kategori),
             )
             ->latest('id')
             ->paginate(10)
@@ -30,6 +35,7 @@ class PostController extends Controller
             'posts' => $posts,
             'search' => $search,
             'status' => $status,
+            'kategori' => $kategori,
         ]);
     }
 

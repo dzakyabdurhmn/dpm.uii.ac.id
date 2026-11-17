@@ -73,9 +73,7 @@
                                 <div class="news-card-body">
                                     <div class="news-card-meta">
                                         @if ($post->published_at)<span>{{ $post->published_at->translatedFormat('d F Y') }}</span>@endif
-                                        @if ($post->type && $post->isSocialization())
-                                            <span>{{ $post->type_label }}</span>
-                                        @endif
+                                        <span>{{ $post->isSocialization() && $post->type ? $post->type_label : $post->category_label }}</span>
                                     </div>
                                     <a class="news-card-title" href="{{ $post->url }}">{{ $post->title }}</a>
                                     @if ($post->excerpt)<p class="news-card-excerpt">{{ $post->excerpt }}</p>@endif

@@ -7,7 +7,22 @@
 
 @section('title', $isEdit ? 'Ubah berita' : 'Berita baru')
 @section('heading', $isEdit ? 'Ubah berita' : 'Berita baru')
-@section('subheading', $isEdit ? '/berita/'.$post->slug : 'Tulis kabar atau pengumuman baru')
+@section('subheading', $isEdit ? '/berita/'.$post->slug : 'Tulis berita, pengumuman, atau sosialisasi baru')
+
+@push('scripts')
+<script>
+  // Jenis sosialisasi hanya relevan saat kategori = Sosialisasi.
+  (function () {
+    const category = document.getElementById('category');
+    const field = document.querySelector('[data-socialization-field]');
+    if (!category || !field) return;
+
+    const sync = () => field.classList.toggle('hidden', category.value !== 'sosialisasi');
+    category.addEventListener('change', sync);
+    sync();
+  })();
+</script>
+@endpush
 
 @section('content')
     <form method="POST"
@@ -51,24 +66,38 @@
         <div class="space-y-5">
             <div class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5">
                 <div>
-                    <label for="status" class="block text-xs font-medium text-slate-600">Status</label>
-                    <select id="status" name="status" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
-                        <option value="draft" @selected(old('status', $post->status) === 'draft')>Draf</option>
-                        <option value="published" @selected(old('status', $post->status) === 'published')>Terbit</option>
+                    <label for="category" class="block text-xs font-medium text-slate-600">Kategori konten <span class="text-red-500">*</span></label>
+                    <select id="category" name="category" required
+                            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                        @foreach (\App\Models\Post::CATEGORIES as $key => $label)
+                            <option value="{{ $key }}" @selected(old('category', $post->category ?? 'berita') === $key)>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
+                    <p class="mt-1 text-xs text-slate-400">
+                        Menentukan halaman publik tujuan: Berita, Berita Kegiatan, Pengumuman, atau Sosialisasi.
+                    </p>
+                    @error('category') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
 
-                <div>
-                    <label for="type" class="block text-xs font-medium text-slate-600">Jenis Sosialisasi</label>
+                <div data-socialization-field @class(['hidden' => old('category', $post->category ?? 'berita') !== 'sosialisasi'])>
+                    <label for="type" class="block text-xs font-medium text-slate-600">Jenis sosialisasi</label>
                     <select id="type" name="type" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
-                        <option value="">Berita Umum / Pengumuman</option>
                         @foreach (\App\Models\Post::SOCIALIZATION_TYPES as $typeKey => $typeLabel)
                             <option value="{{ $typeKey }}" @selected(old('type', $post->type) === $typeKey)>
                                 {{ $typeLabel }}
                             </option>
                         @endforeach
                     </select>
-                    <p class="mt-1 text-xs text-slate-400">Kosongkan untuk berita/pengumuman biasa. Pilih jenis untuk masuk halaman Sosialisasi.</p>
+                </div>
+
+                <div>
+                    <label for="status" class="block text-xs font-medium text-slate-600">Status</label>
+                    <select id="status" name="status" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                        <option value="draft" @selected(old('status', $post->status) === 'draft')>Draf</option>
+                        <option value="published" @selected(old('status', $post->status) === 'published')>Terbit</option>
+                    </select>
                 </div>
 
                 <div>

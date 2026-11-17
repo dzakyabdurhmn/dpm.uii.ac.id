@@ -11,7 +11,6 @@ use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\OfficialController;
 use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\PeriodController;
-use App\Http\Controllers\Admin\PimpinanDewanController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UnitController as AdminUnitController;
@@ -93,15 +92,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->middleware('auth')
         ->name('logout');
 
-    Route::middleware('auth')->group(function () {
+    Route::middleware(['auth', 'admin.period'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Periode kerja admin: satu pilihan untuk semua halaman.
+        Route::get('periode-kerja/{period}', [PeriodController::class, 'context'])->name('periods.context');
 
         Route::resource('posts', PostController::class)->except(['show']);
         Route::resource('documents', AdminDocumentController::class)->except(['show']);
         Route::resource('legal-products', AdminLegalProductController::class)->except(['show']);
 
-        // Alat kelengkapan bersifat tetap: hanya ubah nama tidak diperbolehkan, hanya anggota.
-        Route::resource('units', AdminUnitController::class)->only(['index', 'edit', 'update']);
+        // Alat kelengkapan bisa ditambah kapan saja. Unit yang sudah punya
+        // anggota tidak bisa dihapus (dijaga di UnitController::destroy).
+        Route::resource('units', AdminUnitController::class)->except(['show']);
         Route::post('units/{unit}/fungsionaris', [OfficialController::class, 'store'])->name('units.officials.store');
         Route::put('units/{unit}/fungsionaris/{official}', [OfficialController::class, 'update'])->name('units.officials.update');
         Route::delete('units/{unit}/fungsionaris/{official}', [OfficialController::class, 'destroy'])->name('units.officials.destroy');
@@ -110,19 +113,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->except(['show'])
             ->parameters(['kategori-dokumen' => 'documentCategory'])
             ->names('document-categories');
-
-        Route::resource('pimpinan-dewan', PimpinanDewanController::class)
-            ->except(['show'])
-            ->names('pimpinan-dewan');
-
-        Route::get('pimpinan-dewan/{pimpinan}/tugas', [PimpinanDewanController::class, 'tugas'])
-            ->name('pimpinan-dewan.tugas');
-        Route::post('pimpinan-dewan/{pimpinan}/tugas', [PimpinanDewanController::class, 'tugasStore'])
-            ->name('pimpinan-dewan.tugas.store');
-        Route::put('pimpinan-dewan/{pimpinan}/tugas/{tugas}', [PimpinanDewanController::class, 'tugasUpdate'])
-            ->name('pimpinan-dewan.tugas.update');
-        Route::delete('pimpinan-dewan/{pimpinan}/tugas/{tugas}', [PimpinanDewanController::class, 'tugasDestroy'])
-            ->name('pimpinan-dewan.tugas.destroy');
 
         Route::resource('distribusi-dana', AdminDistribusiDanaController::class)
             ->except(['show'])

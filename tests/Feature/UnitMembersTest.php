@@ -25,19 +25,63 @@ class UnitMembersTest extends TestCase
         $this->admin = User::query()->firstOrFail();
     }
 
-    public function test_alat_kelengkapan_cannot_be_created_or_deleted(): void
+    public function test_admin_can_create_a_new_alat_kelengkapan(): void
     {
-        $unit = OrganizationalUnit::query()->firstOrFail();
+        $this->actingAs($this->admin)
+            ->post(route('admin.units.store'), [
+                'name' => 'Badan Advokasi Baru',
+                'abbreviation' => 'BAB',
+                'type' => 'badan',
+                'description' => 'Unit uji coba.',
+                'sort_order' => 20,
+                'is_active' => true,
+            ])
+            ->assertRedirect();
+
+        $unit = OrganizationalUnit::query()->where('name', 'Badan Advokasi Baru')->firstOrFail();
+
+        $this->assertSame('badan-advokasi-baru', $unit->slug);
+        $this->assertSame('BAB', $unit->short_name);
+
+        // Unit baru langsung tampil di halaman publik.
+        $this->get(route('units.show', $unit))->assertOk()->assertSee('Badan Advokasi Baru');
+    }
+
+    public function test_alat_kelengkapan_with_members_cannot_be_deleted(): void
+    {
+        $unit = OrganizationalUnit::query()->where('slug', 'mentari')->firstOrFail();
+
+        Official::query()->create([
+            'organizational_unit_id' => $unit->id,
+            'name' => 'Anggota Uji Hapus',
+            'position' => 'Staf',
+        ]);
+
+        $this->assertGreaterThan(0, $unit->officials()->count());
 
         $this->actingAs($this->admin)
-            ->post('/admin/units', ['name' => 'Unit Baru'])
-            ->assertStatus(405);
-
-        $this->actingAs($this->admin)
-            ->delete('/admin/units/'.$unit->id)
-            ->assertStatus(405);
+            ->delete(route('admin.units.destroy', $unit))
+            ->assertRedirect(route('admin.units.index'))
+            ->assertSessionHas('error');
 
         $this->assertDatabaseHas('organizational_units', ['id' => $unit->id]);
+    }
+
+    public function test_alat_kelengkapan_without_members_can_be_deleted(): void
+    {
+        $unit = OrganizationalUnit::query()->create([
+            'type' => 'badan',
+            'name' => 'Unit Tanpa Anggota',
+            'sort_order' => 99,
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($this->admin)
+            ->delete(route('admin.units.destroy', $unit))
+            ->assertRedirect(route('admin.units.index'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('organizational_units', ['id' => $unit->id]);
     }
 
     public function test_admin_can_update_unit_description(): void
@@ -88,6 +132,24 @@ class UnitMembersTest extends TestCase
         Storage::disk('uploads')->assertExists(str_replace('uploads/', '', $member->photo_path));
     }
 
+    public function test_new_member_defaults_to_the_admin_period_context(): void
+    {
+        $unit = OrganizationalUnit::query()->where('slug', 'mentari')->firstOrFail();
+        $period = Period::query()->where('is_active', true)->firstOrFail();
+
+        $this->actingAs($this->admin)
+            ->withSession(['admin_period_id' => $period->id])
+            ->post(route('admin.units.officials.store', $unit), [
+                'name' => 'Anggota Tanpa Periode',
+                'is_active' => true,
+            ])
+            ->assertRedirect(route('admin.units.edit', $unit));
+
+        $member = Official::query()->where('name', 'Anggota Tanpa Periode')->firstOrFail();
+
+        $this->assertSame($period->id, $member->period_id);
+    }
+
     public function test_unit_page_lists_members_grouped_by_period(): void
     {
         $unit = OrganizationalUnit::query()->where('slug', 'mentari')->firstOrFail();
@@ -111,8 +173,10 @@ class UnitMembersTest extends TestCase
         $this->get(route('units.show', $unit))
             ->assertOk()
             ->assertSee('Anggota')
-            ->assertSee('Periode '.$current->name)
-            ->assertSee('Periode '.$previous->name)
+            // Pemilih periode berupa pill/tab, bukan dropdown.
+            ->assertSee('data-periode="'.$current->name.'"', false)
+            ->assertSee('data-periode="'.$previous->name.'"', false)
+            ->assertDontSee('<select id="periode"', false)
             ->assertSee('Anggota Terkini')
             // Deskripsi ikut ke dataset JSON; @json meng-escape garis miring.
             ->assertSee('Fakultas Teknik \/ Informatika', false)

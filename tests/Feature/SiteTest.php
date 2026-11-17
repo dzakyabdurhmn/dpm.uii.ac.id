@@ -7,6 +7,7 @@ use App\Models\DocumentCategory;
 use App\Models\Period;
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class SiteTest extends TestCase
@@ -45,6 +46,41 @@ class SiteTest extends TestCase
 
         // Tidak ada halaman bebas: seksi tak dikenal = 404.
         $this->get('/tentang/halaman-bebas')->assertNotFound();
+    }
+
+    public function test_landing_page_separates_announcements_from_activity_news(): void
+    {
+        $make = fn (string $title, string $category) => Post::query()->create([
+            'title' => $title,
+            'slug' => Str::slug($title),
+            'body' => '<p>Isi</p>',
+            'category' => $category,
+            'status' => Post::STATUS_PUBLISHED,
+            'published_at' => now()->subDay(),
+        ]);
+
+        $make('Kegiatan Uji Eksklusif', 'berita-kegiatan');
+        $make('Pengumuman Uji Eksklusif', 'pengumuman');
+        $make('Sosialisasi Uji Eksklusif', 'sosialisasi');
+
+        // Halaman Pengumuman hanya memuat pengumuman, bukan kegiatan.
+        $this->get(route('news.announcements'))
+            ->assertOk()
+            ->assertSee('Pengumuman Uji Eksklusif')
+            ->assertDontSee('Kegiatan Uji Eksklusif')
+            ->assertDontSee('Sosialisasi Uji Eksklusif');
+
+        // Halaman Berita Kegiatan hanya memuat kegiatan.
+        $this->get(route('news.activities'))
+            ->assertOk()
+            ->assertSee('Kegiatan Uji Eksklusif')
+            ->assertDontSee('Pengumuman Uji Eksklusif');
+
+        // Halaman Sosialisasi terpisah dari berita.
+        $this->get(route('news.socialization'))
+            ->assertOk()
+            ->assertSee('Sosialisasi Uji Eksklusif')
+            ->assertDontSee('Kegiatan Uji Eksklusif');
     }
 
     public function test_berita_lists_only_published_posts(): void

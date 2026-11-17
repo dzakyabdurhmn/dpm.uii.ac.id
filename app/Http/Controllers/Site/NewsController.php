@@ -39,7 +39,7 @@ class NewsController extends Controller
 
         $posts = Post::query()
             ->published()
-            ->where('type', '!=', null)
+            ->category('sosialisasi')
             ->when($type && isset(Post::SOCIALIZATION_TYPES[$type]), fn ($q) => $q->where('type', $type))
             ->latest('published_at')
             ->paginate(9)
@@ -78,7 +78,7 @@ class NewsController extends Controller
     {
         $descriptions = [
             'berita' => 'Kegiatan yang diikuti DPM UII, agenda legislasi, dan kabar terbaru dari parlemen mahasiswa.',
-            'berita-kegiatan' => 'Kegiatan dan agenda DPM UII serta parsip mahasiswa.',
+            'berita-kegiatan' => 'Kegiatan dan agenda DPM UII serta partisipasi mahasiswa.',
             'pengumuman' => 'Seruan aksi, informasi resmi, dan pemberitahuan untuk KM UII.',
         ];
 
@@ -90,7 +90,10 @@ class NewsController extends Controller
 
         $posts = Post::query()
             ->published()
-            ->when($type !== 'berita', fn ($q) => $q->where('type', $type))
+            // Berita = semua kabar non-sosialisasi, supaya Berita Umum tetap
+            // muncul di halaman Berita bersama Berita Kegiatan.
+            ->when($type === 'berita', fn ($q) => $q->category('berita', 'berita-kegiatan'))
+            ->when($type !== 'berita', fn ($q) => $q->category($type))
             ->latest('published_at')
             ->paginate(9);
 

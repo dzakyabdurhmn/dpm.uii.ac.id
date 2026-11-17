@@ -21,7 +21,8 @@
   .unit-hero .crumb span[aria-current] { color: var(--white); font-weight: 600; }
   .unit-hero .unit-desc { max-width: 640px; font-size: 15.5px; line-height: 1.7; color: var(--t-sub); margin-bottom: 18px; }
   .unit-hero .meta { display: flex; flex-wrap: wrap; gap: 10px; }
-  .unit-hero .meta span { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--b-btn); border-radius: 100px; font-size: 12.5px; font-weight: 600; color: var(--white); background: rgba(0,22,51,.5); }
+  .unit-hero .meta span { display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border: 1px solid var(--b-btn); border-radius: 100px; font-size: 12.5px; font-weight: 600; color: var(--white); background: rgba(0,22,51,.5); }
+  .unit-hero .meta span b { font-family: 'Wix Madefor Display', sans-serif; font-size: 15px; font-weight: 800; line-height: 1; }
   .unit-hero .meta span small { font-size: 11px; font-weight: 500; letter-spacing: .8px; text-transform: uppercase; color: var(--t-cap); }
 
   .subnav { position: sticky; top: 73px; z-index: 50; background: rgba(0,22,51,.95); border-bottom: 1px solid var(--b-default); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
@@ -33,12 +34,17 @@
   .subnav li a em { font-style: normal; font-size: 11px; opacity: .6; }
   .subnav li a:hover { color: var(--white); }
   .subnav li a[aria-current="true"] { color: var(--white); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.35); }
-  .subnav .ctrls { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
-  .sel { position: relative; }
-  .sel select { appearance: none; -webkit-appearance: none; padding: 8px 36px 8px 14px; border: 1px solid var(--b-btn); border-radius: 6px; background: var(--navy-card); font: inherit; font-size: 13px; font-weight: 600; color: var(--white); cursor: pointer; }
-  .sel::after { content: ''; position: absolute; right: 13px; top: 50%; width: 7px; height: 7px; margin-top: -6px; border-right: 2px solid var(--white); border-bottom: 2px solid var(--white); transform: rotate(45deg); pointer-events: none; }
-  .sel select option { background: #001A3A; color: #fff; }
-  @media (max-width: 1080px) { .subnav .ctrls { display: none; } }
+  .periode-tabs { display: flex; align-items: center; gap: 6px; padding: 10px 0; overflow-x: auto; scrollbar-width: none; flex-shrink: 0; }
+  .periode-tabs::-webkit-scrollbar { display: none; }
+  .periode-tabs .plabel { flex: 0 0 auto; margin-right: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--t-cap); }
+  .periode-tab { flex: 0 0 auto; padding: 7px 15px; border-radius: 100px; border: 1px solid var(--b-btn); background: transparent; color: var(--t-sub); font: inherit; font-size: 12.5px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: color .2s, background .2s, border-color .2s; }
+  .periode-tab:hover { color: var(--white); border-color: var(--b-btn-hover); background: rgba(255,255,255,.06); }
+  .periode-tab:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+  .periode-tab[aria-pressed="true"] { background: var(--white); border-color: var(--white); color: #001E43; }
+  @media (max-width: 1080px) {
+    .subnav-inner { flex-direction: column; align-items: stretch; gap: 0; }
+    .periode-tabs { border-top: 1px solid var(--b-default); }
+  }
 
   .unit-sec { padding: 80px 0; border-bottom: 1px solid var(--b-default); }
   .unit-sec.alt { background: var(--navy-footer); }
@@ -89,8 +95,9 @@
   .pd-x { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--b-btn); border-radius: 50%; background: rgba(0,22,51,.8); color: var(--white); font-size: 20px; line-height: 1; cursor: pointer; z-index: 2; }
   .pd-x:hover { border-color: var(--b-btn-hover); }
 
-  @media (max-width: 1080px) { .g3 { grid-template-columns: 1fr 1fr; } .lead { grid-template-columns: 280px 1fr; } .lead-info { padding: 32px; } .subnav .ctrls { display: none; } }
+  @media (max-width: 1080px) { .g3 { grid-template-columns: 1fr 1fr; } .lead { grid-template-columns: 280px 1fr; } .lead-info { padding: 32px; } }
   @media (max-width: 720px) { .unit-hero { padding: 36px 0 32px; } .unit-sec { padding: 52px 0; } .lead { grid-template-columns: 1fr; } .lead .av { min-height: 320px; } .lead-info { padding: 24px 22px 28px; } .g2, .g3 { grid-template-columns: 1fr; } .unit-head .no { font-size: 52px; } }
+
 </style>
 @endpush
 
@@ -136,11 +143,26 @@
       '<span class="more">Lihat profil</span></div></div>';
   }
 
+  // Periode aktif dipilih lewat tombol pill di subnav (berlaku untuk semua alat kelengkapan).
+  let currentPeriode = document.querySelector('.periode-tab[aria-pressed="true"]')?.dataset.periode
+    || Object.keys(window.UNIT_DATA)[0]
+    || '';
+
   function render() {
-    const per = $('periode').value;
+    const per = currentPeriode;
     const d = window.UNIT_DATA[per];
     if (!d) return;
     registry = [];
+
+    // Angka ringkas di hero ikut periode yang dipilih.
+    const m = $('metaMembers');
+    const p = $('metaPositions');
+    const pc = $('metaPeriod');
+    const chip = $('metaPeriodChip');
+    if (m) m.textContent = d.total ?? 0;
+    if (p) p.textContent = d.positions ?? 0;
+    if (pc) pc.textContent = per;
+    if (chip) chip.hidden = false;
 
     // Lead
     const leadMember = d.lead;
@@ -191,9 +213,9 @@
     const parts = [['Fakultas', a.fakultas], ['Program Studi', a.prodi], ['Angkatan', a.angkatan], ['NIM', a.nim]].filter(x => x[1]);
     $('dlgBody').innerHTML = avatarHtml(a, 'lead') +
       '<div class="pd-body"><h3>' + esc(a.name) + '</h3>' +
-      '<div class="rl">' + esc(a.position) + ' · Periode ' + esc($('periode').value) + '</div>' +
+      '<div class="rl">' + esc(a.position) + ' · Periode ' + esc(currentPeriode) + '</div>' +
       (parts.length ? '<dl>' + parts.map(x => '<dt>' + x[0] + '</dt><dd>' + esc(x[1]) + '</dd>').join('') + '</dl>' : '') +
-      '<p>' + esc(a.name) + ' menjabat sebagai ' + esc(a.position) + ' ' + esc(a.unit_name || '') + ' Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia periode ' + esc($('periode').value) + '.</p></div>';
+      '<p>' + esc(a.name) + ' menjabat sebagai ' + esc(a.position) + ' ' + esc(a.unit_name || '') + ' Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia periode ' + esc(currentPeriode) + '.</p></div>';
     dlg.showModal();
   }
 
@@ -239,8 +261,23 @@
   }
   addEventListener('scroll', prog, { passive: true });
 
-  const sel = $('periode');
-  sel.addEventListener('change', render);
+  const periodeTabs = Array.from(document.querySelectorAll('.periode-tab'));
+
+  function pilihPeriode(value) {
+    if (!value || value === currentPeriode) {
+      return;
+    }
+
+    currentPeriode = value;
+    periodeTabs.forEach((tab) => {
+      tab.setAttribute('aria-pressed', String(tab.dataset.periode === value));
+    });
+    render();
+  }
+
+  periodeTabs.forEach((tab) => {
+    tab.addEventListener('click', () => pilihPeriode(tab.dataset.periode));
+  });
 
   render(); prog();
 </script>
@@ -268,8 +305,9 @@
         <p class="unit-desc">{{ $unit->description }}</p>
       @endif
       <div class="meta">
-        <span>Total Anggota <small>{{ $totalMembers ?? 0 }}</small></span>
-        <span>Jabatan Unik <small>{{ $uniquePositions ?? 0 }}</small></span>
+        <span><b id="metaMembers">{{ $totalMembers ?? 0 }}</b> <small>Total Anggota</small></span>
+        <span><b id="metaPositions">{{ $uniquePositions ?? 0 }}</b> <small>Jabatan Unik</small></span>
+        <span id="metaPeriodChip" @if (! $activePeriod) hidden @endif><small>Periode</small> <b id="metaPeriod">{{ $activePeriod ?? '—' }}</b></span>
       </div>
     </div>
   </section>
@@ -278,15 +316,15 @@
   <div class="subnav" id="subnav">
     <div class="container subnav-inner">
       <ol id="toc" aria-label="Navigasi {{ $unit->short_name }}"></ol>
-      <div class="ctrls">
-        <label class="sel">
-          <select id="periode" aria-label="Periode kepengurusan">
-            @foreach (array_keys($unitData ?? []) as $periodName)
-              <option value="{{ $periodName }}" @selected($loop->first)>Periode {{ $periodName }}</option>
-            @endforeach
-          </select>
-        </label>
-      </div>
+      @if (! empty($unitData))
+        <div class="periode-tabs" role="group" aria-label="Periode kepengurusan">
+          <span class="plabel">Periode</span>
+          @foreach (array_keys($unitData) as $periodName)
+            <button type="button" class="periode-tab" data-periode="{{ $periodName }}"
+                    aria-pressed="{{ $loop->first ? 'true' : 'false' }}">{{ $periodName }}</button>
+          @endforeach
+        </div>
+      @endif
     </div>
   </div>
 
