@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\DanaTriwulan;
 use App\Models\Period;
 use App\Models\User;
+use Database\Seeders\DistribusiDanaSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -72,6 +73,30 @@ class DistribusiDanaTest extends TestCase
             ->assertOk()
             ->assertSee('Menampilkan: Periode 2024/2025 · Triwulan IV')
             ->assertSee('Overview dana Triwulan IV');
+    }
+
+    public function test_distribution_page_uses_the_published_faculty_data(): void
+    {
+        $this->seed(DistribusiDanaSeeder::class);
+
+        $this->get(route('dana.distribusi'))
+            ->assertOk()
+            ->assertSee('Fakultas Bisnis &amp; Ekonomika', false)
+            ->assertSee('Fakultas Teknik Industri')
+            ->assertSee('Fakultas Ilmu Sosial Budaya')
+            ->assertSee('Fakultas Teknik Sipil &amp; Perencanaan', false)
+            ->assertSee('Fakultas MIPA')
+            ->assertSee('Fakultas Psikologi')
+            ->assertSee('Fakultas Ilmu Agama Islam')
+            ->assertSee('Fakultas Kedokteran')
+            ->assertSee('61,59')
+            ->assertSee('53,93')
+            ->assertSee('27,81')
+            ->assertSee('3.441')
+            ->assertSee('393.499.238')
+            ->assertSee('22.686.250')
+            ->assertDontSee('Fakultas Teknologi Industri')
+            ->assertDontSee('Fakultas Ekonomi');
     }
 
     public function test_dana_page_only_shows_three_entry_cards(): void

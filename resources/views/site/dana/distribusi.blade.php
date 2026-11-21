@@ -114,9 +114,9 @@
 <!-- ================= PER FAKULTAS ================= -->
 <section class="dd-sec" id="perfakultas"><div class="container"><div class="dd-h"><span class="no">05</span><h2>Total dana per fakultas</h2></div>
   <ul class="bl nf">
-    @php $i = 1; @endphp
+    @php $i = 1; $maxTotalFakultas = $totalPerFakultas->max('total') ?: 1; @endphp
     @foreach($totalPerFakultas as $fp)
-    <li><span class="l">{{ $i }}. {{ $fp['fakultas']->nama }}</span><i class="b"><u style="--w:100.0%"></u></i><span class="v">{{ number_format($fp['total'] / 1000000, 2, ',', '.') }}<small>juta rupiah</small></span></li>
+    <li><span class="l">{{ $i }}. {{ $fp['fakultas']->nama }}</span><i class="b"><u style="--w:{{ round(($fp['total'] / $maxTotalFakultas) * 100, 1) }}%"></u></i><span class="v">{{ number_format($fp['total'] / 1000000, 2, ',', '.') }}<small>juta rupiah</small></span></li>
     @php $i++; @endphp
     @endforeach
   </ul>
