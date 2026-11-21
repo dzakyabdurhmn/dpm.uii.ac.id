@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#001E43">
 <title>Tautan Resmi | DPM UII</title>
+<link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+<link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
 <meta name="description" content="Tautan resmi Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia: produk hukum, surat keputusan, laporan, dana, dan aspirasi mahasiswa.">
 <meta property="og:title" content="Tautan Resmi | DPM UII">
 <meta property="og:description" content="Dewan Permusyawaratan Mahasiswa Universitas Islam Indonesia, lembaga legislatif Keluarga Mahasiswa UII.">
