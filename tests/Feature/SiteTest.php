@@ -129,7 +129,14 @@ class SiteTest extends TestCase
             ->assertOk()
             ->assertSee('@dpmuii')
             ->assertSee('Produk Hukum')
-            ->assertSee('Dokumen dan Publikasi');
+            ->assertSee('Dokumen dan Publikasi')
+            ->assertSee('SOP Penerimaan Kunjungan Lembaga')
+            ->assertSee('https://drive.google.com/file/d/1xJGAk8FctatV3Gc5QWZxQMAKVcssZpFj/view?usp=sharing')
+            ->assertSee('Formulir Permohonan Dana Taktis')
+            ->assertSee('https://forms.gle/UqzHq6sr1FsNWUpe7')
+            ->assertSee(route('legal-products.type', 'pkm'))
+            ->assertSee(route('humas.download'))
+            ->assertSee('https://wa.me/6281511092004');
     }
 
     public function test_humas_download_page_lists_and_serves_internal_files(): void

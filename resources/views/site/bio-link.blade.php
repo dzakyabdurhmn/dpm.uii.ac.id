@@ -124,7 +124,7 @@
       <a href="https://www.instagram.com/dpmuii/" target="_blank" rel="noopener" aria-label="Instagram @dpmuii">
         <svg class="line" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
       </a>
-      <a href="https://wa.me/6281511092004" target="_blank" rel="noopener" aria-label="WhatsApp DPM UII">
+      <a href="{{ $bioLink->whatsapp_url }}" target="_blank" rel="noopener" aria-label="WhatsApp DPM UII">
         <svg class="fill" viewBox="0 0 448 512" aria-hidden="true"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
       </a>
       <a href="https://tiktok.com/@dpmuii" target="_blank" rel="noopener" aria-label="TikTok @dpmuii">
@@ -140,17 +140,104 @@
   </header>
 
   <!-- Sorotan -->
-  <a class="feature rise" style="--i:4" href="{{ route('home') }}">
+  <a class="feature rise" style="--i:4" href="{{ $bioLink->website_url }}" target="_blank" rel="noopener">
     <span class="eyebrow">Sorotan</span>
-    <h2>Portal Resmi DPM UII</h2>
+    <h2>Website Resmi DPM UII</h2>
     <p>Akses informasi terlengkap, produk hukum resmi, transparansi dana, dan publikasi DPM UII dalam satu pintu.</p>
-    <span class="btn">Kunjungi Website <span aria-hidden="true">→</span></span>
+    <span class="btn">Kunjungi dpm.uii.ac.id <span aria-hidden="true">→</span></span>
   </a>
 
   <!-- Grup: Layanan & Informasi -->
   <section class="group rise" style="--i:5" aria-labelledby="g-layanan">
     <h2 id="g-layanan">Layanan &amp; Informasi</h2>
     <ul>
+      <li>
+        <a class="lnk" href="{{ $bioLink->sop_kunjungan_url }}" target="_blank" rel="noopener">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6a1 1 0 0 1 1 1v2H8V3a1 1 0 0 1 1-1z"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><path d="m9 14 2 2 4-4"/></svg></span>
+          <span class="tx">
+            <strong>SOP Penerimaan Kunjungan Lembaga</strong>
+            <small>Panduan alur penerimaan kunjungan lembaga</small>
+          </span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="lnk" href="{{ route('humas.download') }}">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+          <span class="tx">
+            <strong>Kebutuhan Administrasi</strong>
+            <small>Logo dan font resmi UII</small>
+          </span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="lnk" href="{{ $bioLink->dana_taktis_form_url }}" target="_blank" rel="noopener">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+          <span class="tx">
+            <strong>Formulir Permohonan Dana Taktis</strong>
+            <small>Ajukan permohonan dana taktis DPM UII</small>
+          </span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="lnk" href="{{ $bioLink->website_url }}" target="_blank" rel="noopener">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+          <span class="tx">
+            <strong>Website Resmi DPM UII</strong>
+            <small>dpm.uii.ac.id</small>
+          </span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="lnk" href="{{ route('legal-products.type', 'pkm') }}">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+          <span class="tx">
+            <strong>Peraturan KM UII</strong>
+            <small>Peraturan Keluarga Mahasiswa UII</small>
+          </span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="lnk" href="{{ $bioLink->whatsapp_url }}" target="_blank" rel="noopener">
+          <span class="ic"><svg class="fill" viewBox="0 0 448 512" aria-hidden="true"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg></span>
+          <span class="tx">
+            <strong>Narahubung DPM UII</strong>
+            <small>Hubungi sekretariat via WhatsApp</small>
+          </span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Grup: Dokumen & Publikasi -->
+  <section class="group rise" style="--i:6" aria-labelledby="g-publikasi">
+    <h2 id="g-publikasi">Dokumen &amp; Publikasi</h2>
+    <ul>
+      <li>
+        <a class="lnk" href="{{ route('news.index') }}">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg></span>
+          <span class="tx">
+            <strong>Berita &amp; Siaran Pers</strong>
+            <small>Kabar terbaru kegiatan legislatif mahasiswa</small>
+          </span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="lnk" href="{{ url('/tentang/struktur') }}">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="6" height="6" rx="1"/><rect x="16" y="3" width="6" height="6" rx="1"/><rect x="9" y="15" width="6" height="6" rx="1"/><path d="M5 9v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9"/><path d="M12 14v1"/></svg></span>
+          <span class="tx">
+            <strong>Struktur Organisasi</strong>
+            <small>Pimpinan, komisi, dan alat kelengkapan dewan</small>
+          </span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+      </li>
       <li>
         <a class="lnk" href="{{ route('legal-products.index') }}">
           <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
@@ -187,43 +274,6 @@
           <span class="tx">
             <strong>Kanal Aspirasi Mahasiswa</strong>
             <small>Sampaikan aspirasi, kritik, dan masukan Anda</small>
-          </span>
-          <span class="go" aria-hidden="true">→</span>
-        </a>
-      </li>
-    </ul>
-  </section>
-
-  <!-- Grup: Publikasi & Profil -->
-  <section class="group rise" style="--i:6" aria-labelledby="g-publikasi">
-    <h2 id="g-publikasi">Publikasi &amp; Profil</h2>
-    <ul>
-      <li>
-        <a class="lnk" href="{{ route('news.index') }}">
-          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg></span>
-          <span class="tx">
-            <strong>Berita &amp; Siaran Pers</strong>
-            <small>Kabar terbaru kegiatan legislatif mahasiswa</small>
-          </span>
-          <span class="go" aria-hidden="true">→</span>
-        </a>
-      </li>
-      <li>
-        <a class="lnk" href="{{ url('/tentang/struktur') }}">
-          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="6" height="6" rx="1"/><rect x="16" y="3" width="6" height="6" rx="1"/><rect x="9" y="15" width="6" height="6" rx="1"/><path d="M5 9v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9"/><path d="M12 14v1"/></svg></span>
-          <span class="tx">
-            <strong>Struktur Organisasi</strong>
-            <small>Pimpinan, komisi, dan alat kelengkapan dewan</small>
-          </span>
-          <span class="go" aria-hidden="true">→</span>
-        </a>
-      </li>
-      <li>
-        <a class="lnk" href="{{ route('humas.download') }}">
-          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
-          <span class="tx">
-            <strong>Unduh Template &amp; Font Resmi</strong>
-            <small>Aset humas dan format dokumen resmi DPM</small>
           </span>
           <span class="go" aria-hidden="true">→</span>
         </a>
